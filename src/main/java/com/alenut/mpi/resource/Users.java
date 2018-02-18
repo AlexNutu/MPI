@@ -8,6 +8,6 @@ import javax.persistence.Table;
 @Table(name="user")
 public class Users {
     @Id
-
+    // ceva comment de test dude
 
 }
