@@ -1,9 +1,8 @@
-package com.alenut.mpi.models;
+package com.alenut.mpi.entities;
+
+import com.alenut.mpi.entities.info.UserInformation;
 
 import javax.persistence.*;
-
-import com.alenut.mpi.models.info.UserInformation;
-
 import java.util.Date;
 
 @Entity
@@ -11,7 +10,7 @@ import java.util.Date;
 public class User {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,23 +23,30 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "nr_ideas")
-    private Integer nr_ideas;
-
-    @Column(name = "ocupation")
-    private String ocupation;
-
-    @Column(name = "gender")
-    private String gender;
-
     @Column(name = "phone_number")
     private String phone_number;
+
+    @Column(name = "role")
+    private int role;
 
     @Column(name = "reg_date")
     private Date reg_date;
 
-    @Column(name = "role")
-    private int role;
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+//    private List<Role> roles;
+
+    User() {
+    }
+
+    public User(UserInformation userInformation) {
+        this.username = userInformation.getUsername();
+        this.password = userInformation.getPassword();
+        this.email = userInformation.getEmail();
+        this.phone_number = userInformation.getPhone_number();
+        this.reg_date = userInformation.getRegistration_date();
+        this.role = userInformation.getRole();
+    }
 
     public Long getId() {
         return id;
@@ -74,30 +80,6 @@ public class User {
         this.email = email;
     }
 
-    public Integer getNr_ideas() {
-        return nr_ideas;
-    }
-
-    public void setNr_ideas(Integer nr_ideas) {
-        this.nr_ideas = nr_ideas;
-    }
-
-    public String getOcupation() {
-        return ocupation;
-    }
-
-    public void setOcupation(String ocupation) {
-        this.ocupation = ocupation;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
     public String getPhone_number() {
         return phone_number;
     }
@@ -122,19 +104,4 @@ public class User {
         this.role = role;
     }
 
-    public User() {
-    }
-
-    public User(UserInformation userInformation) {
-        this.username = userInformation.getUsername();
-        this.password = userInformation.getPassword();
-        this.email = userInformation.getEmail();
-        this.nr_ideas = userInformation.getNr_ideas();
-        this.ocupation = userInformation.getOcupation();
-        this.gender = userInformation.getGender();
-        this.phone_number = userInformation.getPhone_number();
-        this.reg_date = userInformation.getRegistration_date();
-        this.role = userInformation.getRole();
-    }
 }
-

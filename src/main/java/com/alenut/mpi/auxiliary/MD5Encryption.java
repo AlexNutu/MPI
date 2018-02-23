@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class MD5Encryption {
 
-    public static String encryptMD5(String input) throws NoSuchAlgorithmException {
+    public static String computeMD5(String input) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] data = input.getBytes(Charset.forName("UTF-8"));
         md.update(data);

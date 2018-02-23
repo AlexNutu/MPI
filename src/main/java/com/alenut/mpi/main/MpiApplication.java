@@ -9,17 +9,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
-@ComponentScan({"com.alenut.mpi.models", "com.alenut.mpi.main", "controller",
-		"com.alenut.mpi.service", "com.alenut.mpi.repository",
-		"com.alenut.mpi.auxiliary"})
+
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@ComponentScan({"config","controllers","com.alenut.mpi.entities", "com.alenut.mpi.main",
+        "com.alenut.mpi.service", "com.alenut.mpi.repository",
+        "com.alenut.mpi.auxiliary",})
 @EnableJpaRepositories("com.alenut.mpi.repository")
-@EntityScan(basePackages = {"com.alenut.mpi.models"})
+@EntityScan(basePackages = {"com.alenut.mpi.entities"})
 @EnableScheduling
 @Configuration
 public class MpiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MpiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MpiApplication.class, args);
+    }
+
 }

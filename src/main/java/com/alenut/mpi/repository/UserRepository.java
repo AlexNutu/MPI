@@ -1,11 +1,15 @@
 package com.alenut.mpi.repository;
 
-import com.alenut.mpi.models.User;
-import org.springframework.data.repository.CrudRepository;
+import com.alenut.mpi.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends CrudRepository<User, Long> {
-    User getByEmail(String email);
+/**
+ * User repository for CRUD operations.
+ */
+
+public interface UserRepository extends JpaRepository<User, Long> {
     User getByUsername(String username);
+    User getByEmail(String email);
+
 }

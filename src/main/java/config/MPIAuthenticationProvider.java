@@ -1,7 +1,7 @@
 package config;
 
 import com.alenut.mpi.auxiliary.MD5Encryption;
-import com.alenut.mpi.models.User;
+import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class MPIAuthentificationProvider implements AuthenticationProvider {
-
+public class MPIAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserService userService;
 
@@ -28,12 +27,18 @@ public class MPIAuthentificationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
         User user = userService.getByEmail(email);
         try {
-            if (user != null && MD5Encryption.encryptMD5(password).equals(user.getPassword())) {
+            if (user != null && MD5Encryption.computeMD5(password).equals(user.getPassword())) {
                 List<GrantedAuthority> grantedAuths = new ArrayList<>();
                 String role = "";
                 switch (user.getRole()) {
-                    case 0: { role = "USER"; break; }
-                    case 1: { role = "ADMIN"; break; }
+                    case 1: {
+                        role = "USER";
+                        break;
+                    }
+                    case 0: {
+                        role = "ADMIN";
+                        break;
+                    }
                 }
                 grantedAuths.add(new SimpleGrantedAuthority(role));
                 return new UsernamePasswordAuthenticationToken(email, password, grantedAuths);

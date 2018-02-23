@@ -1,24 +1,17 @@
 package com.alenut.mpi.service;
 
-import com.alenut.mpi.models.User;
-import com.alenut.mpi.models.info.UserInformation;
+import com.alenut.mpi.entities.User;
+import com.alenut.mpi.entities.info.UserInformation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 
 public interface UserService {
+    @Transactional(readOnly = true)
+    User getUser(String email, String password);
 
     @Transactional(readOnly = true)
-    User getUserUP(String username, String password);
-
-    @Transactional(readOnly = true)
-    User getUserEP(String email, String password);
-
-    @Transactional(readOnly = true)
-    User getByUsername(String username);
-
-    @Transactional(readOnly = true)
-    User getByEmail(String username);
+    User getByEmail(String email);
 
     @Transactional(readOnly = true)
     void createUser(UserInformation userInfo) throws NoSuchAlgorithmException;

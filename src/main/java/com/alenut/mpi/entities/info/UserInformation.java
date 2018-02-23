@@ -1,4 +1,4 @@
-package com.alenut.mpi.models.info;
+package com.alenut.mpi.entities.info;
 
 import java.util.Date;
 

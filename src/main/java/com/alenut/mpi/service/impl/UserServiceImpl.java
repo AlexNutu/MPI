@@ -1,8 +1,8 @@
 package com.alenut.mpi.service.impl;
 
 import com.alenut.mpi.auxiliary.MD5Encryption;
-import com.alenut.mpi.models.User;
-import com.alenut.mpi.models.info.UserInformation;
+import com.alenut.mpi.entities.User;
+import com.alenut.mpi.entities.info.UserInformation;
 import com.alenut.mpi.repository.UserRepository;
 import com.alenut.mpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,33 +18,14 @@ public class UserServiceImpl implements UserService {
 
     private User usr = null;
 
-    public User getUserEP(String email, String password) {
+    public User getUser(String email, String password) {
 
         try {
             User user = userRepository.getByEmail(email);
             if (user == null) {
                 return null;
             } else {
-                if (user.getPassword().equals(MD5Encryption.encryptMD5(password))) {
-                    return user;
-                } else {
-                    throw new IllegalArgumentException();
-                }
-            }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public User getUserUP(String username, String password) {
-
-        try {
-            User user = userRepository.getByUsername(username);
-            if (user == null) {
-                return null;
-            } else {
-                if (user.getPassword().equals(MD5Encryption.encryptMD5(password))) {
+                if (user.getPassword().equals(MD5Encryption.computeMD5(password))) {
                     return user;
                 } else {
                     throw new IllegalArgumentException();
@@ -66,20 +47,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public User getByUsername(String username) {
-        try {
-            User user = userRepository.getByUsername(username);
-            return user;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
     public void createUser(UserInformation userInfo) throws NoSuchAlgorithmException {
 
-        userInfo.setPassword(MD5Encryption.encryptMD5("parola"));
+        userInfo.setPassword(MD5Encryption.computeMD5("parola"));
         User user = new User(userInfo);
 
         try {
@@ -92,23 +63,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void editUser(UserInformation userInfo) throws NoSuchAlgorithmException {
 
-        userInfo.setPassword(MD5Encryption.encryptMD5(userInfo.getPassword()));
+        userInfo.setPassword(MD5Encryption.computeMD5(userInfo.getPassword()));
         User user = userRepository.getByEmail(userInfo.getEmail());
 
-        user.setUsername(userInfo.getUsername());
+        //TODO: de adaugat setere pentru celelalte campuri
         user.setPassword(userInfo.getPassword());
-        user.setNr_ideas(userInfo.getNr_ideas());
-        user.setOcupation(userInfo.getOcupation());
-        user.setGender(userInfo.getGender());
-        user.setPhone_number(userInfo.getPhone_number());
-        user.setReg_date(userInfo.getRegistration_date());
         user.setRole(userInfo.getRole());
-
         try {
             usr = userRepository.save(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }
