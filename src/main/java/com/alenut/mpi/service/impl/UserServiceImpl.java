@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(String email, String password) {
 
         try {
-            User user = userRepository.getByEmail(email);
+            User user = userRepository.getByEmail(email);/**/
             if (user == null) {
                 return null;
             } else {

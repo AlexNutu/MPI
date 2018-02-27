@@ -1,0 +1,23 @@
+
+body{
+    background: url("../img/i203.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+#title{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 45px;
+    font-size:40px;
+    text-shadow: 0 0 10px black;
+}
+
+.form-container{ padding:50px 60px; margin-top: 20vh;
+    -webkit-box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);
+    box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);
+}
+

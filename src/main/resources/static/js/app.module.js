@@ -1,6 +1,6 @@
-(function () {
-    'use strict'
-
-    angular.module('mpi-app', ['ui.router']);
-
-})();
+// (function () {
+//     'use strict'
+//
+//     angular.module('mpi-app', ['ui.router']);
+//
+// })();

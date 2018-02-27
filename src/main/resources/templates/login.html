@@ -1,52 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Smart Gateway Access</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/login.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" />
-    <link rel="stylesheet" href="./css/tracker.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js/"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 
+    <title>Log in</title>
 </head>
 
-<body ng-app="gateway-app">
+<body><!-- ng-app="mpi-app">-->
 
-
-<div ng-controller="loginController as login" class="container-fluid login-container">
-    <div class="login row">
-        <div class="brand">
-            <div class="row">
-                <img class="img-fluid logo-image" src="./img/logo.png"/>
-                <div class="text main-brand-text">
-                    <h1>Smart</h1>
-                    <h1>Gateway</h1>
+<div ng-controller="loginController as login" class="container-fluid bg">
+    <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12"></div>
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <!--form start-->
+            <form name="login" action="login" method="POST" class="form-container" style="color:#fff;">
+                <h1 id="title"> My Project Idea </h1>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input name="username" type="text" class="form-control" id="exampleInputEmail1" placeholder="Username"/>
                 </div>
-            </div>
-            <div class="row">
-                <div class="text">
-                    <h2>Access Tracking System</h2>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"/>
                 </div>
-            </div>
-        </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"/> Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">Submit</button>
+            </form>
 
-        <div class="form">
-            <div class="form-group">
-                <form class="row" name="login" action="login" method="POST">
-                    <div class="col-md-6 inp">
-                        <input class="form-control " name="username" type="text" placeholder="Username" />
-                    </div>
-                    <div class="col-md-6 inp">
-                        <input class="form-control" name="password" type="password" placeholder="Password" />
-                    </div>
-                    <button class="button" type="submit">Log in</button>
-                </form>
-            </div>
-
+            <!--form end-->
         </div>
+        <div class="col-md-4 col-sm-4 col-xs-12"></div>
     </div>
+
 </div>
+
+
+<!--<div ng-controller="loginController as login" class="container-fluid login-container">-->
+    <!--<div class="login row">-->
+        <!--<div class="brand">-->
+            <!--<div class="row">-->
+                <!--<img class="img-fluid logo-image" src="./img/logo.png"/>-->
+                <!--<div class="text main-brand-text">-->
+                    <!--<h1>My</h1>-->
+                    <!--<h1>Project</h1>-->
+                    <!--<h1>Idea</h1>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+                <!--<div class="text">-->
+                    <!--<h2>Login in to Post your Idea</h2>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form">-->
+            <!--<div class="form-group">-->
+                <!--<form class="row" name="login" action="login" method="POST">-->
+                    <!--<div class="col-md-6 inp">-->
+                        <!--<input class="form-control " name="username" type="text" placeholder="Username" />-->
+                    <!--</div>-->
+                    <!--<div class="col-md-6 inp">-->
+                        <!--<input class="form-control" name="password" type="password" placeholder="Password" />-->
+                    <!--</div>-->
+                    <!--<button class="button" type="submit">Log in</button>-->
+                <!--</form>-->
+            <!--</div>-->
+
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+
 
 <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>-->
 <!--<script src="https://ajax.googleapis.com/ajax/libs/angular-ui-router/1.0.0-rc.1/angular-ui-router.min.js"></script>-->
