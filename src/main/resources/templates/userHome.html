@@ -8,6 +8,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="shortcut icon" href="../img/icon.png"/>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+
+
     <title>Home</title>
 </head>
 
@@ -19,26 +24,54 @@
             <a class="navbar-brand" href="#">My Project Idea</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Page 1</a></li>
-            <li><a href="#">Page 2</a></li>
+            <li class="active"><a href="#"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+
+            <!--<li><a href="#"><i class="glyphicon glyphicon-briefcase"></i> My matchings <i style="color: green;">(2)</i> <i style="color: blue">(999)</i></a></li>-->
+
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> My matchings
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Page 1-1</a></li>
-                    <li><a href="#">Page 1-2</a></li>
-                    <li><a href="#">Page 1-3</a></li>
+                    <li><a href="#">New (<i style="color: green;">2</i>)</a></li>
+                    <li><a href="#">All &nbsp;&nbsp;&nbsp;(<i style="color: blue">999</i>)</a></li>
+                </ul>
+            </li>
+
+
+            <li><a href="#"><i class="glyphicon glyphicon-envelope"></i> Messages (10)</a></li>
+            <li><a href="#"><i class="glyphicon glyphicon-text-background"></i> About</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Education</a></li>
+                    <li><a href="#">Social Media</a></li>
+                    <li><a href="#">Finance</a></li>
+                    <li><a href="#">Gaming</a></li>
+                    <li><a href="#">Music</a></li>
+                    <li><a href="#">Sport</a></li>
+                    <li><a href="#">Vehicles</a></li>
                 </ul>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+            <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>-->
         </ul>
 
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Username section <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/user/preferences"><i class="glyphicon glyphicon-cog"></i> Preferences</a></li>
+                        <li><a href="/help/support"><i class="glyphicon glyphicon-earphone"></i> Contact Support</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/auth/logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+
         <form class="navbar-form navbar-left" action="/">
-            <div class="input-group" style="width: 300%">
+            <div class="input-group" style="width: auto">
                 <input type="text" class="form-control" placeholder="Search for an idea" name="search"/>
                 <div class="input-group-btn">
                     <button class="btn btn-default" type="submit">
@@ -52,22 +85,75 @@
 </nav>
 
 
+<div class="container bootstrap snippet">
+    <section id="team" class="white-bg padding-top-bottom">
+        <div class="container bootstrap snippet">
+            <h1 class="section-title text-center page-title">Popular Ideas</h1>
+            <p class="section-description text-center">The most popular platform where you're ideas become reality </p>
 
-<h2> Categories: .... </h2>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
-<h1 style="text-align: center"> Home </h1>
+            <div class="row member-content" style="margin-bottom: 40px">
+                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in">
+                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
+                    <h4>El jefe</h4>
+                    <p class="title">Lead Designer &amp; Founder</p>
+                </div>
+                <div class="col-sm-7">
+                    <div class="details">
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <ul class="social-content">
+                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                            <li><button class="btn btn-info"> See more </button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row member-content right" style="margin-bottom: 10px">
+                <div class="col-sm-3 col-sm-push-8 member-thumb">
+                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" alt="" style="width:30%;height: 30%"/>
+                    <h4>El monito</h4>
+                    <p class="title">Designer</p>
+                </div>
+                <div class="col-sm-7 col-sm-pull-2">
+                    <div class="details">
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <ul class="social-content">
+                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                            <li><button class="btn btn-info"> See more </button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row member-content" style="margin-bottom: 10px">
+                <div class="col-sm-3 col-sm-offset-1 member-thumb">
+                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="" style="width:30%;height: 30%"/>
+                    <h4>El morenito</h4>
+                    <p class="title">Lead Developer</p>
+                </div>
+                <div class="col-sm-7   ">
+                    <div class="details">
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <ul class="social-content">
+                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-
+                            linkedin fa-fw"></i></a></li>
+                            <li><button class="btn btn-info"> See more </button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 
 
 
