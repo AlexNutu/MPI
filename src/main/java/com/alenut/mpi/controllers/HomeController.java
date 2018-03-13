@@ -1,78 +1,76 @@
 package com.alenut.mpi.controllers;
 
+import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
-import com.alenut.mpi.entities.info.UserInformation;
-import com.alenut.mpi.service.impl.UserServiceImpl;
+import com.alenut.mpi.service.UserService;
+import com.alenut.mpi.service.impl.IdeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.NoSuchAlgorithmException;
 
 @Controller
+@RequestMapping("/user")
 public class HomeController extends BaseController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private IdeaService ideaService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String redirectToLogin() {
-        return "login";
-    }//redirect:login
+    @Autowired
+    private UserService userService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String getLoginForm(HttpServletRequest request, Model model) {
-        return "login";
-    }
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String getIdeas(HttpServletRequest request, Model model) {
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST,
-            consumes = {"application/json"})
-    public String addUser(@RequestBody UserInformation userInfo) throws NoSuchAlgorithmException {
-        userService.createUser(userInfo);
-
-        return "manageUser";
-    }
-
-    @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String successRedirect() throws NoSuchAlgorithmException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        authentication.getAuthorities();
-        String email;
-        if (authentication.getPrincipal() instanceof User) {
-            email = ((User) authentication.getPrincipal()).getEmail();
-        } else {
-            email = authentication.getName();
-        }
-        User user = userService.getByEmail(email);
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
 
-        // 0 admin, 1 user
-        if (user.getRole() == 0) {
-            return "redirect:/admin/home";
-        } else {//if (user.getRole() == 1) {
-            return "redirect:/user/home";
-        }
-        //return "redirect:/error";
+        return "userHome";
     }
 
-    @ExceptionHandler()
-    public ModelAndView error(Exception e) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("error", e);
-        mav.setViewName("error");
-        return mav;
+//    public String populateTable(Model model) {
+//        int[] days;
+//        Long id;
+//
+//        id = getCurrentUser().getId();
+//        days = userDataServiceImpl.getDates(id, userService, holidayService, requestService);
+//        int additionalVacation = userService.getById(id).getAdditionalVacation();
+//        model.addAttribute("remainingDays", days[0] + additionalVacation);
+//        model.addAttribute("remainingDaysToDate", days[2] + additionalVacation);
+//        model.addAttribute("requestedDays", days[1]);
+//        model.addAttribute("approvedDays", userDataServiceImpl.getApprovedDaysThisYear(holidayService.getAll(), requestRepository.getVacationRequestOnly(id)));
+//        model.addAttribute("medicalDays", days[4]);
+//        return "userHome";
+//    }
+
+    @PostMapping(value = "/postIdea")
+    public String publishIdea(@RequestBody Idea idea) {
+        idea.setCreator(getCurrentUser().getId());
+        ideaService.insert(idea);
+        return "Idea was pusblished";
     }
 
-    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public String getCurrentUser(HttpServletRequest request) {
-        return request.getUserPrincipal().getName();
+    @GetMapping(value = "/viewIdea")
+    public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
+        //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
+        return "idea";
+    }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String userProfile(HttpServletRequest request) {
+
+        return "userProfile";
+    }
+
+    @RequestMapping(value = "/contact", method = RequestMethod.GET)
+    public String contactUs(HttpServletRequest request) {
+
+        return "contact";
     }
 
 }

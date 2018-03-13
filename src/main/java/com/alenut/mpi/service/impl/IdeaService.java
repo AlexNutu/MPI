@@ -17,7 +17,7 @@ public class IdeaService {
 
 
     public List<Idea> getAllIdeas() {
-        return ideaRepository.findAll();
+        return ideaRepository.findAll(); // gaseste toate ideile salvate in baza de date
     }
 
     public void insert(Idea idea) {

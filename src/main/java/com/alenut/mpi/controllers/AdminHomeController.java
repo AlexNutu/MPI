@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
-public class ResponseController extends BaseController {
+public class AdminHomeController extends BaseController {
 
     @Autowired
     private IdeaService ideaService;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org ">
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="../css/ideas.css" />
@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
 
+    <title> Home </title>
 
-    <title>Home</title>
 </head>
 
 <body>
@@ -55,17 +55,17 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="/user/createUser"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
             <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>-->
         </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Username section <b class="caret"></b></a>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="'Hello, ' + ${username} "> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/user/preferences"><i class="glyphicon glyphicon-cog"></i> Preferences</a></li>
-                        <li><a href="/help/support"><i class="glyphicon glyphicon-earphone"></i> Contact Support</a></li>
+                        <li><a href="/user/profile"><i class="glyphicon glyphicon-cog"></i> Profile</a></li>
+                        <li><a href="/user/contact"><i class="glyphicon glyphicon-earphone"></i> Contact </a></li>
                         <li class="divider"></li>
-                        <li><a href="/auth/logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
+                        <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
                     </ul>
                 </li>
             </ul>
@@ -89,9 +89,9 @@
     <section id="team" class="white-bg padding-top-bottom">
         <div class="container bootstrap snippet">
             <h1 class="section-title text-center page-title">Popular Ideas</h1>
-            <p class="section-description text-center">The most popular platform where you're ideas become reality </p>
+            <p class="section-description text-center" style="margin-bottom: 40px">The most popular platform where you're ideas become reality </p>
 
-            <div class="row member-content" style="margin-bottom: 40px">
+            <div class="row member-content" style="margin-bottom: 60px">
                 <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in">
                     <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
                     <h4>El jefe</h4>
@@ -111,7 +111,7 @@
                 </div>
             </div>
 
-            <div class="row member-content right" style="margin-bottom: 10px">
+            <div class="row member-content right" style="margin-bottom: 40px">
                 <div class="col-sm-3 col-sm-push-8 member-thumb">
                     <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" alt="" style="width:30%;height: 30%"/>
                     <h4>El monito</h4>
@@ -131,7 +131,7 @@
                 </div>
             </div>
 
-            <div class="row member-content" style="margin-bottom: 10px">
+            <div class="row member-content" style="margin-bottom: 40px">
                 <div class="col-sm-3 col-sm-offset-1 member-thumb">
                     <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="" style="width:30%;height: 30%"/>
                     <h4>El morenito</h4>
@@ -155,6 +155,8 @@
     </section>
 </div>
 
+<br/>
+<br/>
 
 
 </body>
