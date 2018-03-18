@@ -4,6 +4,7 @@ import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.IdeaService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,8 +26,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String getIdeas(HttpServletRequest request, Model model) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         User user = userService.getByEmail(authentication.getName());
         model.addAttribute("username", user.getUsername());
 
@@ -49,7 +49,11 @@ public class HomeController extends BaseController {
 //    }
 
     @PostMapping(value = "/postIdea")
-    public String publishIdea(@RequestBody Idea idea) {
+    public String publishIdea(@RequestBody Idea idea, Model model) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
+
         idea.setCreator(getCurrentUser().getId());
         ideaService.insert(idea);
         return "Idea was pusblished";
@@ -57,20 +61,57 @@ public class HomeController extends BaseController {
 
     @GetMapping(value = "/viewIdea")
     public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
+
         //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
         return "idea";
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String userProfile(HttpServletRequest request) {
+    public String userProfile(HttpServletRequest request, Model model) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
 
         return "userProfile";
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public String contactUs(HttpServletRequest request) {
+    public String contactUs(HttpServletRequest request, Model model) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
 
         return "contact";
+    }
+
+    @RequestMapping(value = "/myIdeas", method = RequestMethod.GET)
+    public String myIdeas(HttpServletRequest request, Model model) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
+
+        return "myIdeas";
+    }
+
+    @RequestMapping(value = "/messages", method = RequestMethod.GET)
+    public String myMessages(HttpServletRequest request, Model model) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
+
+        return "messages";
+    }
+
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
+    public String about(HttpServletRequest request, Model model) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
+
+        return "about";
     }
 
 }

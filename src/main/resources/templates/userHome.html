@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <title> Home </title>
 
 </head>
@@ -21,25 +21,14 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">My Project Idea</a>
+            <!--<a class="navbar-brand" href="#">My Project Idea</a>-->
+            <a href="#" class="navbar-brand">My Project Idea </a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li class="active"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
-            <!--<li><a href="#"><i class="glyphicon glyphicon-briefcase"></i> My matchings <i style="color: green;">(2)</i> <i style="color: blue">(999)</i></a></li>-->
-
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> My matchings
-                    <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">New (<i style="color: green;">2</i>)</a></li>
-                    <li><a href="#">All &nbsp;&nbsp;&nbsp;(<i style="color: blue">999</i>)</a></li>
-                </ul>
-            </li>
-
-
-            <li><a href="#"><i class="glyphicon glyphicon-envelope"></i> Messages (10)</a></li>
-            <li><a href="#"><i class="glyphicon glyphicon-text-background"></i> About</a></li>
+            <li><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge" style="color: orange"> 10 </span></a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
                     <span class="caret"></span></a>
@@ -53,17 +42,17 @@
                     <li><a href="#">Vehicles</a></li>
                 </ul>
             </li>
+            <li><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/user/createUser"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="/user/createUser"><span class="glyphicon glyphicon-registration-mark"></span> Sign Up</a></li>
             <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>-->
         </ul>
-
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="'Hello, ' + ${username} "> <b class="caret"></b></a>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="'Welcome, ' + ${username} "> User <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/user/profile"><i class="glyphicon glyphicon-cog"></i> Profile</a></li>
-                        <li><a href="/user/contact"><i class="glyphicon glyphicon-earphone"></i> Contact </a></li>
+                        <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                        <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
                         <li class="divider"></li>
                         <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
                     </ul>
@@ -89,7 +78,7 @@
     <section id="team" class="white-bg padding-top-bottom">
         <div class="container bootstrap snippet">
             <h1 class="section-title text-center page-title">Popular Ideas</h1>
-            <p class="section-description text-center" style="margin-bottom: 40px">The most popular platform where you're ideas become reality </p>
+            <p class="section-description text-center" style="margin-bottom: 40px">The platform where you're ideas become reality </p>
 
             <div class="row member-content" style="margin-bottom: 60px">
                 <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in">
@@ -99,13 +88,14 @@
                 </div>
                 <div class="col-sm-7">
                     <div class="details">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <h4 style="font-weight: bold"> Aceasta idee este geniala</h4>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
-                            <li><button class="btn btn-info"> See more </button></li>
+                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul>
                     </div>
                 </div>
@@ -119,13 +109,14 @@
                 </div>
                 <div class="col-sm-7 col-sm-pull-2">
                     <div class="details">
+                        <h4 style="font-weight: bold"> Aceasta idee este geniala</h4>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
-                            <li><button class="btn btn-info"> See more </button></li>
+                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul>
                     </div>
                 </div>
@@ -134,19 +125,19 @@
             <div class="row member-content" style="margin-bottom: 40px">
                 <div class="col-sm-3 col-sm-offset-1 member-thumb">
                     <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="" style="width:30%;height: 30%"/>
-                    <h4>El morenito</h4>
+                    <h4>El matchingsnito</h4>
                     <p class="title">Lead Developer</p>
                 </div>
                 <div class="col-sm-7   ">
                     <div class="details">
+                        <h4 style="font-weight: bold"> Aceasta idee este geniala</h4>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-
-                            linkedin fa-fw"></i></a></li>
-                            <li><button class="btn btn-info"> See more </button></li>
+                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul>
                     </div>
                 </div>
@@ -157,6 +148,76 @@
 
 <br/>
 <br/>
+
+
+<footer>
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+
+                    <li>
+                        <p></p>
+                    </li>
+
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+</footer>
 
 
 </body>
