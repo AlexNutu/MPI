@@ -38,7 +38,7 @@ public class LoginController extends BaseController {
     public String addUser(@RequestBody UserInformation userInfo) throws NoSuchAlgorithmException {
         userService.createUser(userInfo);
 
-        return "manageUser";
+        return "createUser";
     }
 
     @RequestMapping(value = "/success", method = RequestMethod.GET)

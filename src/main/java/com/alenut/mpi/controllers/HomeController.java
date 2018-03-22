@@ -78,6 +78,15 @@ public class HomeController extends BaseController {
         return "userProfile";
     }
 
+    @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)
+    public String accountSettings(HttpServletRequest request, Model model) {
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getByEmail(authentication.getName());
+        model.addAttribute("username", user.getUsername());
+
+        return "accountSettings";
+    }
+
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public String contactUs(HttpServletRequest request, Model model) {
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
