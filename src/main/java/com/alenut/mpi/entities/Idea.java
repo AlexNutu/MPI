@@ -2,6 +2,7 @@ package com.alenut.mpi.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Idea {
@@ -17,21 +18,31 @@ public class Idea {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "postedDate")
-    private Date postedDate;
+    @Column(name = "likes_number")
+    private Integer likes_number;
 
-    @Column(name = "id_creator")
-    private Long idCreator;
+    @Column(name = "posted_date")
+    private Date posted_date;
 
-    public Idea(){
+//    @Column(name = "id_user")
+//    private Long id_user;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
+
+    @OneToMany(mappedBy = "idea")
+    private List<Comment> comments;
+
+    public Idea() {
     }
 
-    public Long getId() {
+    public Long getId_idea() {
         return id_idea;
     }
 
-    public void setId(Long id) {
-        this.id_idea = id;
+    public void setId_idea(Long id_idea) {
+        this.id_idea = id_idea;
     }
 
     public String getTitle() {
@@ -50,20 +61,36 @@ public class Idea {
         this.body = body;
     }
 
-    public Date getPostedDate() {
-        return postedDate;
+    public Integer getLikes_number() {
+        return likes_number;
     }
 
-    public void setPostedDate(Date posted_date) {
-        this.postedDate = posted_date;
+    public void setLikes_number(Integer likes_number) {
+        this.likes_number = likes_number;
     }
 
-    public Long getCreator() {
-        return idCreator;
+    public Date getPosted_date() {
+        return posted_date;
     }
 
-    public void setCreator(Long idCreator) {
-        this.idCreator = idCreator;
+    public void setPosted_date(Date posted_date) {
+        this.posted_date = posted_date;
     }
 
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }

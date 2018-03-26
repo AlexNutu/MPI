@@ -1,7 +1,6 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.entities.User;
-import com.alenut.mpi.entities.info.UserInformation;
 import com.alenut.mpi.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -9,7 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +23,8 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String redirectToLogin() {
-        return "login";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return "redirect:/home";
     }//redirect:login
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -33,27 +32,23 @@ public class LoginController extends BaseController {
         return "login";
     }
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST,
-            consumes = {"application/json"})
-    public String addUser(@RequestBody UserInformation userInfo) throws NoSuchAlgorithmException {
-        userService.createUser(userInfo);
-
-        return "createUser";
-    }
-
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public String successRedirect() throws NoSuchAlgorithmException {
 
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         authentication.getAuthorities();
-        String email;
+        String emailOrUsername;
         if (authentication.getPrincipal() instanceof User) {
-            email = ((User) authentication.getPrincipal()).getEmail();
+            emailOrUsername = ((User) authentication.getPrincipal()).getEmail();
         } else {
-            email = authentication.getName();
+            emailOrUsername = authentication.getName();
         }
-        User user = userService.getByEmail(email);
+        User user = null;
+        if (userService.getByEmail(emailOrUsername) != null) {
+            user = userService.getByEmail(emailOrUsername);
+        } else {
+            user = userService.getByUsername(emailOrUsername);
+        }
 
         // 0 admin, 1 user
         if (user.getRole() == 0) {
@@ -69,6 +64,7 @@ public class LoginController extends BaseController {
         ModelAndView mav = new ModelAndView();
         mav.addObject("error", e);
         mav.setViewName("error");
+
         return mav;
     }
 

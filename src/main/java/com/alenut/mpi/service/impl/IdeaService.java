@@ -1,6 +1,7 @@
 package com.alenut.mpi.service.impl;
 
 import com.alenut.mpi.entities.Idea;
+import com.alenut.mpi.entities.User;
 import com.alenut.mpi.repository.IdeaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,11 @@ public class IdeaService {
     }
 
     public void insert(Idea idea) {
-        if (idea.getCreator() == null) {
-            idea.setCreator(123L);
+        if (idea.getUser() == null) { // nu ar trebui sa se intample
+            idea.setUser(new User());
         }
-        if (idea.getPostedDate() == null) {
-            idea.setPostedDate(new Date());
+        if (idea.getPosted_date() == null) {
+            idea.setPosted_date(new Date());
         }
         ideaRepository.save(idea);
     }

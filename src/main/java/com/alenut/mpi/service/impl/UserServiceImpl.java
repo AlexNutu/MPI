@@ -39,8 +39,7 @@ public class UserServiceImpl implements UserService {
 
     public User getByEmail(String email) {
         try {
-            User user = userRepository.getByEmail(email);
-            return user;
+            return userRepository.getByEmail(email);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -48,31 +47,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(UserInformation userInfo) throws NoSuchAlgorithmException {
+    public User getByUsername(String username) {
+        try {
+            return userRepository.getByUsername(username);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
-        userInfo.setPassword(MD5Encryption.computeMD5("parola"));
-        User user = new User(userInfo);
+    @Override
+    public void createUser(User user) throws NoSuchAlgorithmException {
 
+        user.setPassword(MD5Encryption.computeMD5(user.getPassword()));
         try {
             usr = userRepository.save(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("The username or email already exists");
         }
     }
 
     @Override
-    public void editUser(UserInformation userInfo) throws NoSuchAlgorithmException {
+    public void editUser(User user1) throws NoSuchAlgorithmException {
 
-        userInfo.setPassword(MD5Encryption.computeMD5(userInfo.getPassword()));
-        User user = userRepository.getByEmail(userInfo.getEmail());
-
-        //TODO: de adaugat setere pentru celelalte campuri
-        user.setPassword(userInfo.getPassword());
-        user.setRole(userInfo.getRole());
-        try {
-            usr = userRepository.save(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        user1.setPassword(MD5Encryption.computeMD5(user1.getPassword()));
+//       // User user = userRepository.getByEmail(user1.getEmail());
+//
+//        //TODO: de adaugat setere pentru celelalte campuri
+//        user.setPassword(userInfo.getPassword());
+//        user.setRole(userInfo.getRole());
+//
+//        try {
+//            usr = userRepository.save(user);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

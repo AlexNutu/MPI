@@ -24,9 +24,16 @@ public class MPIAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String email = authentication.getName();
+        String emailOrUsername = authentication.getName();
+
         String password = authentication.getCredentials().toString();
-        User user = userService.getByEmail(email);
+        User user = null;
+        if(userService.getByEmail(emailOrUsername) != null){
+             user = userService.getByEmail(emailOrUsername);
+        }else{
+             user = userService.getByUsername(emailOrUsername);
+        }
+
         try {
             if (user != null && MD5Encryption.computeMD5(password).equals(user.getPassword())) {
                 List<GrantedAuthority> grantedAuths = new ArrayList<>();
@@ -42,7 +49,7 @@ public class MPIAuthenticationProvider implements AuthenticationProvider {
                     }
                 }
                 grantedAuths.add(new SimpleGrantedAuthority(role));
-                return new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
+                return new UsernamePasswordAuthenticationToken(emailOrUsername, password, grantedAuths);
             } else {
                 return null;
             }

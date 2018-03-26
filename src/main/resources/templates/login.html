@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8"/>
@@ -10,7 +10,6 @@
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js/"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-
 
     <title>Log in</title>
 </head>
@@ -24,21 +23,29 @@
             <!--form start-->
             <form name="login" action="login" method="POST" class="form-container" style="color:#fff;">
                 <h1 id="title"> My Project Idea </h1>
+
+                <!--th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">-->
+                <div class="error" th:if="${param.error}">
+                    <span class="alert alert-danger"> Username or password are incorrect! </span>
+                </div><br/>
+
                 <div class="form-group emailInput has-feedback">
-                    <label for="username">Email address</label>
-                    <input name="username" type="email" class="form-control" id="username" placeholder="Email" required=""/>
+                    <label for="username">Email address or Username</label>
+                    <input name="username" type="text" class="form-control" id="username" placeholder="Email" required=""/>
                 </div>
                 <div class="form-group passwordInput has-feedback">
                     <label for="password">Password</label>
                     <input name="password" type="password" class="form-control" id="password" placeholder="Password" required=""/>
                 </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"/> Remember me
-                    </label>
-                </div>
+
+                <!--<div class="checkbox">-->
+                    <!--<label class="control-label" for="remember">-->
+                        <!--<input type="checkbox" id="remember" name="remember-me" value="true"/> Remember me-->
+                    <!--</label>-->
+                <!--</div>-->
+
                 <button type="submit" class="btn btn-success btn-block">Login</button>
-                <br/><p class="loginbottomtext">Still don't have an account? <a href="/user/createUser">Register</a></p>
+                <br/><p class="loginbottomtext">Still don't have an account? <a href="/home/createUser">Register</a></p>
             </form>
 
             <!--form end-->
@@ -49,49 +56,7 @@
 </div>
 
 
-<!--<div ng-controller="loginController as login" class="container-fluid login-container">-->
-    <!--<div class="login row">-->
-        <!--<div class="brand">-->
-            <!--<div class="row">-->
-                <!--<img class="img-fluid logo-image" src="./img/logo.png"/>-->
-                <!--<div class="text main-brand-text">-->
-                    <!--<h1>My</h1>-->
-                    <!--<h1>Project</h1>-->
-                    <!--<h1>Idea</h1>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="row">-->
-                <!--<div class="text">-->
-                    <!--<h2>Login in to Post your Idea</h2>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
 
-        <!--<div class="form">-->
-            <!--<div class="form-group">-->
-                <!--<form class="row" name="login" action="login" method="POST">-->
-                    <!--<div class="col-md-6 inp">-->
-                        <!--<input class="form-control " name="username" type="text" placeholder="Username" />-->
-                    <!--</div>-->
-                    <!--<div class="col-md-6 inp">-->
-                        <!--<input class="form-control" name="password" type="password" placeholder="Password" />-->
-                    <!--</div>-->
-                    <!--<button class="button" type="submit">Log in</button>-->
-                <!--</form>-->
-            <!--</div>-->
-
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
-
-
-
-<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>-->
-<!--<script src="https://ajax.googleapis.com/ajax/libs/angular-ui-router/1.0.0-rc.1/angular-ui-router.min.js"></script>-->
-<!--<script src="./js/app.module.js"></script>-->
-<!--<script src="./js/login.controller.js"></script>-->
-<!--<script src="./js/tracker.controller.js"></script>-->
-<!--<script src="./js/app.service.js"></script>-->
 
 </body>
 

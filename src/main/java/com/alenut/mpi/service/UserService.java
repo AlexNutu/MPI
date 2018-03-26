@@ -14,8 +14,12 @@ public interface UserService {
     User getByEmail(String email);
 
     @Transactional(readOnly = true)
-    void createUser(UserInformation userInfo) throws NoSuchAlgorithmException;
+    void createUser(User user) throws NoSuchAlgorithmException;
 
     @Transactional(readOnly = true)
-    void editUser(UserInformation userInfo) throws NoSuchAlgorithmException;
+    void editUser(User user) throws NoSuchAlgorithmException;
+
+    @Transactional(readOnly = true)
+    User getByUsername(String username);
+
 }

@@ -22,7 +22,7 @@ public class AdminHomeController extends BaseController {
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String displayAllRequestsFromAllUsersExceptMine(HttpSession session, Model model) {
         int[] days;
-        if (getCurrentUser().getId() == 1) {
+        if (getCurrentUser().getRole() == 1) {
             return "redirect:/login";
         }
 
@@ -46,7 +46,7 @@ public class AdminHomeController extends BaseController {
 
     @PostMapping(value = "/postIdea")
     public String publishIdea(@RequestBody Idea idea) {
-        idea.setCreator(getCurrentUser().getId());
+        idea.setUser(getCurrentUser());
         ideaService.insert(idea);
         return "Idea was pusblished";
     }

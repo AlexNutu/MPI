@@ -1,9 +1,9 @@
 package com.alenut.mpi.entities;
 
-import com.alenut.mpi.entities.info.UserInformation;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -12,19 +12,28 @@ public class User {
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_user;
 
-    @Column(name = "username")
+    @Column(name = "full_name")
+    private String full_name;
+
+    @NotNull
+    @Column(name = "username", unique = true)
     private String username;
 
+    @NotNull
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @NotNull
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "phone_number")
     private String phone_number;
+
+    @Column(name = "occupation")
+    private String occupation;
 
     @Column(name = "role")
     private int role;
@@ -32,28 +41,47 @@ public class User {
     @Column(name = "reg_date")
     private Date reg_date;
 
+    @OneToMany(mappedBy = "user")
+    private List<Idea> ideas;
+
+    @OneToMany(mappedBy = "user")
+    private List<Message> messages;
+
+
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
 //    private List<Role> roles;
 
-    User() {
+    public User() {
     }
 
-    public User(UserInformation userInformation) {
-        this.username = userInformation.getUsername();
-        this.password = userInformation.getPassword();
-        this.email = userInformation.getEmail();
-        this.phone_number = userInformation.getPhone_number();
-        this.reg_date = userInformation.getRegistration_date();
-        this.role = userInformation.getRole();
+    public User(String full_name, String username, String email, String password, String phone_number, String occupation, int role, Date reg_date, List<Idea> ideas, List<Message> messages) {
+        this.full_name = full_name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.phone_number = phone_number;
+        this.occupation = occupation;
+        this.role = role;
+        this.reg_date = reg_date;
+        this.ideas = ideas;
+        this.messages = messages;
     }
 
-    public Long getId() {
-        return id;
+    public Long getId_user() {
+        return id_user;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId_user(Long id_user) {
+        this.id_user = id_user;
+    }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
     public String getUsername() {
@@ -64,20 +92,20 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhone_number() {
@@ -88,12 +116,12 @@ public class User {
         this.phone_number = phone_number;
     }
 
-    public Date getReg_date() {
-        return reg_date;
+    public String getOccupation() {
+        return occupation;
     }
 
-    public void setReg_date(Date reg_date) {
-        this.reg_date = reg_date;
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
     }
 
     public int getRole() {
@@ -104,4 +132,27 @@ public class User {
         this.role = role;
     }
 
+    public Date getReg_date() {
+        return reg_date;
+    }
+
+    public void setReg_date(Date reg_date) {
+        this.reg_date = reg_date;
+    }
+
+    public List<Idea> getIdeas() {
+        return ideas;
+    }
+
+    public void setIdeas(List<Idea> ideas) {
+        this.ideas = ideas;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
 }

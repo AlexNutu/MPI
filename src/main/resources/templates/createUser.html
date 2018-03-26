@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="../css/messages.css"/>
     <link rel="stylesheet" href="../css/ideas.css"/>
-    <link rel="stylesheet" href="../css/signup.css"/>
+    <link rel="stylesheet" href="../css/signup.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 
@@ -12,6 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    <script src="../js/navbar.js"></script>
 
     <link rel="shortcut icon" href="../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
@@ -22,6 +23,21 @@
 </head>
 <body>
 
+<script>
+    function customReset()
+    {
+        document.getElementById("inputName").value = "";
+        document.getElementById("inputUsername").value = "";
+        document.getElementById("inputEmail").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("selectOccupation").selectedIndex = -1;
+        document.getElementById("inputPassword").value = "";
+        document.getElementById("inputPasswordConfirm").value = "";
+
+    }
+</script>
+
+
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -29,13 +45,15 @@
             <a href="#" class="navbar-brand">My Project Idea </a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+
             <li class="divider-vertical"></li>
-            <li><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span class="badge"
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span class="badge"
                                                                                                 style="color: #5bc0de;"> 100 </span></a>
             </li>
 
-            <li><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge"
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge"
                                                                                                      style="color: orange"> 10 </span></a>
             </li>
             <li class="dropdown">
@@ -52,15 +70,31 @@
                     <li><a href="#">Vehicles</a></li>
                 </ul>
             </li>
-            <li><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+
+            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="/user/createUser"><span class="glyphicon glyphicon-registration-mark"></span> Sign Up</a></li>
-            <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>-->
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li class="active"><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                                    th:text="'Welcome, ' + ${username} "> User <b class="caret"></b></a>
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li class="active"><a href="/user/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
+        </ul>
+
+        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
+
+        <!--<ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">-->
+        <!--<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>-->
+        <!--</ul>-->
+
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <b class="caret"></b>
+                </a>
                 <ul class="dropdown-menu">
                     <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
                     <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a>
@@ -85,19 +119,24 @@
     </div>
 </nav>
 
-<form class="form-horizontal" data-toggle="validator" role="form" style="margin-top: 2%;">
+<div style="color:white">
+<form class="form-horizontal" th:action="@{/home/createUser}" th:object="${user}" method="POST" data-toggle="validator" role="form" style="margin-top: 2%;">
     <fieldset>
 
         <div style="text-align: center; margin-left: 4%;">
 
             <!-- Form Name -->
-            <legend style="font-size: 36px; margin-bottom: 2%;">Register to post your great ideas</legend>
+            <legend class="title" style="font-size: 36px; margin-bottom: 3%; color: white !important;">Register to post your great ideas</legend>
+
+            <div class="error" th:if="${hasError}">
+                <span class="alert alert-danger"> Username or Email already exists! </span>
+            </div><br/>
 
             <!-- Text input name-->
             <div class="form-group" style="margin-bottom: 2%; width: 100%">
                 <label class="col-md-4 control-label" for="inputName">Full Name</label>
                 <div class="col-md-4">
-                    <input id="inputName" name="inputName" type="text" placeholder="John Doe" class="form-control input-md"
+                    <input id="inputName" th:field="*{full_name}" name="inputName" type="text" placeholder="John Doe" class="form-control input-md"
                            required=""/>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -107,7 +146,7 @@
             <div class="form-group" style="margin-bottom: 2%; width: 100%">
                 <label class="col-md-4 control-label" for="inputUsername">Username</label>
                 <div class="col-md-4">
-                    <input id="inputUsername" name="inputUsername" type="text" placeholder="Doe" class="form-control input-md"
+                    <input id="inputUsername" th:field="*{username}" name="inputUsername" type="text" placeholder="johndoe" class="form-control input-md"
                            required=""/>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -117,55 +156,68 @@
             <div class="form-group" style="margin-bottom: 2%; width: 100%">
                 <label class="col-md-4 control-label" for="inputEmail">Email</label>
                 <div class="col-md-4">
-                    <input id="inputEmail" name="inputEmail" type="email" placeholder="johndoe@example.com"
-                           class="form-control input-md" data-error="Sorry, the email address is invalid" required="" />
+                    <input id="inputEmail" th:field="*{email}" name="inputEmail" type="email" placeholder="johndoe@example.com"
+                           class="form-control input-md" data-error="Email address is invalid." required="" />
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
 
             <!-- Text input phone-->
-            <div class="form-group" style="margin-bottom: 2%; width: 100%">
+            <div class="form-group" style="margin-bottom: 2.5%; width: 100%">
                 <label class="col-md-4 control-label" for="phone">Phone</label>
                 <div class="col-md-4">
-                    <input id="phone" name="phone" type="text" pattern="\d{4}[\-]\d{3}[\-]\d{3}" maxlength="12" data-error="Sorry, phone is invalid" placeholder="0777-555-123"
+                    <input id="phone" th:field="*{phone_number}" name="phone" type="text" pattern="\d{4}[\-]\d{3}[\-]\d{3}" maxlength="12" data-error="Sorry, phone is invalid" placeholder="0777-555-123"
                            class="form-control input-md bfh-phone" />
                 </div>
             </div>
 
-
-            <!-- Password input-->
-            <div class="form-group" style="margin-bottom: 2%; width: 100%">
-                <label class="col-md-4 control-label" for="inputPassword">Password</label>
+            <!-- Select input-->
+            <div class="form-group" style="width: 100%; margin-bottom: 2.5%;">
+                <label for="selectOccupation" class="col-md-4 control-label">Occupation</label>
                 <div class="col-md-4">
-                    <input id="inputPassword" name="password" type="password" data-minlength="6" placeholder="Password" class="form-control input-md"
-                           required=""/>
-                    <div class="help-block">Minimum of 6 characters</div>
-                </div>
-            </div>
-
-            <!-- Password input confirmation-->
-            <div class="form-group" style="margin-bottom: 2%; width: 100%">
-                <label class="col-md-4 control-label" for="confirmation">Confirm password</label>
-                <div class="col-md-4">
-                    <input id="confirmation" name="confirmation" type="password" data-match="#inputPassword" data-match-error="Whoops, passwords don't match"
-                           placeholder="Confirm" class="form-control input-md" required=""/>
+                    <select class="form-control input-md" th:field="*{occupation}" id="selectOccupation" required="">
+                        <option value=""></option>
+                        <option value="student">Student</option>
+                        <option value="developer">Developer</option>
+                        <option value="team-leader">Team Lead</option>
+                        <option value="director">Director</option>
+                        <option value="freelancer">Freelancer</option>
+                    </select>
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-        </div>
 
-        <!-- Button (Double) -->
-            <div class="form-group" style="margin-bottom: 2%; width: 100%;">
-                <label class="col-md-4 control-label" for="save"></label>
-                <div class="col-md-8" style="text-align: center; float: none !important;">
-                    <button id="save" name="save" type="submit" class="btn btn-success">Register</button>
-                    <button id="clear" name="clear" class="btn btn-danger">Reset</button>
+            <!-- Password input-->
+            <div class="form-group" style="width: 100%; margin-bottom: 2%">
+                <label class="col-md-4 control-label" for="inputPassword">Password</label>
+                <div class="form-inline row" style="width: 100%">
+                    <div class="form-group col-md-2" style="padding-left: 30px; margin-left: 0">
+                        <input type="password" th:field="*{password}" data-minlength="6" style="width: 100%" class="form-control" id="inputPassword" placeholder="Password" required="" />
+                        <div class="help-block">Minimum of 6 characters</div>
+                    </div>
+                    <div class="form-group col-md-2" style="padding-left: 30px; margin-left: 0">
+                        <input type="password" class="form-control" style="width: 100%" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Whoops, these don't match" placeholder="Confirm" required="" />
+                        <div class="help-block with-errors">Confirm password</div>
+                    </div>
                 </div>
             </div>
 
 
+        </div>
+
+
+        <!-- Button (Double) -->
+            <div class="form-group" style="margin-bottom: 3%; width: 100%;">
+                <label class="col-md-4 control-label" for="save"></label>
+                <div class="col-md-8" style="text-align: center; float: none !important;">
+                    <button id="save" name="save" type="submit" class="btn btn-success">Register</button>
+                    <button id="clear" type="reset" name="clear" onclick="customReset();" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+
     </fieldset>
 </form>
+</div>
 
 <!--<form data-toggle="validator" role="form">-->
     <!--<div class="form-group">-->

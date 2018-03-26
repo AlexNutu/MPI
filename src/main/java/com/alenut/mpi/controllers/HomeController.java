@@ -6,6 +6,7 @@ import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.IdeaService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,8 +27,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String getIdeas(HttpServletRequest request, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         return "userHome";
@@ -50,19 +50,17 @@ public class HomeController extends BaseController {
 
     @PostMapping(value = "/postIdea")
     public String publishIdea(@RequestBody Idea idea, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
-        idea.setCreator(getCurrentUser().getId());
+        idea.setUser(getCurrentUser());
         ideaService.insert(idea);
         return "Idea was pusblished";
     }
 
     @GetMapping(value = "/viewIdea")
     public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
@@ -71,8 +69,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String userProfile(HttpServletRequest request, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         return "userProfile";
@@ -80,8 +77,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)
     public String accountSettings(HttpServletRequest request, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         return "accountSettings";
@@ -89,8 +85,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public String contactUs(HttpServletRequest request, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         return "contact";
@@ -98,8 +93,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/myIdeas", method = RequestMethod.GET)
     public String myIdeas(HttpServletRequest request, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         return "myIdeas";
@@ -107,8 +101,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
     public String myMessages(HttpServletRequest request, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         return "messages";
@@ -116,8 +109,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about(HttpServletRequest request, Model model) {
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getByEmail(authentication.getName());
+        User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
 
         return "about";

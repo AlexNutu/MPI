@@ -3,12 +3,16 @@ package com.alenut.mpi.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -20,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.AuthProvider;
+import java.util.Arrays;
 import java.util.Collection;
 
 @Configuration
@@ -30,7 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-
     @Autowired
     private MPIAuthenticationProvider provider;
 
@@ -38,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/**").authenticated()
+                .antMatchers("/home/**").permitAll()
                 .antMatchers("/admin/**").authenticated()
                 .antMatchers("/").permitAll()
                 .antMatchers("/css/**").permitAll()
@@ -47,7 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
                 .antMatchers("/update").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/success").permitAll()
-                .antMatchers("/home/**").permitAll()
                 .antMatchers("/employee/**").permitAll()
 //                .antMatchers("/user/**").hasAuthority("ADMIN")
 //                .antMatchers("/employee/**").hasAuthority("ADMIN")
@@ -58,8 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/success", true)
                 .and()
-                .logout().logoutSuccessUrl("/login")
-                .and().csrf().disable();
+                .logout().logoutSuccessUrl("/home")
+                .and()
+                .csrf().disable();
     }
 
     @Autowired

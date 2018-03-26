@@ -1,7 +1,6 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.entities.User;
-import com.alenut.mpi.entities.info.UserInformation;
 import com.alenut.mpi.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,24 +12,26 @@ public class BaseController {
     @Autowired
     private UserServiceImpl userService;
 
-    @ModelAttribute("currentUserEmail")
-    public String getCurrentUserEmail() {
+    @ModelAttribute("currentUserEmailOrUsername")
+    public String getCurrentUserEmailOrUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = "";
+        String emailOrUsername = "";
         if (authentication != null) {
-            if (authentication.getPrincipal() instanceof UserInformation) {
-                email = ((UserInformation) authentication.getPrincipal()).getEmail();
+            if (authentication.getPrincipal() instanceof User) {
+                emailOrUsername = ((User) authentication.getPrincipal()).getEmail();
             } else {
-                email = authentication.getName();
+                emailOrUsername = authentication.getName();
             }
         }
-        return email;
+        return emailOrUsername;
     }
 
     @ModelAttribute("currentUser")
     public User getCurrentUser() {
-        String userEmail = getCurrentUserEmail();
-        User user = userService.getByEmail(userEmail);
-        return user;
+        String emailOrUsername = getCurrentUserEmailOrUsername();
+        if (userService.getByEmail(emailOrUsername) != null) {
+            return userService.getByEmail(emailOrUsername);
+        }
+        return userService.getByUsername(emailOrUsername);
     }
 }

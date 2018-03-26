@@ -5,10 +5,11 @@ import java.util.Date;
 public class UserInformation {
 
     private Integer id;
+    private String fullName;
     private String username;
     private String password;
     private String email;
-    private Integer nr_ideas;
+    private Integer likes;
     private String ocupation;
     private String gender;
     private String phone_number;
@@ -21,6 +22,14 @@ public class UserInformation {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getUsername() {
@@ -47,12 +56,12 @@ public class UserInformation {
         this.email = email;
     }
 
-    public Integer getNr_ideas() {
-        return nr_ideas;
+    public Integer getLikes() {
+        return likes;
     }
 
-    public void setNr_ideas(Integer nr_ideas) {
-        this.nr_ideas = nr_ideas;
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 
     public String getOcupation() {
