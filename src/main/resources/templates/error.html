@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <title>Error</title>
+</head>
+<body role="document">
+
+<div style="text-align: center">
+    <h1> An error has occurred in the application</h1>
+
+    <div th:text="${error}"></div>
+
+    <button class="btn btn-primary" th:hidden="${backButton} == null" onclick="location.href='/user/userHome'">Go
+        back
+    </button>
+
+</div>
+
+</body>
