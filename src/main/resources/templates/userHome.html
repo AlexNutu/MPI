@@ -116,22 +116,23 @@
             <h1 class="section-title text-center page-title">Popular Ideas</h1>
             <p class="section-description text-center" style="margin-bottom: 40px">The platform where you're ideas become reality </p>
 
-            <div class="row member-content" style="margin-bottom: 60px">
-                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in">
-                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
-                    <h4>El jefe</h4>
-                    <p class="title">Lead Designer &amp; Founder</p>
+            <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px">
+                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" >
+                        <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
+                        <h4 th:text="${idea.getUser().getFull_name()}">El jefe</h4>
+                        <p th:text="${idea.getUser().getOccupation()}" class="title">Lead Designer &amp; Founder</p>
                 </div>
                 <div class="col-sm-7">
                     <div class="details">
-                        <h4 style="font-weight: bold"> Aceasta idee este geniala</h4>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <h4 th:text="${idea.getTitle()}" style="font-weight: bold"></h4>
+                        <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+                            <!--<li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>-->
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
-                            <a href="#" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                            <!--<li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>-->
+                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> Likes (100)</button></li>
+                            <li><button class="btn btn-warning btn-xs" ><span class="glyphicon glyphicon-comment"></span> 2 comments</button></li>
                             <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul>
                     </div>
@@ -140,9 +141,9 @@
 
             <div class="row member-content right" style="margin-bottom: 40px">
                 <div class="col-sm-3 col-sm-push-8 member-thumb">
-                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" alt="" style="width:30%;height: 30%"/>
-                    <h4>El monito</h4>
-                    <p class="title">Designer</p>
+                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="" style="width:30%;height: 30%"/>
+                    <h4>El matchingsnito</h4>
+                    <p class="title">Lead Developer</p>
                 </div>
                 <div class="col-sm-7 col-sm-pull-2">
                     <div class="details">
@@ -150,35 +151,16 @@
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+                            <!--<li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>-->
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                            <!--<li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>-->
                             <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="row member-content" style="margin-bottom: 40px">
-                <div class="col-sm-3 col-sm-offset-1 member-thumb">
-                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="" style="width:30%;height: 30%"/>
-                    <h4>El matchingsnito</h4>
-                    <p class="title">Lead Developer</p>
-                </div>
-                <div class="col-sm-7   ">
-                    <div class="details">
-                        <h4 style="font-weight: bold"> Aceasta idee este geniala</h4>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        <ul class="social-content">
-                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
-                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </section>
 </div>

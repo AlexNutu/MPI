@@ -20,9 +20,6 @@ public class Message {
     @Column(name = "id_sender")
     private Long id_sender;
 
-//    @Column(name = "id_user")
-//    private Long id_user;
-
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;

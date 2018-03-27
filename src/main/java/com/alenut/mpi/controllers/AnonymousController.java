@@ -1,6 +1,7 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.UserValidator;
+import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.AutoLoginService;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.List;
 
 
 @Controller
@@ -38,7 +40,11 @@ public class AnonymousController extends BaseController {
     private AutoLoginService autoLoginService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String getIdeas(HttpServletRequest request, Model model) {
+    public String displayAllIdeas(HttpServletRequest request, Model model) {
+
+        List<Idea> ideas = ideaService.getAllIdeas();
+
+        model.addAttribute("ideasList", ideas);
 
         return "userHome";
     }

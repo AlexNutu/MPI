@@ -17,9 +17,6 @@ public class Comment {
     @Column(name = "posted_date")
     private Date posted_date;
 
-//    @Column(name = "id_idea")
-//    private Long id_idea;
-
     @ManyToOne
     @JoinColumn(name = "id_idea")
     private Idea idea;

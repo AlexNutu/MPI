@@ -24,9 +24,6 @@ public class Idea {
     @Column(name = "posted_date")
     private Date posted_date;
 
-//    @Column(name = "id_user")
-//    private Long id_user;
-
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;

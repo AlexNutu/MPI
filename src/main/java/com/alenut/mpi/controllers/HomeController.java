@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -29,6 +30,9 @@ public class HomeController extends BaseController {
     public String getIdeas(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+
+        List<Idea> ideas = ideaService.getAllIdeas();
+        model.addAttribute("ideasList", ideas);
 
         return "userHome";
     }

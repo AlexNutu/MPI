@@ -85,10 +85,6 @@
 
         <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
 
-        <!--<ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">-->
-        <!--<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>-->
-        <!--</ul>-->
-
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -119,14 +115,14 @@
     </div>
 </nav>
 
-<div style="color:white">
+<div>
 <form class="form-horizontal" th:action="@{/home/createUser}" th:object="${user}" method="POST" data-toggle="validator" role="form" style="margin-top: 2%;">
     <fieldset>
 
         <div style="text-align: center; margin-left: 4%;">
 
             <!-- Form Name -->
-            <legend class="title" style="font-size: 36px; margin-bottom: 3%; color: white !important;">Register to post your great ideas</legend>
+            <legend class="title" style="font-size: 36px; margin-bottom: 3%;">Register to post your great ideas</legend>
 
             <div class="error" th:if="${hasError}">
                 <span class="alert alert-danger"> Username or Email already exists! </span>
@@ -177,11 +173,11 @@
                 <div class="col-md-4">
                     <select class="form-control input-md" th:field="*{occupation}" id="selectOccupation" required="">
                         <option value=""></option>
-                        <option value="student">Student</option>
-                        <option value="developer">Developer</option>
-                        <option value="team-leader">Team Lead</option>
-                        <option value="director">Director</option>
-                        <option value="freelancer">Freelancer</option>
+                        <option value="Student">Student</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Team Leader">Team Lead</option>
+                        <option value="Director">Director</option>
+                        <option value="Freelancer">Freelancer</option>
                     </select>
                     <div class="help-block with-errors"></div>
                 </div>
