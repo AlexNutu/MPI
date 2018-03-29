@@ -22,13 +22,14 @@ public class IdeaService {
         return ideaRepository.findAll(); // gaseste toate ideile salvate in baza de date
     }
 
+    public List<Idea> getIdeasByUser(User user) {
+        return ideaRepository.getIdeasObjectsByUser(user);
+    }
+
 //    private Sort sortByPostedDateAsc() {
 //        return new Sort(Sort.Direction.ASC, "id_idea");
 //    }
 
-//    public List<Idea> getIdeasByUser(User user) {
-//        return ideaRepository.getIdeasObjectsByUser(user);
-//    }
 
     public void insert(Idea idea) {
         if (idea.getUser() == null) { // nu ar trebui sa se intample

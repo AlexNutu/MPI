@@ -24,6 +24,10 @@ public class Idea {
     @Column(name = "posted_date")
     private Date posted_date;
 
+    @OneToOne
+    @JoinColumn(name = "id_category")
+    private Category category;
+
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
@@ -74,6 +78,13 @@ public class Idea {
         this.posted_date = posted_date;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public User getUser() {
         return user;

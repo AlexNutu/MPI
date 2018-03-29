@@ -116,8 +116,8 @@
             <h1 class="section-title text-center page-title">Popular Ideas</h1>
             <p class="section-description text-center" style="margin-bottom: 40px">The platform where you're ideas become reality </p>
 
-            <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px">
-                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" >
+            <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px; margin-left: -60px;">
+                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 3.333333%">
                         <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
                         <h4 th:text="${idea.getUser().getFull_name()}">El jefe</h4>
                         <p th:text="${idea.getUser().getOccupation()}" class="title">Lead Designer &amp; Founder</p>
@@ -128,13 +128,13 @@
                         <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <!--<li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>-->
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <!--<li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>-->
-                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> Likes (100)</button></li>
-                            <li><button class="btn btn-warning btn-xs" ><span class="glyphicon glyphicon-comment"></span> 2 comments</button></li>
+                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getLikes_number() + ' Likes'}"></span></button></li>
+                            <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
                             <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul>
+                        <br/>
+                        <p style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em style="color:#999;" th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
                     </div>
                 </div>
             </div>
@@ -151,9 +151,9 @@
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <!--<li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>-->
+                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <!--<li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>-->
+                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
                             <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul>
                     </div>

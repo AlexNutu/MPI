@@ -12,5 +12,6 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
 //    Idea getById(Long id);
 
-//    List<Idea> getIdeasObjectsByUser(User user);
+    List<Idea> getIdeasObjectsByUser(User user);
+
 }

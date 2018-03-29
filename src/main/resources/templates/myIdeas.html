@@ -9,6 +9,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../js/navbar.js"></script>
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <link rel="shortcut icon" href="../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
@@ -27,7 +28,7 @@
         <ul class="nav navbar-nav">
             <li><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${ideasList.size()}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge" style="color: orange"> 10 </span></a></li>
 
@@ -87,7 +88,68 @@
     </div>
 </nav>
 
-    <h1 style="text-align: center"> My Ideas </h1>
+<div class="container">
+    <div class="row">
+        <h1 style="margin-bottom: -10px; text-align:center; margin-top: 0;">My Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
+        <hr class="hr-primary" style="  height: 4px;" />
+        <ol th:if="${not #lists.isEmpty(ideasList)}" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
+            <button href="#" style="background-color: #5bc0de; border-color: #46b8da;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
+            <li th:each="idea : ${ideasList}" th:text="${idea.getCategory().getBody()}"><a href="#">MY TOPICS</a></li>
+        </ol>
+        <div style="text-align: center; margin-bottom: 10px">
+            <div th:if="${#lists.isEmpty(ideasList)}" class="alert alert-info" role="alert">
+                <span>You got 0 ideas posted!</span>
+            </div>
+            <button class="btn btn-info btn-lg" >
+                <span class="glyphicon glyphicon-edit"></span>  Submit Idea
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="container bootstrap snippet">
+    <section id="team" class="white-bg padding-top-bottom">
+        <div class="container bootstrap snippet">
+            <br/><br/>
+
+            <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: -10.666667%; float:none;">
+                <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
+                <h4>El jefe</h4>
+                <p class="title">Lead Designer &amp; Founder</p>
+            </div>
+
+            <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px; margin-left: 28%">
+                <div class="col-sm-7">
+                    <div class="details" style="margin: -40px -180px 45px -90px;">
+                        <h4 th:text="${idea.getTitle()}" style="font-weight: bold"></h4>
+                        <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <ul class="social-content">
+                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
+                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
+                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getLikes_number() + ' Likes'}"></span></button></li>
+                            <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
+                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
+                        </ul>
+                        <br/>
+                        <p style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em style="color:#999;" th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+
+
+
+
+
 
 </body>
 </html>
