@@ -14,4 +14,5 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     List<Idea> getIdeasObjectsByUser(User user);
 
+    List<Idea> getIdeaByTitle(String title);
 }

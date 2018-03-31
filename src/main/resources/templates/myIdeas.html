@@ -94,7 +94,7 @@
         <hr class="hr-primary" style="  height: 4px;" />
         <ol th:if="${not #lists.isEmpty(ideasList)}" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
             <button href="#" style="background-color: #5bc0de; border-color: #46b8da;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
-            <li th:each="idea : ${ideasList}" th:text="${idea.getCategory().getBody()}"><a href="#">MY TOPICS</a></li>
+            <li th:each="category : ${categoryList}" th:text="${category.getBody()}"><a href="#">MY TOPICS</a></li>
         </ol>
         <div style="text-align: center; margin-bottom: 10px">
             <div th:if="${#lists.isEmpty(ideasList)}" class="alert alert-info" role="alert">

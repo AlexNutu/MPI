@@ -24,6 +24,9 @@ public class Idea {
     @Column(name = "posted_date")
     private Date posted_date;
 
+    @Column(name = "image_path")
+    private String image_path;
+
     @OneToOne
     @JoinColumn(name = "id_category")
     private Category category;
@@ -76,6 +79,14 @@ public class Idea {
 
     public void setPosted_date(Date posted_date) {
         this.posted_date = posted_date;
+    }
+
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
     }
 
     public Category getCategory() {

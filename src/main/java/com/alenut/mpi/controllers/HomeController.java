@@ -1,15 +1,23 @@
 package com.alenut.mpi.controllers;
 
+import com.alenut.mpi.auxiliary.IdeaValidator;
+import com.alenut.mpi.entities.Category;
 import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
-import com.alenut.mpi.service.UserService;
-import com.alenut.mpi.service.impl.IdeaService;
+import com.alenut.mpi.service.impl.CategoryServiceImpl;
+import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -17,15 +25,19 @@ import java.util.List;
 public class HomeController extends BaseController {
 
     @Autowired
-    private IdeaService ideaService;
+    private IdeaServiceImpl ideaService;
 
     @Autowired
-    private UserService userService;
+    private CategoryServiceImpl categoryService;
+
+    @Autowired
+    private IdeaValidator ideaValidator;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String displayAllIdeas(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         List<Idea> ideas = ideaService.getAllIdeas();
         model.addAttribute("ideasList", ideas);
@@ -40,33 +52,69 @@ public class HomeController extends BaseController {
 
         List<Idea> ideas = ideaService.getIdeasByUser(user);
         model.addAttribute("ideasList", ideas);
+        List<Category> categories = categoryService.getUniqueCategoriesByUser(ideas);
+        model.addAttribute("categoryList", categories);
 
         return "myIdeas";
     }
 
-    @PostMapping(value = "/postIdea")
-    public String publishIdea(@RequestBody Idea idea, Model model) {
+    @RequestMapping(value = "/postIdea", method = RequestMethod.GET)
+    public ModelAndView postIdeaView(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("categories", categoryService.getAllCategories());
 
-        idea.setUser(getCurrentUser());
-        ideaService.insert(idea);
-        return "Idea was pusblished";
+        ModelAndView modelAndView = new ModelAndView("postIdea");
+        modelAndView.addObject("idea", new Idea());
+
+        if (!model.containsAttribute("displaySuccess")) {
+            model.addAttribute("displaySuccess", "false");
+        }
+        if (!model.containsAttribute("displayError")) {
+            model.addAttribute("displayError", "false");
+        }
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/postIdea", method = RequestMethod.POST)
+    public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir) {
+        User user = getCurrentUser();
+        List<Idea> ideas = ideaService.getIdeasByUser(user);
+        model.addAttribute("ideasList", ideas);
+
+        ModelAndView modelAndView = new ModelAndView("redirect:postIdea");
+        modelAndView.addObject("idea", idea);
+
+        idea.setUser(user);
+        ideaValidator.validate(idea, result);
+
+        if (result.hasErrors()) {
+            redir.addFlashAttribute("displayError", "true");
+        } else {
+            redir.addFlashAttribute("displaySuccess", "true");
+            ideaService.insert(idea, user);
+        }
+
+        return modelAndView;
     }
 
     @GetMapping(value = "/viewIdea")
     public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
-        return "idea";
+        return "viewIdea";
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
     public String myMessages(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         return "messages";
     }
@@ -75,6 +123,7 @@ public class HomeController extends BaseController {
     public String userProfile(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         return "userProfile";
     }
@@ -83,24 +132,27 @@ public class HomeController extends BaseController {
     public String accountSettings(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         return "accountSettings";
-    }
-
-    @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public String contactUs(HttpServletRequest request, Model model) {
-        User user = getCurrentUser();
-        model.addAttribute("username", user.getUsername());
-
-        return "contact";
     }
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         return "about";
+    }
+
+    @RequestMapping(value = "/contact", method = RequestMethod.GET)
+    public String contactUs(HttpServletRequest request, Model model) {
+        User user = getCurrentUser();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+
+        return "contact";
     }
 
     //    public String populateTable(Model model) {

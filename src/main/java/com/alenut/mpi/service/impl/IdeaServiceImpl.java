@@ -4,14 +4,13 @@ import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.repository.IdeaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class IdeaService {
+public class IdeaServiceImpl {
 
 
     @Autowired
@@ -26,18 +25,15 @@ public class IdeaService {
         return ideaRepository.getIdeasObjectsByUser(user);
     }
 
-//    private Sort sortByPostedDateAsc() {
-//        return new Sort(Sort.Direction.ASC, "id_idea");
-//    }
+    public List<Idea> getIdeaByTitle(String title) {
+        return ideaRepository.getIdeaByTitle(title);
+    }
 
+    public void insert(Idea idea, User user) {
+        idea.setLikes_number(0);
+        idea.setImage_path("idea.jpg");
+        idea.setPosted_date(new Date());
 
-    public void insert(Idea idea) {
-        if (idea.getUser() == null) { // nu ar trebui sa se intample
-            idea.setUser(new User());
-        }
-        if (idea.getPosted_date() == null) {
-            idea.setPosted_date(new Date());
-        }
         ideaRepository.save(idea);
     }
 }

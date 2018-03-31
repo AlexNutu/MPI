@@ -5,7 +5,7 @@ import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.AutoLoginService;
-import com.alenut.mpi.service.impl.IdeaService;
+import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +28,7 @@ import java.util.List;
 public class AnonymousController extends BaseController {
 
     @Autowired
-    private IdeaService ideaService;
+    private IdeaServiceImpl ideaService;
 
     @Autowired
     private UserService userService;
@@ -91,7 +91,7 @@ public class AnonymousController extends BaseController {
     public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
 
         //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
-        return "idea";
+        return "viewIdea";
     }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)

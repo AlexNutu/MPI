@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="../css/messages.css"/>
+    <link rel="stylesheet" href="../css/ideas.css"/>
+    <link rel="stylesheet" href="../css/signup.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    <script src="../js/navbar.js"></script>
+    <script src="../js/postIdea.js"></script>
+
+    <link rel="shortcut icon" href="../img/icon.png"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+
+    <title> Post Idea </title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <!--<a class="navbar-brand" href="#">My Project Idea</a>-->
+            <a href="#" class="navbar-brand">My Project Idea </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()" class="active"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${ideasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge" style="color: orange"> 10 </span></a></li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Education</a></li>
+                    <li><a href="#">Social Media</a></li>
+                    <li><a href="#">Finance</a></li>
+                    <li><a href="#">Gaming</a></li>
+                    <li><a href="#">Music</a></li>
+                    <li><a href="#">Sport</a></li>
+                    <li><a href="#">Vehicles</a></li>
+                </ul>
+            </li>
+
+            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+
+        </ul>
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
+        </ul>
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li><a href="/user/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
+        </ul>
+
+
+        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
+
+
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                    <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
+                    <li class="divider"></li>
+                    <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <form class="navbar-form navbar-left" action="/">
+            <div class="input-group" style="width: auto">
+                <input type="text" class="form-control" placeholder="Search for an idea" name="search"/>
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row">
+        <h1 style="margin-bottom: -10px; text-align:center; margin-top: 0;">Submit an Idea <i style="font-size: 28px" class="glyphicon glyphicon-edit"></i></h1>
+        <hr class="hr-primary" style="  height: 4px;" />
+    </div>
+</div>
+
+<div th:if="${displaySuccess}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-success alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Your <a href="#" class="alert-link">idea</a> was posted!
+</div>
+<div th:if="${displayError}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-warning alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Warning!</strong> You already posted this <a href="#" class="alert-link">idea</a>
+</div>
+
+<form class="form-horizontal" th:action="@{/user/postIdea}" th:object="${idea}" method="POST" data-toggle="validator" role="form" style="margin-top: 2%;">
+    <fieldset>
+
+        <div style="text-align: center; margin-left: 1%;">
+
+            <!-- Text input title-->
+            <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                <label class="col-md-4 control-label" for="inputTitle">Title</label>
+                <div class="col-md-4">
+                    <input id="inputTitle" th:field="*{title}" minlength="5" name="inputTitle" type="text" placeholder="Idea's Title" class="form-control input-md" required=""/>
+                    <div class="help-block with-errors">Minimum 5 characters</div>
+                </div>
+            </div>
+
+            <!-- Text input description-->
+            <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                <label class="col-md-4 control-label" for="inputDescription">Description</label>
+                <div class="col-md-4">
+                    <textarea id="inputDescription" rows="5" th:field="*{body}" minlength="20" name="inputDescription" required="" placeholder="Idea's Description" class="form-control input-md">
+                    </textarea>
+                    <div class="help-block with-errors">Minimum 20 characters</div>
+                </div>
+            </div>
+
+            <!-- Select input-->
+            <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                <label for="selectCategory" class="col-md-4 control-label">Category</label>
+                <div class="col-md-4">
+                    <select class="form-control input-md" th:field="*{category.id_category}" id="selectCategory" required="">
+                        <option value=""></option>
+                        <option th:each="category: ${categories}" th:value="${category.getId_category()}" th:text="${category.getBody()}"></option>
+                    </select>
+                    <div class="help-block with-errors">Select Idea's Category</div>
+                </div>
+            </div>
+
+            <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                <label for="selectImage" class="col-md-4 control-label">Image</label>
+                <div class="col-md-4">
+                        <input type="file" accept="image/png, image/jpeg, image/jpg, image/gif" name="img[]" id="selectImage" class="file" />
+                        <div class="input-group col-xs-12">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                                 <input type="text" th:field="*{image_path}" style="background-color: white" class="form-control input-md" disabled="" placeholder="Upload Image"/>
+                            <span class="input-group-btn">
+                                 <button class="browse btn btn-default input-md" style="background-color: #eee" type="button"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Browse</button>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button (Double) -->
+        <div class="form-group col-md-4" style="width: 100%;">
+            <label class="col-md-4 control-label" for="save"></label>
+            <div class="col-md-8" style="text-align: center; float: none !important;">
+                <button id="save" name="save" type="submit" class="btn btn-success">Submit</button>
+                <a id="cancel" href="/user/home" type="button" name="cancel" class="btn btn-danger">Cancel</a>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+
+
+
+
+
+</body>
+</html>

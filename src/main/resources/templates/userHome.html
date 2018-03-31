@@ -7,13 +7,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../js/navbar.js"></script>
+    <script src="../js/bootstrap-dropdownhover.min.js"></script>
 
+    <link href="../css/animate.min.css" rel="stylesheet"/>
+    <link href="../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="shortcut icon" href="../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-
+    <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
+    <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
     <title> Home </title>
 </head>
 
@@ -22,20 +26,20 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <!--<a class="navbar-brand" href="#">My Project Idea</a>-->
             <a href="#" class="navbar-brand">My Project Idea </a>
         </div>
         <ul class="nav navbar-nav">
             <li sec:authorize="isAuthenticated()" class="active"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
             <li sec:authorize="isAnonymous()" class="active"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${ideasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge" style="color: orange"> 10 </span></a></li>
 
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
-                    <span class="caret"></span></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu">
                     <li><a href="#">Education</a></li>
                     <li><a href="#">Social Media</a></li>
@@ -65,7 +69,7 @@
 
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
                     <span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
                     <b class="caret"></b>
                 </a>
@@ -104,20 +108,20 @@
 
 <div class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
 
-<div class="text-center" style="margin-bottom: 3%;">
-    <button class="btn btn-info btn-lg" >
-        <span class="glyphicon glyphicon-edit"></span>  Submit Idea
-    </button>
+<div sec:authorize="isAuthenticated()" class="text-center" style="margin-bottom: 100px">
+    <a href="/user/postIdea" class="button" style="margin-left: 30%" >
+        <span>submit idea</span>
+    </a>
 </div>
 
 <div class="container bootstrap snippet">
     <section id="team" class="white-bg padding-top-bottom">
         <div class="container bootstrap snippet">
-            <h1 class="section-title text-center page-title">Popular Ideas</h1>
-            <p class="section-description text-center" style="margin-bottom: 40px">The platform where you're ideas become reality </p>
+            <h1 class="section-title text-center page-title">Popular Ideas / Latest Ideas </h1>
+            <p class="section-description text-center" style="margin-bottom: 80px"> Make your ideas count </p>
 
             <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px; margin-left: -60px;">
-                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 3.333333%">
+                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 0.333333%">
                         <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
                         <h4 th:text="${idea.getUser().getFull_name()}">El jefe</h4>
                         <p th:text="${idea.getUser().getOccupation()}" class="title">Lead Designer &amp; Founder</p>
@@ -132,8 +136,8 @@
                             <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getLikes_number() + ' Likes'}"></span></button></li>
                             <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
                             <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
-                        </ul>
-                        <br/>
+                        </ul><br/>
+                        <a class="read-more" href="#">Read More</a>
                         <p style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em style="color:#999;" th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
                     </div>
                 </div>
@@ -159,7 +163,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
     </section>

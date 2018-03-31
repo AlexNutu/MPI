@@ -28,7 +28,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-                <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+                <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${ideasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
                 <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge" style="color: orange"> 10 </span></a></li>
 
@@ -89,6 +89,9 @@
     </nav>
 
     <h1 style="text-align: center"> My Profile </h1>
+
+    <div class="button"><div class="outer"><div class="height"><div class="inner">SUBMIT IDEA</div></div></div></div>
+
 
 </body>
 </html>
