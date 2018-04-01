@@ -50,8 +50,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Like> likes;
+    @OneToMany(mappedBy = "user")
+    private List<Appreciation> appreciations;
 
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -60,7 +60,7 @@ public class User {
     public User() {
     }
 
-    public User(String full_name, String username, String email, String password, String phone_number, String occupation, int role, Date reg_date, List<Idea> ideas, List<Message> messages, List<Comment> comments, List<Like> likes) {
+    public User(String full_name, String username, String email, String password, String phone_number, String occupation, int role, Date reg_date, List<Idea> ideas, List<Message> messages, List<Comment> comments, List<Appreciation> appreciations) {
         this.full_name = full_name;
         this.username = username;
         this.email = email;
@@ -72,7 +72,7 @@ public class User {
         this.ideas = ideas;
         this.messages = messages;
         this.comments = comments;
-//        this.likes = likes;
+        this.appreciations = appreciations;
     }
 
     public Long getId_user() {
@@ -171,11 +171,11 @@ public class User {
         this.comments = comments;
     }
 
-//    public List<Like> getLikes() {
-//        return likes;
-//    }
-//
-//    public void setLikes(List<Like> likes) {
-//        this.likes = likes;
-//    }
+    public List<Appreciation> getAppreciations() {
+        return appreciations;
+    }
+
+    public void setAppreciations(List<Appreciation> appreciations) {
+        this.appreciations = appreciations;
+    }
 }

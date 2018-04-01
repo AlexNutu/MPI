@@ -35,8 +35,8 @@ public class Idea {
     @OneToMany(mappedBy = "idea")
     private List<Comment> comments;
 
-//    @OneToMany(mappedBy = "idea")
-//    private List<Like> likes;
+    @OneToMany(mappedBy = "idea")
+    private List<Appreciation> appreciations;
 
     public Idea() {
     }
@@ -105,11 +105,11 @@ public class Idea {
         this.comments = comments;
     }
 
-//    public List<Like> getLikes() {
-//        return likes;
-//    }
-//
-//    public void setLikes(List<Like> likes) {
-//        this.likes = likes;
-//    }
+    public List<Appreciation> getAppreciations() {
+        return appreciations;
+    }
+
+    public void setAppreciations(List<Appreciation> appreciations) {
+        this.appreciations = appreciations;
+    }
 }

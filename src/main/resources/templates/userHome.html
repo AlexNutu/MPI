@@ -133,8 +133,7 @@
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
                             <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <!--idea.getLikes().size() +-->
-                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${' Likes'}"></span></button></li>
+                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size() + ' Likes'}"></span></button></li>
                             <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
                             <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul><br/>

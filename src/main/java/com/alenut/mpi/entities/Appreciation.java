@@ -3,13 +3,13 @@ package com.alenut.mpi.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "like")
-public class Like {
+@Table(name = "appreciation")
+public class Appreciation {
 
     @Id
-    @Column(name = "id_like")
+    @Column(name = "id_appreciation")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_like;
+    private Long id_appreciation;
 
     @ManyToOne
     @JoinColumn(name = "id_user")
@@ -19,12 +19,12 @@ public class Like {
     @JoinColumn(name = "id_idea")
     private Idea idea;
 
-    public Long getId_like() {
-        return id_like;
+    public Long getId_appreciation() {
+        return id_appreciation;
     }
 
-    public void setId_like(Long id_like) {
-        this.id_like = id_like;
+    public void setId_appreciation(Long id_appreciation) {
+        this.id_appreciation = id_appreciation;
     }
 
     public User getUser() {
