@@ -23,16 +23,16 @@ public class IdeaValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
+        // Daca un user incearca sa insereze o idee identica cu una din cele deja postate de el
         Idea idea = (Idea) o;
         List<Idea> ideaList = ideaService.getIdeaByTitle(idea.getTitle());
-        if (ideaList != null) {
+        if (ideaList.size() > 0) {
             for (Idea idea1 : ideaList) {
                 if (idea1.getBody().equals(idea.getBody())
                         && idea1.getCategory().getId_category().equals(idea.getCategory().getId_category())
                         && idea1.getUser().getId_user().equals(idea.getUser().getId_user())) {
                     errors.reject("Duplicate ideas");
                 }
-                // Daca un user incearca sa insereze o idee identica cu una din cele deja postate de el
             }
         }
     }

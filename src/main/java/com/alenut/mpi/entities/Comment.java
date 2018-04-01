@@ -18,6 +18,10 @@ public class Comment {
     private Date posted_date;
 
     @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "id_idea")
     private Idea idea;
 
@@ -43,6 +47,14 @@ public class Comment {
 
     public void setPosted_date(Date posted_date) {
         this.posted_date = posted_date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Idea getIdea() {

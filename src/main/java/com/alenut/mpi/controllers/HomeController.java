@@ -13,11 +13,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -79,7 +82,7 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping(value = "/postIdea", method = RequestMethod.POST)
-    public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir) {
+    public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir, @RequestParam("file") MultipartFile image) throws IOException {
         User user = getCurrentUser();
         List<Idea> ideas = ideaService.getIdeasByUser(user);
         model.addAttribute("ideasList", ideas);
@@ -93,6 +96,11 @@ public class HomeController extends BaseController {
         if (result.hasErrors()) {
             redir.addFlashAttribute("displayError", "true");
         } else {
+            // image uploading on file disk
+            if (idea.getImage_path() != null) {
+                String imagePath = ideaService.saveIdeaImage(image, user);
+                idea.setImage_path(imagePath);
+            }
             redir.addFlashAttribute("displaySuccess", "true");
             ideaService.insert(idea, user);
         }

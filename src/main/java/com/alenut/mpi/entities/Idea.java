@@ -18,9 +18,6 @@ public class Idea {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "likes_number")
-    private Integer likes_number;
-
     @Column(name = "posted_date")
     private Date posted_date;
 
@@ -37,6 +34,9 @@ public class Idea {
 
     @OneToMany(mappedBy = "idea")
     private List<Comment> comments;
+
+//    @OneToMany(mappedBy = "idea")
+//    private List<Like> likes;
 
     public Idea() {
     }
@@ -63,14 +63,6 @@ public class Idea {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public Integer getLikes_number() {
-        return likes_number;
-    }
-
-    public void setLikes_number(Integer likes_number) {
-        this.likes_number = likes_number;
     }
 
     public Date getPosted_date() {
@@ -112,4 +104,12 @@ public class Idea {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+//    public List<Like> getLikes() {
+//        return likes;
+//    }
+//
+//    public void setLikes(List<Like> likes) {
+//        this.likes = likes;
+//    }
 }

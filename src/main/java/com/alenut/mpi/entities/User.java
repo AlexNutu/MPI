@@ -47,6 +47,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Message> messages;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+//    @OneToMany(mappedBy = "user")
+//    private List<Like> likes;
 
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -55,7 +60,7 @@ public class User {
     public User() {
     }
 
-    public User(String full_name, String username, String email, String password, String phone_number, String occupation, int role, Date reg_date, List<Idea> ideas, List<Message> messages) {
+    public User(String full_name, String username, String email, String password, String phone_number, String occupation, int role, Date reg_date, List<Idea> ideas, List<Message> messages, List<Comment> comments, List<Like> likes) {
         this.full_name = full_name;
         this.username = username;
         this.email = email;
@@ -66,6 +71,8 @@ public class User {
         this.reg_date = reg_date;
         this.ideas = ideas;
         this.messages = messages;
+        this.comments = comments;
+//        this.likes = likes;
     }
 
     public Long getId_user() {
@@ -155,4 +162,20 @@ public class User {
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+//    public List<Like> getLikes() {
+//        return likes;
+//    }
+//
+//    public void setLikes(List<Like> likes) {
+//        this.likes = likes;
+//    }
 }
