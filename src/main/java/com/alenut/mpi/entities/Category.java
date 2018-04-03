@@ -8,17 +8,17 @@ public class Category {
     @Id
     @Column(name = "id_category")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_category;
+    private Long id;
 
     @Column(name = "body")
     private String body;
 
-    public Long getId_category() {
-        return id_category;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_category(Long id_category) {
-        this.id_category = id_category;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBody() {

@@ -9,7 +9,7 @@ public class Message {
     @Id
     @Column(name = "id_message")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_message;
+    private Long id;
 
     @Column(name = "body")
     private String body;
@@ -24,12 +24,12 @@ public class Message {
     @JoinColumn(name = "id_user")
     private User user;
 
-    public Long getId_message() {
-        return id_message;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_message(Long id_message) {
-        this.id_message = id_message;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBody() {

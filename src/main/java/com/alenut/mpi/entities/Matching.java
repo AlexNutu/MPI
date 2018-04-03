@@ -3,21 +3,19 @@ package com.alenut.mpi.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "appreciation")
-public class Appreciation {
-
+public class Matching {
     @Id
-    @Column(name = "id_appreciation")
+    @Column(name = "id_match")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "id_idea")
     private Idea idea;
+
+    @ManyToOne
+    @JoinColumn(name = "id_match_idea")
+    private Idea ideaMatch;
 
     public Long getId() {
         return id;
@@ -27,19 +25,19 @@ public class Appreciation {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Idea getIdea() {
         return idea;
     }
 
     public void setIdea(Idea idea) {
         this.idea = idea;
+    }
+
+    public Idea getIdeaMatch() {
+        return ideaMatch;
+    }
+
+    public void setIdeaMatch(Idea ideaMatch) {
+        this.ideaMatch = ideaMatch;
     }
 }

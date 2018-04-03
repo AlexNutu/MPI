@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="../css/signup.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -31,12 +33,11 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <!--<a class="navbar-brand" href="#">My Project Idea</a>-->
             <a href="#" class="navbar-brand">My Project Idea </a>
         </div>
         <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
-            <li sec:authorize="isAnonymous()" class="active"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${ideasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
@@ -75,7 +76,7 @@
 
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
                     <span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
                     <b class="caret"></b>
                 </a>
@@ -147,9 +148,9 @@
             <div class="form-group" style="width: 100%; margin-bottom: 3%;">
                 <label for="selectCategory" class="col-md-4 control-label">Category</label>
                 <div class="col-md-4">
-                    <select class="form-control input-md" th:field="*{category.id_category}" id="selectCategory" required="">
+                    <select class="form-control input-md" th:field="*{category.id}" id="selectCategory" required="">
                         <option value=""></option>
-                        <option th:each="category: ${categories}" th:value="${category.getId_category()}" th:text="${category.getBody()}"></option>
+                        <option th:each="category: ${categories}" th:value="${category.getId()}" th:text="${category.getBody()}"></option>
                     </select>
                     <div class="help-block with-errors">Select Idea's Category</div>
                 </div>

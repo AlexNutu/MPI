@@ -29,8 +29,8 @@ public class IdeaValidator implements Validator {
         if (ideaList.size() > 0) {
             for (Idea idea1 : ideaList) {
                 if (idea1.getBody().equals(idea.getBody())
-                        && idea1.getCategory().getId_category().equals(idea.getCategory().getId_category())
-                        && idea1.getUser().getId_user().equals(idea.getUser().getId_user())) {
+                        && idea1.getCategory().getId().equals(idea.getCategory().getId())
+                        && idea1.getUser().getId().equals(idea.getUser().getId())) {
                     errors.reject("Duplicate ideas");
                 }
             }

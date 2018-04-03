@@ -1,5 +1,6 @@
 package com.alenut.mpi.controllers;
 
+import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
@@ -13,27 +14,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 
     @Autowired
     UserService userService;
 
     @Autowired
     IdeaServiceImpl ideaService;
-
-    @RequestMapping(value = "/editUser", method = RequestMethod.POST,
-            consumes = {"application/json"})
-    public String editUser(@RequestBody User userInfo, Model model) throws NoSuchAlgorithmException {
-        User user = getCurrentUser();
-        model.addAttribute("username", user.getUsername());
-
-        userService.editUser(userInfo);
-
-        return "manageUser";
-    }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
@@ -62,24 +53,41 @@ public class UserController extends BaseController{
         return "thanks";
     }
 
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String userProfile(HttpServletRequest request, Model model) {
+        User user = getCurrentUser();
+        List<Idea> ideaList = ideaService.getIdeasByUser(user);
+        model.addAttribute("fullname", user.getFull_name());
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("occupation", user.getOccupation());
+        model.addAttribute("ideasNumber", ideaList.size());
 
-//    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-//    public ModelAndView createUser(@Valid User user, BindingResult result) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        if (result.hasErrors()) {
-//            modelAndView.setViewName("createUser");
-//            modelAndView.addObject("user", user);
-//            return modelAndView;
-//        }
-//        try {
-//            userService.createUser(user);
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
+        model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
+        model.addAttribute("noOfMatchings", userService.getNoOfMatchings(ideaList));
+        model.addAttribute("noOfLikes", userService.getNoOfLikes(ideaList));
+        model.addAttribute("noOfComments", userService.getNoOfComments(ideaList));
+
+        return "myProfile";
+    }
+
+    @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)
+    public String accountSettings(HttpServletRequest request, Model model) {
+        User user = getCurrentUser();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+
+        return "accountSettings";
+    }
+
+//    @RequestMapping(value = "/editUser", method = RequestMethod.POST,
+//            consumes = {"application/json"})
+//    public String editUser(@RequestBody User userInfo, Model model) throws NoSuchAlgorithmException {
+//        User user = getCurrentUser();
+//        model.addAttribute("username", user.getUsername());
 //
-////        modelAndView.addObject("allUsers", userService.getAllUsers());
-//        modelAndView.setViewName("userHome");
-//        return modelAndView;
+//        userService.editUser(userInfo);
+//
+//        return "manageUser";
 //    }
 
 

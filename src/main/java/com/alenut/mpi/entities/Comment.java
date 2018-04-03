@@ -9,7 +9,7 @@ public class Comment {
     @Id
     @Column(name = "id_comment")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_comment;
+    private Long id;
 
     @Column(name = "body")
     private String body;
@@ -25,12 +25,12 @@ public class Comment {
     @JoinColumn(name = "id_idea")
     private Idea idea;
 
-    public Long getId_comment() {
-        return id_comment;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_comment(Long id_comment) {
-        this.id_comment = id_comment;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBody() {

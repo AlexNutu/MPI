@@ -55,6 +55,7 @@ public class HomeController extends BaseController {
 
         List<Idea> ideas = ideaService.getIdeasByUser(user);
         model.addAttribute("ideasList", ideas);
+        model.addAttribute("ideasNumber", ideas.size());
         List<Category> categories = categoryService.getUniqueCategoriesByUser(ideas);
         model.addAttribute("categoryList", categories);
 
@@ -125,24 +126,6 @@ public class HomeController extends BaseController {
         model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         return "messages";
-    }
-
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String userProfile(HttpServletRequest request, Model model) {
-        User user = getCurrentUser();
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
-
-        return "userProfile";
-    }
-
-    @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)
-    public String accountSettings(HttpServletRequest request, Model model) {
-        User user = getCurrentUser();
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
-
-        return "accountSettings";
     }
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)

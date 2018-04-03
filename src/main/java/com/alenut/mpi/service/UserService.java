@@ -1,10 +1,11 @@
 package com.alenut.mpi.service;
 
+import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
-import com.alenut.mpi.entities.info.UserInformation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public interface UserService {
     @Transactional(readOnly = true)
@@ -21,5 +22,17 @@ public interface UserService {
 
     @Transactional(readOnly = true)
     User getByUsername(String username);
+
+    @Transactional(readOnly = true)
+    Integer getNoOfIdeas(List<Idea> ideas);
+
+    @Transactional(readOnly = true)
+    Integer getNoOfMatchings(List<Idea> ideas);
+
+    @Transactional(readOnly = true)
+    Integer getNoOfLikes(List<Idea> ideas);
+
+    @Transactional(readOnly = true)
+    Integer getNoOfComments(List<Idea> ideas);
 
 }

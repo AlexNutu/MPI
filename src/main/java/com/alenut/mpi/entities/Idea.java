@@ -10,7 +10,7 @@ public class Idea {
     @Id
     @Column(name = "id_idea")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_idea;
+    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -41,12 +41,12 @@ public class Idea {
     public Idea() {
     }
 
-    public Long getId_idea() {
-        return id_idea;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_idea(Long id_idea) {
-        this.id_idea = id_idea;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
