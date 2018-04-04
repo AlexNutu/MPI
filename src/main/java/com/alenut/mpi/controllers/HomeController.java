@@ -52,6 +52,8 @@ public class HomeController extends BaseController {
     public String myIdeas(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("fullname", user.getFull_name());
+        model.addAttribute("occupation", user.getOccupation());
 
         List<Idea> ideas = ideaService.getIdeasByUser(user);
         model.addAttribute("ideasList", ideas);
@@ -85,8 +87,6 @@ public class HomeController extends BaseController {
     @RequestMapping(value = "/postIdea", method = RequestMethod.POST)
     public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir, @RequestParam("file") MultipartFile image) throws IOException {
         User user = getCurrentUser();
-        List<Idea> ideas = ideaService.getIdeasByUser(user);
-        model.addAttribute("ideasList", ideas);
 
         ModelAndView modelAndView = new ModelAndView("redirect:postIdea");
         modelAndView.addObject("idea", idea);
@@ -99,7 +99,7 @@ public class HomeController extends BaseController {
         } else {
             // image uploading on file disk
             if (idea.getImage_path() != null) {
-                String imagePath = ideaService.saveIdeaImage(image, user);
+                String imagePath = ideaService.saveIdeaImage(image, idea);
                 idea.setImage_path(imagePath);
             }
             redir.addFlashAttribute("displaySuccess", "true");
@@ -145,20 +145,5 @@ public class HomeController extends BaseController {
 
         return "contact";
     }
-
-    //    public String populateTable(Model model) {
-//        int[] days;
-//        Long id;
-//
-//        id = getCurrentUser().getId();
-//        days = userDataServiceImpl.getDates(id, userService, holidayService, requestService);
-//        int additionalVacation = userService.getById(id).getAdditionalVacation();
-//        model.addAttribute("remainingDays", days[0] + additionalVacation);
-//        model.addAttribute("remainingDaysToDate", days[2] + additionalVacation);
-//        model.addAttribute("requestedDays", days[1]);
-//        model.addAttribute("approvedDays", userDataServiceImpl.getApprovedDaysThisYear(holidayService.getAll(), requestRepository.getVacationRequestOnly(id)));
-//        model.addAttribute("medicalDays", days[4]);
-//        return "userHome";
-//    }
 
 }

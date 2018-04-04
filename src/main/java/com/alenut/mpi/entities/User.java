@@ -32,14 +32,17 @@ public class User {
     @Column(name = "phone_number")
     private String phone_number;
 
-    @Column(name = "occupation")
-    private String occupation;
-
     @Column(name = "role")
     private int role;
 
     @Column(name = "reg_date")
     private Date reg_date;
+
+    @Column(name = "occupation")
+    private String occupation;
+
+    @Column(name = "image_path")
+    private String image;
 
     @OneToMany(mappedBy = "user")
     private List<Idea> ideas;
@@ -53,6 +56,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Appreciation> appreciations;
 
+    @Transient
+    private String newPassword;
+
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
 //    private List<Role> roles;
@@ -60,15 +66,16 @@ public class User {
     public User() {
     }
 
-    public User(String full_name, String username, String email, String password, String phone_number, String occupation, int role, Date reg_date, List<Idea> ideas, List<Message> messages, List<Comment> comments, List<Appreciation> appreciations) {
+    public User(String full_name, String username, String email, String password, String phone_number, int role, Date reg_date, String occupation, String image, List<Idea> ideas, List<Message> messages, List<Comment> comments, List<Appreciation> appreciations) {
         this.full_name = full_name;
         this.username = username;
         this.email = email;
         this.password = password;
         this.phone_number = phone_number;
-        this.occupation = occupation;
         this.role = role;
         this.reg_date = reg_date;
+        this.occupation = occupation;
+        this.image = image;
         this.ideas = ideas;
         this.messages = messages;
         this.comments = comments;
@@ -123,14 +130,6 @@ public class User {
         this.phone_number = phone_number;
     }
 
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
     public int getRole() {
         return role;
     }
@@ -145,6 +144,22 @@ public class User {
 
     public void setReg_date(Date reg_date) {
         this.reg_date = reg_date;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public List<Idea> getIdeas() {
@@ -177,5 +192,13 @@ public class User {
 
     public void setAppreciations(List<Appreciation> appreciations) {
         this.appreciations = appreciations;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

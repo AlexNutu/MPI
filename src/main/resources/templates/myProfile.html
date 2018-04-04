@@ -113,7 +113,7 @@
             <div class="col-md-12 text-center ">
                 <div class="panel panel-default">
                     <div class="userprofile social ">
-                        <div class="userpic"> <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" class="userpicimg"/> </div>
+                        <div class="userpic"> <img th:src="${'../img/' + image}" alt="" class="userpicimg"/> </div>
                         <h3 class="username" th:text="${fullname}" style="font-size: 30px">Lucky Sans</h3>
                         <p th:text="'- ' +${occupation} + ' -'"> Developer </p>
                         <!--<div class="socials tex-center"> <a href="" class="btn btn-circle btn-primary ">-->

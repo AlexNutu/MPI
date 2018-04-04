@@ -8,8 +8,12 @@ import com.alenut.mpi.repository.*;
 import com.alenut.mpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MatchRepository matchRepository;
+
+    @Autowired
+    private PictureLoaderService pictureLoaderService;
 
     private User usr = null;
 
@@ -82,23 +89,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(User user1) throws NoSuchAlgorithmException {
-
-//        user1.setPassword(MD5Encryption.computeMD5(user1.getPassword()));
-//       // User user = userRepository.getByEmail(user1.getEmail());
-//
-//        //TODO: de adaugat setere pentru celelalte campuri
-//        user.setPassword(userInfo.getPassword());
-//        user.setRole(userInfo.getRole());
-//
-//        try {
-//            usr = userRepository.save(user);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    @Override
     public Integer getNoOfIdeas(List<Idea> ideas) {
         return ideas.size();
     }
@@ -128,5 +118,28 @@ public class UserServiceImpl implements UserService {
             nr += commentRepository.getByIdea(idea).size();
         }
         return nr;
+    }
+
+    @Override
+    public void editUser(User user, Long userId) throws NoSuchAlgorithmException {
+
+        userRepository.editUserInfoById(user.getFull_name(), user.getUsername(), user.getEmail(), user.getPassword(),
+                user.getPhone_number(), user.getOccupation(), user.getImage(), userId);
+    }
+
+    public String savePhoto(MultipartFile image, User user) throws IOException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        String fileName = user.getUsername() + "_" + image.getOriginalFilename().replaceAll("\\s+","");
+
+        pictureLoaderService.savePictureToDisk(fileName, image.getBytes());
+
+        return fileName;
+    }
+
+    @Override
+    public String saveImage(MultipartFile image, User user) throws IOException {
+        return this.savePhoto(image, user);
     }
 }

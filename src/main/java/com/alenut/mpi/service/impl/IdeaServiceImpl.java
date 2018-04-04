@@ -46,18 +46,18 @@ public class IdeaServiceImpl {
         ideaRepository.save(idea);
     }
 
-    public String savePhoto(MultipartFile image, User user) throws IOException {
+    public String savePhoto(MultipartFile image, Idea idea) throws IOException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        String fileName = user.getUsername() + "_" + sdf.format(new Date()) + "_" + image.getOriginalFilename();
+        String fileName = idea.getBody().substring(0,4) + "_" + sdf.format(new Date()) + "_" + image.getOriginalFilename().replaceAll("\\s+","");
 
         pictureLoaderService.savePictureToDisk(fileName, image.getBytes());
 
         return fileName;
     }
 
-    public String saveIdeaImage(MultipartFile image, User user) throws IOException {
-        return this.savePhoto(image, user);
+    public String saveIdeaImage(MultipartFile image, Idea idea) throws IOException {
+        return this.savePhoto(image, idea);
     }
 }

@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="../css/ideas.css" />
+    <link rel="stylesheet" href="../css/messages.css"/>
+    <link rel="stylesheet" href="../css/signup.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     <script src="../js/navbar.js"></script>
     <script src="../js/bootstrap-dropdownhover.min.js"></script>
     <script src="../js/myProfile.js"></script>
+    <script src="../js/postIdea.js"></script>
 
     <link href="../css/animate.min.css" rel="stylesheet"/>
     <link href="../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
@@ -96,17 +101,139 @@
     </div>
 </nav>
 
-<h1 style="text-align: center"> Edit Profile </h1>
+<div class="container">
+    <div class="row">
+        <h1 style="margin-bottom: -10px; text-align:center; margin-top: 0;">Edit Profile</h1>
+        <hr class="hr-primary" style="  height: 4px;" />
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <form th:action="@{/user/accountSettings}" th:object="${user}" enctype="multipart/form-data" method="POST" data-toggle="validator" role="form" class="form-horizontal">
+
+            <fieldset>
+
+                <!-- left column -->
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <img style="width: 150px; height: 150px" th:src="'../img/' + ${image}" class="avatar img-circle" alt="avatar"/>
+                        <h6>Upload a different photo </h6>
+                        <input type="file" accept="image/png, image/jpeg, image/jpg, image/gif" name="file" id="selectImage" class="file" />
+                        <div class="input-group col-xs-12">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                            <input type="text" th:field="*{image}" style="background-color: white" class="form-control input-md" readonly="true" placeholder="Upload Image"/>
+                            <span class="input-group-btn">
+                                 <button class="browse btn btn-default input-md" style="background-color: #eee" type="button"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Browse</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- edit form column -->
+                <div class="col-md-9 personal-info">
+
+                    <div th:if="${displaySuccess}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-info alert-dismissible fade in" >
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <i class="glyphicon glyphicon-ok"></i>
+                        Your <strong>personal info</strong> was updated successfully!
+                    </div>
+
+                    <div th:if="${displayError}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-warning alert-dismissible fade in" >
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <i class="glyphicon glyphicon-exclamation-sign"></i>
+                        Warning! Your actual <strong> password </strong> is incorrect!
+                    </div>
+
+                    <h3>Personal info</h3><br/>
 
 
-            <a class="list-group-item google-plus">
-                <h3 class="pull-right">
-                    <i class="icon glyphicon glyphicon-fire"></i>
-                </h3>
-                <h4 class="list-group-item-heading count">1000</h4>
-                <p class="list-group-item-text">Calories</p>
-            </a>
 
+                        <!-- Text input name-->
+                        <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                            <label class="col-md-3 control-label" for="inputName">Full Name</label>
+                            <div class="col-lg-8">
+                                <input id="inputName" th:value="${user.getFull_name()}" th:field="*{full_name}" name="inputName" type="text" placeholder="John Doe" class="form-control"
+                                       required=""/>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <!-- Text input username-->
+                        <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                            <label class="col-md-3 control-label" for="inputUsername">Username</label>
+                            <div class="col-lg-8">
+                                <input id="inputUsername" th:value="${user.getUsername()}" th:field="*{username}" name="inputUsername" type="text" placeholder="johndoe" class="form-control input-md"
+                                       required=""/>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <!-- Text input email-->
+                        <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                            <label class="col-md-3 control-label" for="inputEmail">Email</label>
+                            <div class="col-lg-8">
+                                <input id="inputEmail" th:value="${user.getEmail()}" th:field="*{email}" name="inputEmail" type="email" placeholder="johndoe@example.com"
+                                       class="form-control input-md" data-error="Email address is invalid." required="" />
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <!-- Text input phone-->
+                        <div class="form-group" style="margin-bottom: 2.5%; width: 100%">
+                            <label class="col-md-3 control-label" for="phone">Phone</label>
+                            <div class="col-lg-8">
+                                <input id="phone" th:value="${user.getPhone_number()}" th:field="*{phone_number}" name="phone" type="text" pattern="\d{4}[\-]\d{3}[\-]\d{3}" maxlength="12" data-error="Sorry, phone is invalid" placeholder="0777-555-123"
+                                       class="form-control input-md bfh-phone" />
+                            </div>
+                        </div>
+
+                        <!-- Select input-->
+                        <div class="form-group" style="width: 100%; margin-bottom: 2.5%;">
+                            <label for="selectOccupation" class="col-md-3 control-label">Occupation</label>
+                            <div class="col-lg-8">
+                                <select class="form-control input-md" id="selectOccupation" th:field="*{occupation}" required="">
+                                    <option value=""></option>
+                                    <option th:selected="${user.getOccupation().equals('Student')}" value="Student">Student</option>
+                                    <option th:selected="${user.getOccupation().equals('Developer')}" value="Developer">Developer</option>
+                                    <option th:selected="${user.getOccupation().equals('Team Lead')}" value="Team Lead">Team Lead</option>
+                                    <option th:selected="${user.getOccupation().equals('Director')}" value="Director">Director</option>
+                                    <option th:selected="${user.getOccupation().equals('Freelancer')}" value="Freelancer">Freelancer</option>
+                                </select>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <!-- Password input-->
+                        <div class="form-group" style="width: 100%; margin-bottom: 2%">
+                            <label class="col-md-3 control-label" for="inputPassword">Password</label>
+                            <div class="form-inline row" style="width: 100%">
+                                <div class="form-group col-md-4" style="padding-left: 30px; margin-left: 0">
+                                    <input th:field="*{password}" type="password" data-minlength="6" style="width: 100%" class="form-control" id="inputPassword" placeholder="Old Password"/>
+                                    <div class="help-block">Minimum of 6 characters</div>
+                                </div>
+                                <div class="form-group col-md-4" style="padding-left: 30px; margin-left: 0">
+                                    <input th:field="*{newPassword}" type="password" data-minlength="6" class="form-control" style="width: 100%" id="inputPasswordConfirm" placeholder="New Password" />
+                                    <div class="help-block">Minimum of 6 characters</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-8">
+                                <button id="save" name="save" type="submit" class="btn btn-success">Save Changes</button>
+                                <button type="reset" class="btn btn-danger">Cancel</button>
+                            </div>
+                        </div>
+
+                </div>
+
+            </fieldset>
+            </form>
+    </div>
+</div>
+<hr/>
 
 </body>
 </html>

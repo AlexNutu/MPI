@@ -74,6 +74,7 @@ public class AnonymousController extends BaseController {
         try {
             user.setReg_date(new Date());
             user.setRole(1);
+            user.setImage("user1.png");
             initialPassword = user.getPassword(); // deoarece parola se schimba la salvarea in baza de date
             userService.createUser(user);
         } catch (NoSuchAlgorithmException e) {
