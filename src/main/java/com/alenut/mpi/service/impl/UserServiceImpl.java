@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        String fileName = user.getUsername() + "_" + image.getOriginalFilename().replaceAll("\\s+","");
+        String fileName = user.getUsername() + "_" + sdf.format(new Date()) + "_" + image.getOriginalFilename().replaceAll("\\s+","");
 
         pictureLoaderService.savePictureToDisk(fileName, image.getBytes());
 

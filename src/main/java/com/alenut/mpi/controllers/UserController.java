@@ -5,6 +5,7 @@ import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
+import com.alenut.mpi.service.impl.PictureLoaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,9 @@ public class UserController extends BaseController {
 
     @Autowired
     IdeaServiceImpl ideaService;
+
+    @Autowired
+    PictureLoaderService pictureLoaderService;
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
@@ -111,10 +115,11 @@ public class UserController extends BaseController {
                 if (currentUser.getPassword().equals(MD5Encryption.computeMD5(user.getPassword()))) {
                     user.setPassword(MD5Encryption.computeMD5(user.getNewPassword()));
 
-                    if (!user.getImage().equals("user1.png")) { // daca a fost schimbata imaginea atunci o adaugam in proiect
+                    if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
+//                        pictureLoaderService.deletePictureFromDisk(user.getImage());
+                        pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
                         String imagePath = userService.saveImage(image, user);
                         user.setImage(imagePath);
-                        // TO DO: delete image
                     }
                     redir.addFlashAttribute("displaySuccess", "true");
                     userService.editUser(user, currentUser.getId());
@@ -126,10 +131,11 @@ public class UserController extends BaseController {
             }
         }
         if (!parola && !error) {
-            if (!user.getImage().equals("user1.png")) { // daca a fost schimbata imaginea atunci o adaugam in proiect
+            if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
+                pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
+//                pictureLoaderService.deletePictureFromDisk(user.getImage());
                 String imagePath = userService.saveImage(image, user);
                 user.setImage(imagePath);
-                // TO DO: delete image
             }
             redir.addFlashAttribute("displaySuccess", "true");
             user.setPassword(currentUser.getPassword());
