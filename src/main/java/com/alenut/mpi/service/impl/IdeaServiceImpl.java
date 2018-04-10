@@ -33,6 +33,8 @@ public class IdeaServiceImpl {
         return ideaRepository.getIdeasObjectsByUser(user);
     }
 
+    public Idea getIdeaById(Long id) { return ideaRepository.getById(id);}
+
     public List<Idea> getIdeaByTitle(String title) {
         return ideaRepository.getIdeaByTitle(title);
     }

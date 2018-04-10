@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
-//    Idea getById(Long id);
+    Idea getById(Long id);
 
     List<Idea> getIdeasObjectsByUser(User user);
 

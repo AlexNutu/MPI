@@ -38,6 +38,9 @@ public class Idea {
     @OneToMany(mappedBy = "idea")
     private List<Appreciation> appreciations;
 
+    @OneToMany(mappedBy = "idea")
+    private List<Tag> tags;
+
     public Idea() {
     }
 
@@ -111,5 +114,13 @@ public class Idea {
 
     public void setAppreciations(List<Appreciation> appreciations) {
         this.appreciations = appreciations;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }

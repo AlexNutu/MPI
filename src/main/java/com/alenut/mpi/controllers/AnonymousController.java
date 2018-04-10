@@ -88,12 +88,12 @@ public class AnonymousController extends BaseController {
     }
 
 
-    @GetMapping(value = "/viewIdea")
-    public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
-
-        //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
-        return "viewIdea";
-    }
+//    @GetMapping(value = "/viewIdea")
+//    public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
+//
+//        //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
+//        return "viewIdea";
+//    }
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public String contactUs(HttpServletRequest request, Model model) {
