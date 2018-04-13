@@ -2,40 +2,62 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../../css/ideas.css" />
-    <link rel="stylesheet" href="../../css/viewIdea.css" />
+    <link rel="stylesheet" href="../../css/ideas.css"/>
+    <link rel="stylesheet" href="../../css/viewIdea.css"/>
+    <link rel="stylesheet" href="../../css/messages.css"/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
 
     <link href="../../css/animate.min.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="shortcut icon" href="../../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+    <!--comments-->
+
+    <meta name="robots" content="noindex"/>
+    <link rel="mask-icon" type=""
+          href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+          color="#111"/>
+    <link rel="canonical" href="https://codepen.io/kavendish/pen/aOdopx?q=comment&amp;limit=all&amp;type=type-pens"/>
+    <meta name="viewport" content="width=device-width"/>
+    <!--<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'/>-->
+    <link rel="stylesheet" href="../../css/comments.css" />
 
     <title>Idea</title>
 </head>
 
 <body>
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
             <a href="#" class="navbar-brand">My Project Idea </a>
         </div>
         <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
-            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a>
+            </li>
+            <li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+            <li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${ideasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My
+                Ideas <span th:text="${ideasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge" style="color: orange"> 10 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i>
+                Messages <span class="badge" style="color: orange"> 10 </span></a></li>
 
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown"
+                   href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -49,8 +71,10 @@
                 </ul>
             </li>
 
-            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
-            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About
+                Us</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i>
+                About Us</a></li>
 
         </ul>
 
@@ -62,25 +86,28 @@
         </ul>
 
 
-        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
+        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right"
+           href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
 
 
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown"
+                   role="button" aria-expanded="false">
                     <span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                    <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
+                    <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a>
+                    </li>
                     <li class="divider"></li>
                     <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
                 </ul>
             </li>
         </ul>
 
-        <form class="navbar-form navbar-left" action="/">
+        <form class="navbar-form navbar-left">
             <div class="input-group" style="width: auto">
                 <input type="text" class="form-control" placeholder="Search for an idea" name="search"/>
                 <div class="input-group-btn">
@@ -94,24 +121,28 @@
 </nav>
 
 
-<div th:object="${idea}">
+<div th:object="${idea}" style="margin-top: 67px">
 
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
 
-                <h1 th:text="${idea.getTitle()}" style="font-size: 30px; font-weight: bold;">Blog Post Template for Bootstrap</h1>
-                <p class="lead" style="font-size: 14px"><i class="fa fa-user"></i> by <a th:text="${idea.getUser().getFull_name()}" href="">Super User</a></p>
-                <span style="font-size: 10px"> <i class="fa fa-calendar"></i> <span th:text="'  Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM </span></span>
+                <h1 th:text="${idea.getTitle()}" style="font-size: 30px; font-weight: bold;">Blog Post Template for
+                    Bootstrap</h1>
+                <p class="lead" style="font-size: 14px"><i class="fa fa-user"></i> by <a
+                        th:text="${idea.getUser().getFull_name()}" href="">Super User</a></p>
+                <span style="font-size: 12px"> <i class="fa fa-calendar"></i> <span
+                        th:text="'  Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM </span></span>
                 <div class="form-inline">
-                    <span style="font-size: 10px"><i class="glyphicon glyphicon-th-list"></i> Category: <span th:text="${idea.getCategory().getBody()}" style="font-size: 10px;" class="badge badge-pill badge-info">Education</span></span>
-                    <span style="font-size: 10px">
+                    <span style="font-size: 12px"><i class="glyphicon glyphicon-th-list"></i> Category: <span
+                            th:text="${idea.getCategory().getBody()}" style="font-size: 10px;"
+                            class="badge badge-pill badge-info">Education</span>
+                    </span>
+                    <span style="font-size: 12px">
                         <i class="fa fa-tags"></i> Tags:
                         <span th:each=" tag : ${idea.getTags()}">
-                            <span th:text="${tag.getBody()}" style="font-size: 10px;" class="label label-info">Bootstrap</span>
-                            <!--<span style="font-size: 10px;" class="label label-info">Web</span>-->
-                            <!--<span style="font-size: 10px;" class="label label-info">CSS</span>-->
-                            <!--<span style="font-size: 10px;" class="label label-info">HTML</span>-->
+                            <span th:text="${tag.getBody()}" style="font-size: 10px;"
+                                  class="label label-info">Bootstrap</span>
                         </span>
                     </span>
                 </div>
@@ -120,9 +151,10 @@
                 <img src="../../img/idea7.jpg" class="img-responsive" width="720" height="309"/>
                 <hr/>
                 <h4><strong>Description</strong></h4>
-                <p th:text="${idea.getBody()}">Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor.</p>
+                <p th:text="${idea.getBody()}">Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
+                    Lorem ipsum dolor Lorem ipsum dolor.</p>
 
-                 <br/>
+                <br/>
             </div>
         </div>
     </div>
@@ -130,33 +162,124 @@
 
     <div class="container" style="text-align: center">
         <div class="row">
-            <div class="col-md-6">
-                <div class="tab" role="tabpanel">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-globe"></i> Matchings</a></li>
-                        <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-rocket"></i> Comments</a></li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content tabs">
-                        <div role="tabpanel" class="tab-pane fade in active" id="Section1">
-                            <h3>Matchings</h3>
-    <h1>adasdaasdjkfndjjfsdfjdsjfdsfjdufhuirhfsuofhoushfoudfjouidfjo</h1>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nec urna aliquam, ornare eros vel, malesuada lorem. Nullam faucibus lorem at eros consectetur lobortis. Maecenas nec nibh congue, placerat sem id, rutrum velit. Phasellus porta enim at facilisis condimentum. Maecenas pharetra dolor vel elit tempor pellentesque sed sed eros. Aenean vitae mauris tincidunt, imperdiet orci semper, rhoncus ligula. Vivamus scelerisque.</p>
+            <div class="tab" role="tabpanel">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist" style="margin-left: 15px;">
+                    <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab"
+                                                              data-toggle="tab"><i class="fa fa-handshake-o"></i>
+                        Matchings</a></li>
+                    <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab"><i
+                            class="glyphicon glyphicon-comment"></i> Comments</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content tabs">
+                    <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                        <h3 style="margin-left: -46px; text-decoration: underline; margin-top: 24px; font-size: 30px; margin-bottom: 55px;">
+                            Matchings <i class="fa fa-handshake-o"></i></h3>
+                        <div class="col-md-10">
 
+                            <div style="text-align: center; margin-bottom: 10px; margin-left: 145px">
+                                <div th:if="${#lists.isEmpty(ideaList)}" class="alert alert-info" role="alert">
+                                    <span>This Idea has 0 matchings!</span>
+                                </div>
+                            </div>
 
+                            <div th:each="idea : ${ideaList}" class="row" style="margin-bottom: 50px">
+                                <div class="col-md-12 post">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 th:text="${idea.getTitle()}" style="color: #5bc0de; margin-left: -69rem; margin-bottom: 13px; font-size: 25px">
+                                                <strong><a class="post-title">Cool Share Button Effects Styles</a></strong>
+                                            </h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="row post-content" style="margin-bottom: 15px">
+                                        <div class="col-md-3 item">
+                                            <a th:href="'/user/viewIdea/' + ${idea.getId()}">
+                                                <img style="width:213px; height: 145px" src="../../img/i14.jpeg"
+                                                     alt="" class="img-responsive"/>
+                                                <span class="img-overflow"></span>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-7" style="width: 74.333333%;">
+                                            <p style="font-size: 16px;" th:text="${idea.getBody()}">
+                                                Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam
+                                                tation option.
+                                            </p>
+                                            <button style="display: inline-block;">
+                                                Message
+                                            </button>
+                                            <p style="margin-left: 10px; display: inline-block;">
+                                                <a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>
+                                            </p><br/>
+                                            <p th:text="'Semantic : ' + ${idea.getSemantic()} + ' %'"  style="display: inline-block; font-size: 19px; font-weight: bold"> </p>
+                                            <p th:text="'Sintactic : ' + ${idea.getSintactic()} + ' %'" style="display: inline-block; margin-left: 148px; font-size: 19px; font-weight: bold">Sintactic % : </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-left: -180px">
+                                        <div class="col-md-15 post-header-line">
+                                            <span class="glyphicon glyphicon-user"></span>by <a th:text="${idea.getUser().getFull_name()}" href="#">Bhaumik</a>
+                                            | <span class="glyphicon glyphicon-calendar"></span> <span th:text="${idea.getPosted_date()}"> Sept 16th, 2012</span>
+                                            | <span class="glyphicon glyphicon-comment"></span> <a th:text="${idea.getComments().size()} + ' Comments'" href="#"> 3 Comments </a>
+                                            | <button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size()} + ' Likes'"></span></button>
+                                            | <span style="font-size: 12px"><i class="glyphicon glyphicon-th-list"></i> Category:
+                                              <span th:text="${idea.getCategory().getBody()}" style="font-size: 12px;" class="badge badge-pill badge-info">Education</span> </span>
+                                            | <span class="glyphicon glyphicon-tags"> </span>Tags : <span th:each="tag : ${idea.getTags()}" th:text="${tag.getBody()}" class="label label-info">Snipp</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane fade" id="Section2">
-                            <h3>Comments</h3>
-                            <p>Aici e sect2</p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nec urna aliquam, ornare eros vel, malesuada lorem. Nullam faucibus lorem at eros consectetur lobortis. Maecenas nec nibh congue, placerat sem id, rutrum velit. Phasellus porta enim at facilisis condimentum. Maecenas pharetra dolor vel elit tempor pellentesque sed sed eros. Aenean vitae mauris tincidunt, imperdiet orci semper, rhoncus ligula. Vivamus scelerisque.</p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Section2">
+                        <h3 style="margin-left: -46px; text-decoration: underline; font-size: 30px; margin-bottom: 55px;">
+                            Comments <i class="glyphicon glyphicon-comment"></i></h3>
+
+                        <div class="comments" style="max-width: 83.75rem; margin-left: 120px">
+                            <div class="comment-wrap">
+                                <div class="photo">
+                                    <div class="avatar"
+                                         style="background-image: url('https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg'); margin-right: 10px; height: 4.25rem; width: 4.25rem"></div>
+                                </div>
+                                <div class="comment-block">
+                                    <form th:action="@{'/user/viewIdea/' + ${idea.getId()}}" th:object="${comment}" method="post" data-toggle="validator" role="form">
+                                        <textarea th:field="*{body}" name="" id="" cols="30" rows="3" placeholder="Add comment..." required=""></textarea>
+                                        <button  style="float: right" class="btn btn-success btn-circle text-uppercase" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Summit</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div th:each="com : ${idea.getComments()}" class="comment-wrap">
+                                <div class="photo">
+                                    <img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/128.jpg" class="avatar"
+                                         style="margin-right: 10px; height: 4.25rem; width: 4.25rem" />
+                                </div>
+                                <div class="comment-block">
+                                    <p th:text="${com.getBody()}" class="comment-text" style="text-align: left">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto temporibus iste
+                                        nostrum dolorem natus recusandae incidunt voluptatum. Eligendi voluptatum ducimus architecto tempore,
+                                        quaerat explicabo veniam fuga corporis totam reprehenderit quasi
+                                        sapiente modi tempora at perspiciatis mollitia, dolores voluptate. Cumque, corrupti?</p>
+                                    <div class="bottom-comment">
+                                        <div th:text="${com.getPosted_date()}" class="comment-date">Aug 24, 2014 @ 2:35 AM</div>
+                                        <ul class="comment-actions">
+                                            <li class="complain" style="display: inline-block">by</li>
+                                            <li th:text="${com.getUser().getFull_name()}" class="reply" style="display: inline-block">Cinesadkjlnaskle</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 
@@ -194,19 +317,23 @@
                 <ul class="social2">
                     <span>Social</span>
                     <li>
-                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i
+                                class="fa fa-facebook fa-2x fa2"></i></a>
                     </li>
                     <li>
                         <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
                     </li>
                     <li>
-                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i
+                                class="fa fa-linkedin fa-2x fa2"></i></a>
                     </li>
                     <li>
-                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i
+                                class="fa fa-tumblr fa-2x fa2"></i></a>
                     </li>
                     <li>
-                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i
+                                class="fa fa-google-plus fa-2x fa2"></i></a>
                     </li>
                 </ul>
             </div>

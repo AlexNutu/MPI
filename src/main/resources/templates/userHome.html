@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../js/navbar.js"></script>
     <script src="../js/bootstrap-dropdownhover.min.js"></script>
 
     <link href="../css/animate.min.css" rel="stylesheet"/>
@@ -19,6 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
     <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
+
     <title> Home </title>
 </head>
 
@@ -129,17 +129,18 @@
                 </div>
                 <div class="col-sm-7">
                     <div class="details">
-                        <h4 th:text="${idea.getTitle()}" style="font-weight: bold"></h4>
+                        <h4 th:text="${idea.getTitle()}" style="font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                        <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span class="glyphicon glyphicon-new-window"></span></a>
+
                         <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
                             <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
                             <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size() + ' Likes'}"></span></button></li>
                             <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
                             <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
                         </ul><br/>
                         <a class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
-                        <p style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em style="color:#999;" th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
+                        <p class="posted" style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
                     </div>
                 </div>
             </div>

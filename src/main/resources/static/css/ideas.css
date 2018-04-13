@@ -1,5 +1,5 @@
 body{
-    background: url("../img/h2.jpg");
+    background: url("../img/b5.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -398,3 +398,37 @@ footer ul li{
     position: absolute;
 }
 
+
+.details .posted,
+.details .posted:hover,
+.details .posted:active,
+.details .posted:focus{
+    padding:10px 0;
+    text-decoration:none;
+    font-size:16px;
+    color:#7A7C7F;
+    line-height:24px;
+}
+
+.member-content:hover .details .posted,
+.member-content:hover .details .posted:hover,
+.member-content:hover .details .posted:active,
+.member-content:hover .details .posted:focus{
+    color:#fff;
+}
+
+
+.details .posted:after{
+    padding-left:12px;
+    font-family:'FontAwesome';
+    font-size:15px;
+    line-height:21px;
+    color:#5CC9DF;
+    vertical-align:middle;
+    -webkit-transition:padding .3s ease-out;
+    transition:padding .3s ease-out;
+}
+
+.member-content:hover .details .posted:after{
+    color:#fff;
+}

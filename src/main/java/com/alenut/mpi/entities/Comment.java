@@ -15,7 +15,7 @@ public class Comment {
     private String body;
 
     @Column(name = "posted_date")
-    private Date posted_date;
+    private String posted_date;
 
     @ManyToOne
     @JoinColumn(name = "id_user")
@@ -41,11 +41,11 @@ public class Comment {
         this.body = body;
     }
 
-    public Date getPosted_date() {
+    public String getPosted_date() {
         return posted_date;
     }
 
-    public void setPosted_date(Date posted_date) {
+    public void setPosted_date(String posted_date) {
         this.posted_date = posted_date;
     }
 

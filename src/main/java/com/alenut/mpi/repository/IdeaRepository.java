@@ -1,5 +1,6 @@
 package com.alenut.mpi.repository;
 
+import com.alenut.mpi.entities.Category;
 import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
     List<Idea> getIdeasObjectsByUser(User user);
 
     List<Idea> getIdeaByTitle(String title);
+
+    List<Idea> getIdeasByCategory(Category category);
+
 }

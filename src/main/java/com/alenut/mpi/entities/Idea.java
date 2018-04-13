@@ -19,7 +19,7 @@ public class Idea {
     private String body;
 
     @Column(name = "posted_date")
-    private Date posted_date;
+    private String posted_date;
 
     @Column(name = "image_path")
     private String image_path;
@@ -33,6 +33,7 @@ public class Idea {
     private User user;
 
     @OneToMany(mappedBy = "idea")
+    @OrderBy("posted_date DESC")
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "idea")
@@ -40,6 +41,15 @@ public class Idea {
 
     @OneToMany(mappedBy = "idea")
     private List<Tag> tags;
+
+    @OneToMany(mappedBy = "idea")
+    private List<Matching> matchings;
+
+    @Column(name = "semantic")
+    private String semantic;
+
+    @Column(name = "sintactic")
+    private String sintactic;
 
     public Idea() {
     }
@@ -68,11 +78,11 @@ public class Idea {
         this.body = body;
     }
 
-    public Date getPosted_date() {
+    public String getPosted_date() {
         return posted_date;
     }
 
-    public void setPosted_date(Date posted_date) {
+    public void setPosted_date(String posted_date) {
         this.posted_date = posted_date;
     }
 
@@ -122,5 +132,29 @@ public class Idea {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<Matching> getMatchings() {
+        return matchings;
+    }
+
+    public void setMatchings(List<Matching> matchings) {
+        this.matchings = matchings;
+    }
+
+    public String getSemantic() {
+        return semantic;
+    }
+
+    public void setSemantic(String semantic) {
+        this.semantic = semantic;
+    }
+
+    public String getSintactic() {
+        return sintactic;
+    }
+
+    public void setSintactic(String sintactic) {
+        this.sintactic = sintactic;
     }
 }

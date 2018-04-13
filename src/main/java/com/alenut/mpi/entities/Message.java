@@ -15,7 +15,7 @@ public class Message {
     private String body;
 
     @Column(name = "send_date")
-    private Date send_date;
+    private String send_date;
 
     @Column(name = "id_sender")
     private Long id_sender;
@@ -40,11 +40,11 @@ public class Message {
         this.body = body;
     }
 
-    public Date getSend_date() {
+    public String getSend_date() {
         return send_date;
     }
 
-    public void setSend_date(Date send_date) {
+    public void setSend_date(String send_date) {
         this.send_date = send_date;
     }
 

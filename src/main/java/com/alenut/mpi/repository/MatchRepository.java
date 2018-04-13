@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface MatchRepository extends JpaRepository<Matching, Long> {
     List<Matching> getByIdea(Idea idea);
+
+
 }

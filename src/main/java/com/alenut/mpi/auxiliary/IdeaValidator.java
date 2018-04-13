@@ -2,6 +2,10 @@ package com.alenut.mpi.auxiliary;
 
 import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -31,9 +35,31 @@ public class IdeaValidator implements Validator {
                 if (idea1.getBody().equals(idea.getBody())
                         && idea1.getCategory().getId().equals(idea.getCategory().getId())
                         && idea1.getUser().getId().equals(idea.getUser().getId())) {
-                    errors.reject("Duplicate ideas");
+                    errors.reject("duplicate");
                 }
             }
         }
+
+        // Validarea descriereii(cea dupa care se face matching-ul)
+        // Caut similiraritatea ideii cu ea insasi, daca avem response corect, atunci descrierea este scrisa corect
+
+        HttpResponse<JsonNode> response = null;
+        try {
+            response = Unirest.post("https://api.dandelion.eu/datatxt/sim/v1")
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .header("Accept", "application/json")
+                    .field("token", "a7252c0613ae465fa0fefbcd7a5894d6")
+                    .field("text1", idea.getBody())
+                    .field("text2", idea.getBody())
+                    .asJson();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+        if(!response.getBody().getObject().has("similarity")){
+            errors.reject("format");
+        }
+
+
     }
 }

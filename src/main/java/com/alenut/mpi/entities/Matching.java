@@ -17,6 +17,12 @@ public class Matching {
     @JoinColumn(name = "id_match_idea")
     private Idea ideaMatch;
 
+    @Column(name = "semantic")
+    private String semantic;
+
+    @Column(name = "sintactic")
+    private String sintactic;
+
     public Long getId() {
         return id;
     }
@@ -39,5 +45,21 @@ public class Matching {
 
     public void setIdeaMatch(Idea ideaMatch) {
         this.ideaMatch = ideaMatch;
+    }
+
+    public String getSemantic() {
+        return semantic;
+    }
+
+    public void setSemantic(String semantic) {
+        this.semantic = semantic;
+    }
+
+    public String getSintactic() {
+        return sintactic;
+    }
+
+    public void setSintactic(String sintactic) {
+        this.sintactic = sintactic;
     }
 }
