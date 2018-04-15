@@ -29,12 +29,10 @@ public class IdeaValidator implements Validator {
     public void validate(Object o, Errors errors) {
         // Daca un user incearca sa insereze o idee identica cu una din cele deja postate de el
         Idea idea = (Idea) o;
-        List<Idea> ideaList = ideaService.getIdeaByTitle(idea.getTitle());
+        List<Idea> ideaList = ideaService.getIdeasByUser(idea.getUser());
         if (ideaList.size() > 0) {
             for (Idea idea1 : ideaList) {
-                if (idea1.getBody().equals(idea.getBody())
-                        && idea1.getCategory().getId().equals(idea.getCategory().getId())
-                        && idea1.getUser().getId().equals(idea.getUser().getId())) {
+                if (idea1.getBody().equals(idea.getBody())) {
                     errors.reject("duplicate");
                 }
             }
@@ -56,7 +54,7 @@ public class IdeaValidator implements Validator {
             e.printStackTrace();
         }
 
-        if(!response.getBody().getObject().has("similarity")){
+        if (!response.getBody().getObject().has("similarity")) {
             errors.reject("format");
         }
 

@@ -68,6 +68,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getById(Long id) {
+        try {
+            return userRepository.getById(id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public User getByUsername(String username) {
         try {
             return userRepository.getByUsername(username);
@@ -131,7 +141,7 @@ public class UserServiceImpl implements UserService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        String fileName = user.getUsername() + "_" + sdf.format(new Date()) + "_" + image.getOriginalFilename().replaceAll("\\s+","");
+        String fileName = user.getUsername() + "_" + sdf.format(new Date()) + "_" + image.getOriginalFilename().replaceAll("\\s+", "");
 
         pictureLoaderService.savePictureToDisk(fileName, image.getBytes());
 

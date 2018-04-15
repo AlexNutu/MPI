@@ -101,7 +101,7 @@ public class HomeController extends BaseController {
         if (result.hasErrors()) {
             String error = result.getAllErrors().get(0).getCode();
             if (error.equals("duplicate")) {
-                redir.addFlashAttribute("duplicate", "true");
+                model.addAttribute("duplicate", "true");
             } else {
                 model.addAttribute("format", "true");
             }
@@ -109,9 +109,11 @@ public class HomeController extends BaseController {
         } else {
             modelAndView.setViewName("redirect:postIdea");
             // image uploading on file disk
-            if (idea.getImage_path() != null) {
+            if (!idea.getImage_path().equals("")) {
                 String imagePath = ideaService.saveIdeaImage(image, idea);
                 idea.setImage_path(imagePath);
+            }else{
+                idea.setImage_path("idea7.jpg");
             }
             ideaService.insert(idea, user);
             // Add matchings with this idea
@@ -137,15 +139,18 @@ public class HomeController extends BaseController {
 
         List<Idea> matchingIdeas = new ArrayList<>();
         List<Matching> matchings = idea.getMatchings();
-        for (Matching matching : matchings) {
-            Idea idea1 = matching.getIdeaMatch();
-            idea1.setSemantic(matching.getSemantic());
-            idea1.setSintactic(matching.getSintactic());
-            if (idea1.getBody().length() > 209) {
-                idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
+        if(matchings.size() > 0){
+            for (Matching matching : matchings) {
+                Idea idea1 = matching.getIdeaMatch();
+                idea1.setSemantic(matching.getSemantic());
+                idea1.setSintactic(matching.getSintactic());
+                if (idea1.getBody().length() > 209) {
+                    idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
+                }
+                matchingIdeas.add(idea1);
             }
-            matchingIdeas.add(idea1);
         }
+
         model.addAttribute(matchingIdeas);
 
         return "viewIdea";

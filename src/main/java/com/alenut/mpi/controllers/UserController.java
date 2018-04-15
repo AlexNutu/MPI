@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,7 +65,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String userProfile(HttpServletRequest request, Model model) {
+    public String myProfile(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         List<Idea> ideaList = ideaService.getIdeasByUser(user);
         model.addAttribute("fullname", user.getFull_name());
@@ -80,6 +81,26 @@ public class UserController extends BaseController {
 
         return "myProfile";
     }
+
+    @RequestMapping(value = "/viewProfile/{userId}", method = RequestMethod.GET)
+    public String userProfile(HttpServletRequest request, @PathVariable Long userId, Model model) {
+        User user = userService.getById(userId);
+
+        List<Idea> ideaList = ideaService.getIdeasByUser(user);
+        model.addAttribute("fullname", user.getFull_name());
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("occupation", user.getOccupation());
+        model.addAttribute("ideasNumber", ideaList.size());
+        model.addAttribute("image", user.getImage());
+
+        model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
+        model.addAttribute("noOfMatchings", userService.getNoOfMatchings(ideaList));
+        model.addAttribute("noOfLikes", userService.getNoOfLikes(ideaList));
+        model.addAttribute("noOfComments", userService.getNoOfComments(ideaList));
+
+        return "viewProfile";
+    }
+
 
     @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)
     public ModelAndView accountSettings(HttpServletRequest request, Model model) {
@@ -116,7 +137,6 @@ public class UserController extends BaseController {
                     user.setPassword(MD5Encryption.computeMD5(user.getNewPassword()));
 
                     if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
-//                        pictureLoaderService.deletePictureFromDisk(user.getImage());
                         pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
                         String imagePath = userService.saveImage(image, user);
                         user.setImage(imagePath);
@@ -133,7 +153,6 @@ public class UserController extends BaseController {
         if (!parola && !error) {
             if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
                 pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
-//                pictureLoaderService.deletePictureFromDisk(user.getImage());
                 String imagePath = userService.saveImage(image, user);
                 user.setImage(imagePath);
             }

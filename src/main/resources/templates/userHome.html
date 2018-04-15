@@ -8,7 +8,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../js/notification.js"></script>
+    <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
 
+
+    <link href="../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../css/notification.css" rel="stylesheet"/>
     <link href="../css/animate.min.css" rel="stylesheet"/>
     <link href="../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -23,6 +29,7 @@
 </head>
 
 <body>
+
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -60,9 +67,6 @@
         <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
             <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
         </ul>
-        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
-            <li><a href="/user/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
-        </ul>
 
 
         <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
@@ -94,18 +98,174 @@
             </div>
         </form>
 
+        <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown dropdown-notifications">
+                    <a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown">
+                        <i data-count="2" class="glyphicon glyphicon-bell notification-icon"></i>
+                    </a>
+
+                    <div class="dropdown-container dropdown-position-bottomright">
+
+                        <div class="dropdown-toolbar">
+                            <div class="dropdown-toolbar-actions">
+                                <a href="#"><i class="glyphicon glyphicon-search"></i> View All</a>
+                            </div>
+                            <h3 class="dropdown-toolbar-title">Recent (3)</h3>
+                        </div>
+
+                        <!-- /dropdown-toolbar -->
+                        <ul class="dropdown-menu notification drop-content">
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">Dave Lister</a> commented on <a href="#">DWARF-13 - Maintenance</a></strong>
+                                        <p class="notification-desc">I totally don't wanna do it. Rimmer can do it.</p>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">27. 11. 2015, 15:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">Nikola Tesla</a> resolved <a href="#">T-14 - Awesome stuff</a></strong>
+
+                                        <p class="notification-desc">Resolution: Fixed, Work log: 4h</p>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">27. 10. 2015, 08:00</small>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                        <div class="dropdown-footer text-center">
+                            <a href="#"> <i class="fa fa-eye"></i> View All</a>
+                        </div><!-- /dropdown-footer -->
+
+                    </div><!-- /dropdown-container -->
+                </li><!-- /dropdown -->
+            </ul>
+        </div>
+
     </div>
 </nav>
 
 
+
 <div id="fb-root"></div>
-<script>(function(d, s, id) {
+<script>
+    (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
     js = d.createElement(s); js.id = id;
     js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v2.12&amp;appId=2441875726038205&amp;autoLogAppEvents=1';
     fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+}(document, 'script', 'facebook-jssdk'));
+</script>
 
 <div class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
 
@@ -123,21 +283,20 @@
 
             <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px; margin-left: -60px;">
                 <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 0.333333%">
-                        <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
-                        <h4 th:text="${idea.getUser().getFull_name()}">El jefe</h4>
+                        <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><img class="img-responsive img-center img-thumbnail img-circle" th:src="@{'../img/' + ${idea.getUser().getImage()}}" style="width: 82px; height: 82px;" alt="Profile image"/></a>
+                        <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><h4 th:text="${idea.getUser().getFull_name()}" style="color:#333">El jefe</h4></a>
                         <p th:text="${idea.getUser().getOccupation()}" class="title">Lead Designer &amp; Founder</p>
+                        <a style="font-size: 22px;" href="mailto:mail@example.com"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                 </div>
                 <div class="col-sm-7">
                     <div class="details">
                         <h4 th:text="${idea.getTitle()}" style="font-weight: bold; display:inline-block;margin-right:10px;"></h4>
-                        <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span class="glyphicon glyphicon-new-window"></span></a>
-
+                        <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                         <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
                         <ul class="social-content">
-                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
                             <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size() + ' Likes'}"></span></button></li>
                             <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
-                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
+                            <li><button class="btn btn-info btn-xs"> <i class="fa fa-handshake-o"></i> <span th:text="${idea.getMatchings().size() + ' Matchings'} "></span></button></li>
                         </ul><br/>
                         <a class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
                         <p class="posted" style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
@@ -147,7 +306,7 @@
 
             <div class="row member-content right" style="margin-bottom: 40px">
                 <div class="col-sm-3 col-sm-push-8 member-thumb">
-                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="" style="width:30%;height: 30%"/>
+                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="Profile image" style="width: 82px; height: 82px;"/>
                     <h4>El matchingsnito</h4>
                     <p class="title">Lead Developer</p>
                 </div>

@@ -3,29 +3,28 @@
 <head>
 
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../css/ideas.css" />
+    <link rel="stylesheet" href="../../css/ideas.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../js/navbar.js"></script>
-    <script src="../js/bootstrap-dropdownhover.min.js"></script>
-    <script src="../js/myProfile.js"></script>
-    <link href="../css/myProfile.css" rel="stylesheet"/>
+    <script src="../../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../../js/myProfile.js"></script>
+    <link href="../../css/myProfile.css" rel="stylesheet"/>
 
-    <link href="../css/bootstrap-notifications.css" rel="stylesheet"/>
-    <link href="../css/bootstrap-notifications.min.css" rel="stylesheet"/>
-    <link href="../css/notification.css" rel="stylesheet"/>
-    <link href="../css/animate.min.css" rel="stylesheet"/>
-    <link href="../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../../css/notification.css" rel="stylesheet"/>
+    <link href="../../css/animate.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="shortcut icon" href="../img/icon.png"/>
+    <link rel="shortcut icon" href="../../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
     <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
 
-    <title>My profile</title>
+    <title>User profile</title>
 
 </head>
 <body>
@@ -78,7 +77,7 @@
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> User Profile</a></li>
                     <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
                     <li class="divider"></li>
                     <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
@@ -253,83 +252,82 @@
     </div>
 </nav>
 
-    <div class="container">
-        <div class="row">
-            <h1 style="text-align:center; margin-top: 81px;">My Profile</h1>
-            <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
+<div class="container">
+    <div class="row">
+        <h1 style="text-align:center; margin-top: 81px;">My Profile</h1>
+        <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
-        </div>
     </div>
+</div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center ">
-                <div class="panel panel-default">
-                    <div class="userprofile social ">
-                        <div class="userpic"> <img th:src="${'../img/' + image}" alt="" class="userpicimg"/> </div>
-                        <h3 class="username" th:text="${fullname}" style="font-size: 30px">Lucky Sans</h3>
-                        <p th:text="'- ' +${occupation} + ' -'"> Developer </p>
-                        <!--<div class="socials tex-center"> <a href="" class="btn btn-circle btn-primary ">-->
-                            <!--<i class="fa fa-facebook"></i></a> <a href="" class="btn btn-circle btn-danger ">-->
-                            <!--<i class="fa fa-google-plus"></i></a> <a href="" class="btn btn-circle btn-info ">-->
-                            <!--<i class="fa fa-twitter"></i></a> <a href="" class="btn btn-circle btn-warning "><i class="fa fa-envelope"></i></a>-->
-                        <!--</div>-->
-                    </div>
-                    <div class="col-md-12 border-top border-bottom">
-                        <ul class="nav nav-pills pull-left countlist" role="tablist">
-                            <li role="presentation">
-                                <div style="text-align: center">
-                                    <h3 style="color: #7FDBFF" class="count" id="ideaNr" th:text="${noOfIdeas} ">12</h3>
-                                    <br/>
-                                    <h3>
-                                        <i class="icon glyphicon glyphicon-ok-sign"></i>
-                                        <br/>
-                                        <small>Ideas</small>
-                                    </h3>
-                                </div>
-                            </li>
-                            <li role="presentation">
-                                <div style="text-align: center">
-                                    <h3 class="count2" style="color:#FF4136;" id="matchNr" th:text="${noOfMatchings}" >45</h3>
-                                        <br/>
-                                    <h3>
-                                        <i class="icon glyphicon glyphicon-fire"></i>
-                                        <br/>
-                                        <small>Matchings</small>
-                                    </h3>
-                                </div>
-                            </li>
-                            <li role="presentation">
-                                <div style="text-align: center">
-                                    <h3 class="count3" style="color: #0074D9" id="likeNr" th:text="${noOfLikes}">14</h3>
-                                        <br/>
-                                    <h3>
-                                        <i class="icon glyphicon glyphicon-thumbs-up"></i>
-                                        <br/>
-                                        <small>Likes</small>
-                                    </h3>
-                                </div>
-                            </li>
-                            <li role="presentation">
-                                <div style="text-align: center">
-                                    <h3 class="count4" style="color: #f0ad4e;" id="commNr" th:text="${noOfComments}">52</h3>
-                                        <br/>
-                                    <h3>
-                                        <i class="icon glyphicon glyphicon-comment"></i>
-                                        <br/>
-                                        <small>Comments</small>
-                                    </h3>
-                                </div>
-                            </li >
-                        </ul>
-                        <a href="/user/accountSettings" class="btn btn-info followbtn"><i class="glyphicon glyphicon-wrench"></i> Edit Profile</a>
-                        <!--<button class="btn btn-primary followbtn">Follow</button>-->
-                    </div>
-                    <div class="clearfix"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center ">
+            <div class="panel panel-default">
+                <div class="userprofile social ">
+                    <div class="userpic"> <img th:src="${'../../img/' + image}" alt="" class="userpicimg"/> </div>
+                    <h3 class="username" th:text="${fullname}" style="font-size: 30px">Lucky Sans</h3>
+                    <p th:text="'- ' +${occupation} + ' -'"> Developer </p>
+                    <!--<div class="socials tex-center"> <a href="" class="btn btn-circle btn-primary ">-->
+                    <!--<i class="fa fa-facebook"></i></a> <a href="" class="btn btn-circle btn-danger ">-->
+                    <!--<i class="fa fa-google-plus"></i></a> <a href="" class="btn btn-circle btn-info ">-->
+                    <!--<i class="fa fa-twitter"></i></a> <a href="" class="btn btn-circle btn-warning "><i class="fa fa-envelope"></i></a>-->
+                    <!--</div>-->
                 </div>
+                <div class="col-md-12 border-top border-bottom">
+                    <ul class="nav nav-pills pull-left countlist" role="tablist">
+                        <li role="presentation">
+                            <div style="text-align: center">
+                                <h3 style="color: #7FDBFF" class="count" id="ideaNr" th:text="${noOfIdeas} ">12</h3>
+                                <br/>
+                                <h3>
+                                    <i class="icon glyphicon glyphicon-ok-sign"></i>
+                                    <br/>
+                                    <small>Ideas</small>
+                                </h3>
+                            </div>
+                        </li>
+                        <li role="presentation">
+                            <div style="text-align: center">
+                                <h3 class="count2" style="color:#FF4136;" id="matchNr" th:text="${noOfMatchings}" >45</h3>
+                                <br/>
+                                <h3>
+                                    <i class="icon glyphicon glyphicon-fire"></i>
+                                    <br/>
+                                    <small>Matchings</small>
+                                </h3>
+                            </div>
+                        </li>
+                        <li role="presentation">
+                            <div style="text-align: center">
+                                <h3 class="count3" style="color: #0074D9" id="likeNr" th:text="${noOfLikes}">14</h3>
+                                <br/>
+                                <h3>
+                                    <i class="icon glyphicon glyphicon-thumbs-up"></i>
+                                    <br/>
+                                    <small>Likes</small>
+                                </h3>
+                            </div>
+                        </li>
+                        <li role="presentation">
+                            <div style="text-align: center">
+                                <h3 class="count4" style="color: #f0ad4e;" id="commNr" th:text="${noOfComments}">52</h3>
+                                <br/>
+                                <h3>
+                                    <i class="icon glyphicon glyphicon-comment"></i>
+                                    <br/>
+                                    <small>Comments</small>
+                                </h3>
+                            </div>
+                        </li >
+                    </ul>
+                    <a href="#" class="btn btn-primary followbtn"><i class="glyphicon glyphicon-plus"></i> Follow </a>
+                </div>
+                <div class="clearfix"></div>
             </div>
         </div>
     </div>
+</div>
 
 
 </body>

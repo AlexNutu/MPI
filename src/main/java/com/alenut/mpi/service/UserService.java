@@ -19,6 +19,9 @@ public interface UserService {
     User getByEmail(String email);
 
     @Transactional(readOnly = true)
+    User getById(Long id);
+
+    @Transactional(readOnly = true)
     void createUser(User user) throws NoSuchAlgorithmException;
 
     @Transactional(readOnly = true)

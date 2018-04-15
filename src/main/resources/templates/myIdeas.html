@@ -11,6 +11,9 @@
     <script src="../js/navbar.js"></script>
     <script src="../js/bootstrap-dropdownhover.min.js"></script>
 
+    <link href="../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../css/notification.css" rel="stylesheet"/>
     <link href="../css/animate.min.css" rel="stylesheet"/>
     <link href="../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -60,9 +63,6 @@
         <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
             <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
         </ul>
-        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
-            <li><a href="/user/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
-        </ul>
 
 
         <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
@@ -93,6 +93,159 @@
                 </div>
             </div>
         </form>
+
+        <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown dropdown-notifications">
+                    <a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown">
+                        <i data-count="2" class="glyphicon glyphicon-bell notification-icon"></i>
+                    </a>
+
+                    <div class="dropdown-container dropdown-position-bottomright">
+
+                        <div class="dropdown-toolbar">
+                            <div class="dropdown-toolbar-actions">
+                                <a href="#"><i class="glyphicon glyphicon-search"></i> View All</a>
+                            </div>
+                            <h3 class="dropdown-toolbar-title">Recent (3)</h3>
+                        </div>
+
+                        <!-- /dropdown-toolbar -->
+                        <ul class="dropdown-menu notification drop-content">
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">Dave Lister</a> commented on <a href="#">DWARF-13 - Maintenance</a></strong>
+                                        <p class="notification-desc">I totally don't wanna do it. Rimmer can do it.</p>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">27. 11. 2015, 15:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">Nikola Tesla</a> resolved <a href="#">T-14 - Awesome stuff</a></strong>
+
+                                        <p class="notification-desc">Resolution: Fixed, Work log: 4h</p>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">27. 10. 2015, 08:00</small>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="notification">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div class="media-object">
+                                            <img src="../img/notif.svg" class="img-circle" alt="Name"/>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>
+
+                                        <div class="notification-meta">
+                                            <small class="timestamp">1. 9. 2015, 08:00</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                        <div class="dropdown-footer text-center">
+                            <a href="#"> <i class="fa fa-eye"></i> View All</a>
+                        </div><!-- /dropdown-footer -->
+
+                    </div><!-- /dropdown-container -->
+                </li><!-- /dropdown -->
+            </ul>
+        </div>
 
     </div>
 </nav>

@@ -19,4 +19,6 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     List<Idea> getIdeasByCategory(Category category);
 
+    List<Idea> findAllByOrderByIdDesc();
+
 }

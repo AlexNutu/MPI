@@ -14,12 +14,13 @@
 <div style="text-align: center">
     <h1> An error has occurred in the application</h1>
 
-    <div th:text="${error}"></div>
+    <!--<div th:text="${error}"></div>-->
 
-    <button class="btn btn-primary" th:hidden="${backButton} == null" onclick="location.href='/user/userHome'">Go
-        back
+    <button class="btn btn-primary" th:hidden="${backButton} == null" th:href="@{'/user/userHome'}">Go back
     </button>
 
 </div>
 
 </body>
+
+</html>

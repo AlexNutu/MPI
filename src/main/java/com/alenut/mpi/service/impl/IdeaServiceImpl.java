@@ -38,7 +38,7 @@ public class IdeaServiceImpl {
 
 
     public List<Idea> getAllIdeas() {
-        return ideaRepository.findAll(); // gaseste toate ideile salvate in baza de date
+        return ideaRepository.findAllByOrderByIdDesc(); // gaseste toate ideile salvate in baza de date
     }
 
     public List<Idea> getIdeasByUser(User user) {
@@ -65,7 +65,8 @@ public class IdeaServiceImpl {
     public String savePhoto(MultipartFile image, Idea idea) throws IOException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String fileName = idea.getBody().substring(0, 4) + "_" + sdf.format(new Date()) + "_" + image.getOriginalFilename().replaceAll("\\s+", "");
+        String fileName = idea.getBody().substring(0, 4) + "_" + sdf.format(new Date()) + "_" + image.getOriginalFilename();
+        fileName = fileName.replaceAll("\\s+", "");
 
         pictureLoaderService.savePictureToDisk(fileName, image.getBytes());
 
@@ -104,17 +105,31 @@ public class IdeaServiceImpl {
 
                 String scoreSintactic = responseSintactic.getBody().getObject().get("similarity").toString();
 
-                Double doubleSemantic = Double.parseDouble(scoreSemantic);
-                Double doubleSintactic = Double.parseDouble(scoreSintactic);
+                Double doubleSemantic = Double.parseDouble(scoreSemantic) * 100.0;
+                Double doubleSintactic = Double.parseDouble(scoreSintactic) * 100.0;
 
-                if (doubleSemantic >= 50.0) {
+                if (doubleSemantic >= 40.0) {
                     Matching matching = new Matching();
+                    Matching matching2 = new Matching();
                     matching.setIdea(idea);
                     matching.setIdeaMatch(idea1);
-                    matching.setSemantic(scoreSemantic);
-                    matching.setSintactic(scoreSintactic);
+                    matching2.setIdea(idea1);
+                    matching2.setIdeaMatch(idea);
+                    String semantic = doubleSemantic.toString(), sintactic = doubleSintactic.toString();
+                    if(semantic.length() > 5){
+                        semantic = semantic.substring(0, 5);
+                    }
+                    if(sintactic.length() > 5){
+                        sintactic = sintactic.substring(0, 5);
+                    }
+                    matching.setSemantic(semantic);
+                    matching.setSintactic(sintactic);
+                    matching2.setSemantic(semantic);
+                    matching2.setSintactic(sintactic);
 
                     matchRepository.save(matching);
+                    matchRepository.save(matching2);
+
                 }
             }
         }
