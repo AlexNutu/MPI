@@ -87,7 +87,7 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping(value = "/postIdea", method = RequestMethod.POST)
-    public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir, @RequestParam("file") MultipartFile image) throws IOException, UnirestException {
+    public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir, @RequestParam("file") MultipartFile image) throws Exception {
         model.addAttribute("categories", categoryService.getAllCategories());
 
         User user = getCurrentUser();
@@ -112,12 +112,14 @@ public class HomeController extends BaseController {
             if (!idea.getImage_path().equals("")) {
                 String imagePath = ideaService.saveIdeaImage(image, idea);
                 idea.setImage_path(imagePath);
-            }else{
+            } else {
                 idea.setImage_path("idea7.jpg");
             }
             ideaService.insert(idea, user);
             // Add matchings with this idea
             ideaService.addMatchings(idea);
+            // Add tags/keywords for this idea
+            ideaService.addTags(idea);
 
             redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());
@@ -139,7 +141,7 @@ public class HomeController extends BaseController {
 
         List<Idea> matchingIdeas = new ArrayList<>();
         List<Matching> matchings = idea.getMatchings();
-        if(matchings.size() > 0){
+        if (matchings.size() > 0) {
             for (Matching matching : matchings) {
                 Idea idea1 = matching.getIdeaMatch();
                 idea1.setSemantic(matching.getSemantic());

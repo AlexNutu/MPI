@@ -361,12 +361,17 @@
                                                 Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam
                                                 tation option.
                                             </p>
-                                            <button style="display: inline-block;">
+                                            <button sec:authorize="isAuthenticated()" class="btn btn-warning" style="display: inline-block;">
                                                 Message
                                             </button>
-                                            <p style="margin-left: 10px; display: inline-block;">
+                                            <p sec:authorize="isAuthenticated()" style="margin-left: 10px; display: inline-block;">
                                                 <a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>
-                                            </p><br/>
+                                            </p>
+                                            <p sec:authorize="isAnonymous()" style="margin-left: 10px; display: inline-block;">
+                                                <a class="btn btn-read-more" th:href="'/home/viewIdea/' + ${idea.getId()}">Read more</a>
+                                            </p>
+
+                                            <br/>
                                             <p th:text="'Semantic : ' + ${idea.getSemantic()} + ' %'"  style="display: inline-block; font-size: 19px; font-weight: bold"> </p>
                                             <p th:text="'Sintactic : ' + ${idea.getSintactic()} + ' %'" style="display: inline-block; margin-left: 148px; font-size: 19px; font-weight: bold">Sintactic % : </p>
                                         </div>

@@ -7,24 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="../js/bootstrap-dropdownhover.min.js"></script>
     <script src="../js/notification.js"></script>
+    <script src="../js/scroll.js"></script>
     <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
 
-
+    <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
     <link href="../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../css/bootstrap-notifications.min.css" rel="stylesheet"/>
     <link href="../css/notification.css" rel="stylesheet"/>
     <link href="../css/animate.min.css" rel="stylesheet"/>
     <link href="../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
     <link rel="shortcut icon" href="../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
     <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
     <title> Home </title>
 </head>
 
@@ -267,73 +270,158 @@
 }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<div class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
 
-<div sec:authorize="isAuthenticated()" class="text-center" style="margin-bottom: 100px">
-    <a href="/user/postIdea" class="button" style="margin-left: 30%" >
-        <span>submit idea</span>
-    </a>
+<div style="margin-top: 51px;" class="welcome">
+    <img src="../img/cover11.jpg " />
+    <h4 class="title" style="font-family: 'Lobster', cursive; font-size: 45px;">Welcome to My Project Idea</h4>
+    <div sec:authorize="isAuthenticated()" class="text-center submitIdea" style="margin-bottom: 100px">
+        <a href="/user/postIdea" class="button">
+            <span style="width: 232px">SUBMIT IDEA</span>
+        </a>
+    </div>
 </div>
 
-<div class="container bootstrap snippet">
-    <section id="team" class="white-bg padding-top-bottom">
-        <div class="container bootstrap snippet">
-            <h1 class="section-title text-center page-title" style="margin-top: 100px">Popular Ideas / Latest Ideas </h1>
-            <p class="section-description text-center" style="margin-bottom: 80px"> Make your ideas count </p>
 
-            <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px; margin-left: -60px;">
-                <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 0.333333%">
-                        <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><img class="img-responsive img-center img-thumbnail img-circle" th:src="@{'../img/' + ${idea.getUser().getImage()}}" style="width: 82px; height: 82px;" alt="Profile image"/></a>
-                        <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><h4 th:text="${idea.getUser().getFull_name()}" style="color:#333">El jefe</h4></a>
-                        <p th:text="${idea.getUser().getOccupation()}" class="title">Lead Designer &amp; Founder</p>
-                        <a style="font-size: 22px;" href="mailto:mail@example.com"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                </div>
-                <div class="col-sm-7">
-                    <div class="details">
-                        <h4 th:text="${idea.getTitle()}" style="font-weight: bold; display:inline-block;margin-right:10px;"></h4>
-                        <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
-                        <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        <ul class="social-content">
-                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size() + ' Likes'}"></span></button></li>
-                            <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
-                            <li><button class="btn btn-info btn-xs"> <i class="fa fa-handshake-o"></i> <span th:text="${idea.getMatchings().size() + ' Matchings'} "></span></button></li>
-                        </ul><br/>
-                        <a class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
-                        <p class="posted" style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
+<div style="margin-top:100px" class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+
+<div class="" style="">
+
+    <div class="first1" style="position: absolute; z-index: 10;">
+        <div class="container bootstrap snippet" style="margin-top: -35px">
+            <section id="team" class="white-bg padding-top-bottom">
+                <div class="container bootstrap snippet">
+                    <h1 class="section-title text-center page-title" style="margin-left:290px; margin-top: 20px; ">Popular Ideas / Latest Ideas </h1>
+                    <p class="section-description text-center" style="margin-left:290px;margin-bottom: 80px"> Make your ideas count </p>
+
+                    <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px; margin-left: -60px;">
+                        <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 7.333333%">
+                            <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><img class="img-responsive img-center img-thumbnail img-circle" th:src="@{'../img/' + ${idea.getUser().getImage()}}" style="width: 82px; height: 82px;" alt="Profile image"/></a>
+                            <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><h4 th:text="${idea.getUser().getFull_name()}" style="color:#333">El jefe</h4></a>
+                            <p th:text="${idea.getUser().getOccupation()}" class="title">Lead Designer &amp; Founder</p>
+                            <a style="font-size: 22px;" href="mailto:mail@example.com"><i class="glyphicon glyphicon-send" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="details">
+                                <h4 th:text="${idea.getTitle()}" style="font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                                <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
+                                <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+
+                                <a style="" sec:authorize="isAuthenticated()" class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
+
+                                <a style="" sec:authorize="isAnonymous()" class="read-more" th:href="@{'/home/viewIdea/' + ${idea.getId()}}">Read More</a>
+                                <br/>
+                                <br/>
+                                <br/>
+
+                                <ul class="social-content">
+                                    <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size() + ' Likes'}"></span></button></li>
+                                    <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
+                                    <li><button class="btn btn-info btn-xs"> <i class="fa fa-handshake-o"></i> <span th:text="${idea.getMatchings().size() + ' Matchings'} "></span></button></li>
+                                </ul>
+
+                                <p style="margin-top: 15px; margin-bottom: -10px; font-size: 10px; "><span style="color: #7A7C7F;" class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
+                                    <span class="badge badge-info" style="font-size: 10px; background-color: #7A7C7F;" th:text="${tag.getBody()}" th:each="tag : ${idea.getTags()}"> Education</span>
+                                </p>
+
+                                <p class="posted" style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<span class="glyphicon glyphicon-tasks"></span> <span class="badge badge-info" style="background-color: #337ab7; font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
+                                <br/>
+
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row member-content right" style="margin-bottom: 40px">
-                <div class="col-sm-3 col-sm-push-8 member-thumb">
-                    <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="Profile image" style="width: 82px; height: 82px;"/>
-                    <h4>El matchingsnito</h4>
-                    <p class="title">Lead Developer</p>
-                </div>
-                <div class="col-sm-7 col-sm-pull-2">
-                    <div class="details">
-                        <h4 style="font-weight: bold"> Aceasta idee este geniala</h4>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        <ul class="social-content">
-                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
-                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
-                        </ul>
+                    <div class="row member-content right" style="margin-bottom: 40px">
+                        <div class="col-sm-3 col-sm-push-8 member-thumb">
+                            <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av22.jpg" alt="Profile image" style="width: 82px; height: 82px;"/>
+                            <h4>El matchingsnito</h4>
+                            <p class="title">Lead Developer</p>
+                        </div>
+                        <div class="col-sm-7 col-sm-pull-2">
+                            <div class="details">
+                                <h4 style="font-weight: bold"> Aceasta idee este geniala</h4>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                <ul class="social-content">
+                                    <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
+                                    <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+                                    <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
+                                    <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                                    <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
+                </div>
+            </section>
         </div>
-    </section>
+    </div>
+
+
+    <div class="second2" style="position:absolute;top: 385px;">
+        <h4 style="margin-left: 1348px">Recent Ideas</h4>
+        <div style="left: 1266px" class="col-md-2">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="6"></li>
+                </ol>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <a style="text-align: center" href="/user/viewIdea/7"><h5>Some idea title bla bla bal</h5></a>
+                        <img src="http://placehold.it/292/16a085/FFF&amp;text=jQuery" alt="" class="img-responsive" />
+                    </div>
+                    <div class="item">
+                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
+                        <img src="http://placehold.it/292/d35400/FFF&amp;text=HTML5" alt="" class="img-responsive" />
+                    </div>
+                    <div class="item">
+                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
+                        <img src="http://placehold.it/292/2980b9/FFF&amp;text=CSS3" alt="" class="img-responsive" />
+                    </div>
+                    <div class="item">
+                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
+                        <img src="http://placehold.it/292/8e44ad/FFF&amp;text=jQuery2DotNet" alt="" class="img-responsive" />
+                    </div>
+                    <div class="item">
+                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
+                        <img src="http://placehold.it/292/8e44ad/FFF&amp;text=jQuery2DotNet" alt="" class="img-responsive" />
+                    </div>
+                    <div class="item">
+                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
+                        <img src="http://placehold.it/292/8e44ad/FFF&amp;text=jQuery2DotNet" alt="" class="img-responsive" />
+                    </div>
+                </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span></a><a class="right carousel-control"
+                                                                                 href="#carousel-example-generic" data-slide="next"><span class="glyphicon glyphicon-chevron-right">
+            </span>
+            </a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="scroll-top-wrapper ">
+  <span class="scroll-top-inner">
+    <i class="fa fa-2x fa-arrow-circle-up"></i>
+  </span>
 </div>
 
 <br/>
 <br/>
 
 
-<footer>
+<footer style="margin-top: 4010px;">
     <div class="container container2">
         <div class="row">
 

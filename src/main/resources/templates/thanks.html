@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../js/navbar.js"></script>
     <script src="../js/bootstrap-dropdownhover.min.js"></script>
 
+    <link href="../css/thanks.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/messages.css"/>
     <link href="../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../css/bootstrap-notifications.min.css" rel="stylesheet"/>
     <link href="../css/notification.css" rel="stylesheet"/>
@@ -247,17 +248,47 @@
     </div>
 </nav>
 
-<div class="jumbotron text-xs-center" style="text-align: center">
-    <h1 class="display-3">Thank You!</h1>
-    <p class="lead"><strong>Post your ideas</strong> and see the matchings you got with other people!</p>
-    <hr/>
-    <br/><br/>
+<br/>
+<div class="jumbotron text-xs-center" style="text-align: center; height: 446px">
+    <h1 class="display-3" style="margin-top: -40px;">Thank You!</h1>
+    <p class="lead">Post <strong>ideas</strong> and connect with people that think <strong>similar</strong> to you!</p>
+    <br/>
+    <br/>
+    <div class="container" style="text-align: center; margin-left: 267px">
+        <div class="process">
+            <div class="process-row">
+                <div class="process-step">
+                    <button type="button" disabled="disabled" class="btn btn-info btn-circle btn-xl"><i class="glyphicon glyphicon-pencil"></i></button>
+                    <p>Post Idea</p>
+                </div>
+                <div class="process-step" style="left:100px">
+                    <button type="button" disabled="disabled" class="btn btn-warning btn-circle btn-xl"><i class="glyphicon glyphicon-eye-open"></i></button>
+                    <p>Find similar Ideas</p>
+                </div>
+                <div class="process-step">
+                    <button type="button" disabled="disabled" class="btn btn-success btn-circle btn-xl"><i class="fa fa-handshake-o" aria-hidden="true"></i></button>
+                    <p>Collaborate with their Creators</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
     <p class="lead">
-        <a class="btn btn-primary btn-sm" href="/user/home" role="button">Continue to homepage</a>
+        <a style="margin-left:-35px;font-size: 14px" class="btn btn-primary btn-sm" href="/user/home" role="button">Continue to Homepage</a>
     </p>
+
+    <p class="lead">
+        <a style="margin-left:-33px;font-size: 14px" class="btn btn-success btn-sm" href="/user/postIdea" role="button">Submit Idea</a>
+    </p>
+    <hr/>
+
 </div>
 
-<footer style="margin-top:112px !important; margin-bottom:-17px; !important; right: 0; bottom: 0; left: 0;">
+
+<footer style="margin-top:70px !important; margin-bottom:-17px; !important; right: 0; bottom: 0; left: 0;">
     <div class="container container2">
         <div class="row">
 

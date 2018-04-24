@@ -1,19 +1,21 @@
 package com.alenut.mpi.service.impl;
 
-import com.alenut.mpi.entities.Comment;
-import com.alenut.mpi.entities.Idea;
-import com.alenut.mpi.entities.Matching;
-import com.alenut.mpi.entities.User;
+import com.alenut.mpi.entities.*;
 import com.alenut.mpi.repository.CommentRepository;
 import com.alenut.mpi.repository.IdeaRepository;
 import com.alenut.mpi.repository.MatchRepository;
+import com.alenut.mpi.repository.TagRepository;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import paralleldots.ParallelDots;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -35,6 +37,9 @@ public class IdeaServiceImpl {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
 
     public List<Idea> getAllIdeas() {
@@ -116,10 +121,10 @@ public class IdeaServiceImpl {
                     matching2.setIdea(idea1);
                     matching2.setIdeaMatch(idea);
                     String semantic = doubleSemantic.toString(), sintactic = doubleSintactic.toString();
-                    if(semantic.length() > 5){
+                    if (semantic.length() > 5) {
                         semantic = semantic.substring(0, 5);
                     }
-                    if(sintactic.length() > 5){
+                    if (sintactic.length() > 5) {
                         sintactic = sintactic.substring(0, 5);
                     }
                     matching.setSemantic(semantic);
@@ -132,6 +137,26 @@ public class IdeaServiceImpl {
 
                 }
             }
+        }
+    }
+
+    public void addTags(Idea idea) throws Exception {
+        // Keywords generation using Parallel DOCS API that uses Neural Language Processing
+        ParallelDots pd = new ParallelDots("9EiarD6fAQkDPHZpPUnFLDnRySwOtKMEH3NUATr851s");
+        String text = idea.getBody();
+        String keywords = pd.keywords(text);
+
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(keywords);
+        JSONArray jsonArray = (JSONArray) json.get("keywords");
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            String keyword = jsonObject.get("keyword").toString();
+            Tag tag = new Tag();
+            tag.setIdea(idea);
+            tag.setBody(keyword);
+            tagRepository.save(tag);
         }
     }
 

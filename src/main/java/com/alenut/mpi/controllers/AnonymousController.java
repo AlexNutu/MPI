@@ -1,7 +1,9 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.UserValidator;
+import com.alenut.mpi.entities.Comment;
 import com.alenut.mpi.entities.Idea;
+import com.alenut.mpi.entities.Matching;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.AutoLoginService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -88,12 +92,32 @@ public class AnonymousController extends BaseController {
     }
 
 
-//    @GetMapping(value = "/viewIdea")
-//    public String viewIdea(HttpServletRequest request, Model model) {//(@RequestParam Idea idea) {
-//
-//        //TODO: Extragere informatii despre ideea curenta, parametrul primit cat si tipul de request trebuie revizuite
-//        return "viewIdea";
-//    }
+    @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.GET)
+    public String viewIdea(HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
+
+        Idea idea = ideaService.getIdeaById(ideaId);
+        model.addAttribute(idea);
+
+        List<Idea> matchingIdeas = new ArrayList<>();
+        List<Matching> matchings = idea.getMatchings();
+        if(matchings.size() > 0){
+            for (Matching matching : matchings) {
+                Idea idea1 = matching.getIdeaMatch();
+                idea1.setSemantic(matching.getSemantic());
+                idea1.setSintactic(matching.getSintactic());
+                if (idea1.getBody().length() > 209) {
+                    idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
+                }
+                matchingIdeas.add(idea1);
+            }
+        }
+
+        model.addAttribute(matchingIdeas);
+
+        return "viewIdea";
+    }
+
+
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public String contactUs(HttpServletRequest request, Model model) {
