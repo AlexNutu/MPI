@@ -17,12 +17,13 @@ public class Message {
     @Column(name = "send_date")
     private String send_date;
 
-    @Column(name = "id_sender")
-    private Long id_sender;
+    @ManyToOne
+    @JoinColumn(name = "id_sender")
+    private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user;
+    @JoinColumn(name = "id_conversation")
+    private Conversation conversation;
 
     public Long getId() {
         return id;
@@ -48,19 +49,19 @@ public class Message {
         this.send_date = send_date;
     }
 
-    public Long getId_sender() {
-        return id_sender;
+    public User getSender() {
+        return sender;
     }
 
-    public void setId_sender(Long id_sender) {
-        this.id_sender = id_sender;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public User getUser() {
-        return user;
+    public Conversation getConversation() {
+        return conversation;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
 }

@@ -47,7 +47,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Idea> ideas;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "sender")
     private List<Message> messages;
 
     @OneToMany(mappedBy = "user")
@@ -55,6 +55,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Appreciation> appreciations;
+
+    @OneToMany(mappedBy = "user")
+    private List<Conversation> conversations;
 
     @Transient
     private String newPassword;
@@ -66,7 +69,7 @@ public class User {
     public User() {
     }
 
-    public User(String full_name, String username, String email, String password, String phone_number, int role, Date reg_date, String occupation, String image, List<Idea> ideas, List<Message> messages, List<Comment> comments, List<Appreciation> appreciations) {
+    public User(String full_name, String username, String email, String password, String phone_number, int role, Date reg_date, String occupation, String image, List<Idea> ideas, List<Comment> comments, List<Appreciation> appreciations, List<Conversation> conversations, String newPassword) {
         this.full_name = full_name;
         this.username = username;
         this.email = email;
@@ -77,9 +80,10 @@ public class User {
         this.occupation = occupation;
         this.image = image;
         this.ideas = ideas;
-        this.messages = messages;
         this.comments = comments;
         this.appreciations = appreciations;
+        this.conversations = conversations;
+        this.newPassword = newPassword;
     }
 
     public Long getId() {
@@ -170,14 +174,6 @@ public class User {
         this.ideas = ideas;
     }
 
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
     public List<Comment> getComments() {
         return comments;
     }
@@ -192,6 +188,14 @@ public class User {
 
     public void setAppreciations(List<Appreciation> appreciations) {
         this.appreciations = appreciations;
+    }
+
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<Conversation> conversations) {
+        this.conversations = conversations;
     }
 
     public String getNewPassword() {

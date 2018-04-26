@@ -2,11 +2,15 @@ package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.IdeaValidator;
 import com.alenut.mpi.entities.*;
+import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.CategoryServiceImpl;
+import com.alenut.mpi.service.impl.ConversationService;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
+import com.alenut.mpi.service.impl.MessageService;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.poi.ss.formula.functions.Match;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,9 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -35,14 +37,27 @@ public class HomeController extends BaseController {
     @Autowired
     private IdeaValidator ideaValidator;
 
+    @Autowired
+    private ConversationService conversationService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MessageService messageService;
+
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String displayAllIdeas(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+//        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
         List<Idea> ideas = ideaService.getAllIdeas();
         model.addAttribute("ideasList", ideas);
+
+//        retrieve the last conversation, if it not affects performance
+//        List<Conversation> conversations = conversationService.getAllUserConversations(user);
+//        model.addAttribute("messagesNumber", messageService.getMessagesByUser(user).size());
 
         return "userHome";
     }
@@ -172,14 +187,53 @@ public class HomeController extends BaseController {
         return "redirect:{ideaId}";
     }
 
-    @RequestMapping(value = "/messages", method = RequestMethod.GET)
-    public String myMessages(HttpServletRequest request, Model model) {
+    @RequestMapping(value = "/messages/{conversationId}", method = RequestMethod.GET)
+    public String myMessagesGet(HttpServletRequest httpServletRequest, @PathVariable Long conversationId, Model model) {
         User user = getCurrentUser();
+        model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
 
+        model.addAttribute("sentMessage", new Message());
+
+        List<Conversation> conversations = conversationService.getAllUserConversations(user);
+        Collections.sort(conversations, (c1, c2) -> {
+            if (c1.getCreatedDate().equals(c2.getCreatedDate()))
+                return 0;
+            if (c1.getCreatedDate().before(c2.getCreatedDate()))
+                return -1;
+            return 1;
+        });
+        model.addAttribute("conversations", conversations);
+
+        if (conversationId == -1) {
+            conversationId = conversations.get(0).getId();
+        }
+        model.addAttribute("convOpen", conversationService.getById(conversationId));
+
         return "messages";
     }
+
+    @RequestMapping(value = "/messages/{conversationId}", method = RequestMethod.POST)
+    public String myMessagesPost(@Valid Message sentMessage, BindingResult result, @PathVariable Long conversationId, HttpServletRequest request, Model model) {
+        User user = getCurrentUser();
+        model.addAttribute("user", user);
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        List<Conversation> conversations = conversationService.getAllUserConversations(user);
+        model.addAttribute("conversations", conversations);
+
+        Conversation convOpen = conversationService.getById(conversationId);
+        model.addAttribute("convOpen", convOpen);
+
+        sentMessage.setSend_date(new Date().toString());
+        sentMessage.setSender(user);
+        sentMessage.setConversation(convOpen);
+        messageService.addMessage(sentMessage);
+
+        return "redirect:{conversationId}";
+    }
+
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about(HttpServletRequest request, Model model) {
