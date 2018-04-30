@@ -20,10 +20,6 @@ public class Conversation {
     @JoinColumn(name = "id_user2")
     private User user2;
 
-    @ManyToOne
-    @JoinColumn(name = "id_last_message")
-    private Message lastMessage;
-
     @OneToMany(mappedBy = "conversation")
     @OrderBy("send_date")
     private List<Message> messages;
@@ -53,14 +49,6 @@ public class Conversation {
 
     public void setUser2(User user2) {
         this.user2 = user2;
-    }
-
-    public Message getLastMessage() {
-        return lastMessage;
-    }
-
-    public void setLastMessage(Message lastMessage) {
-        this.lastMessage = lastMessage;
     }
 
     public List<Message> getMessages() {

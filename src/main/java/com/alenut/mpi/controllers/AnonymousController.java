@@ -9,13 +9,11 @@ import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.AutoLoginService;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -44,11 +42,10 @@ public class AnonymousController extends BaseController {
     private AutoLoginService autoLoginService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String displayAllIdeas(HttpServletRequest request, Model model) {
+    public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page) {
 
-        List<Idea> ideas = ideaService.getAllIdeas();
-
-        model.addAttribute("ideasList", ideas);
+        Page<Idea> ideas = ideaService.getAllIdeas(page);
+        model.addAttribute("ideasList", ideas.getContent());
 
         return "userHome";
     }

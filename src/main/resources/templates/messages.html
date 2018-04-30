@@ -359,7 +359,7 @@ $(window).on('keydown', function(e) {
                             <div class="meta">
                                 <p th:if="${conversation.getUser().getId() == user.getId()}" th:text="${conversation.getUser2().getFull_name()}" class="name">Louis Litt</p>
                                 <p th:if="${conversation.getUser2().getId() == user.getId()}" th:text="${conversation.getUser().getFull_name()}" class="name">Louis Litt</p>
-                                <p th:text="${conversation.getLastMessage().getBody()}" class="preview">You just got LITT up, Mike.</p>
+                                <p th:text="${conversation.messages.get(conversation.getMessages().size()-1).getBody()}" class="preview">You just got LITT up, Mike.</p>
                             </div>
                         </div>
                     </a>

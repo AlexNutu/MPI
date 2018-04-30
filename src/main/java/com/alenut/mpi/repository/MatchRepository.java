@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MatchRepository extends JpaRepository<Matching, Long> {
-    List<Matching> getByIdea(Idea idea);
 
+    List<Matching> getByIdea(Idea idea);
+    List<Matching> getByIdeaMatch(Idea idea);
 
 }

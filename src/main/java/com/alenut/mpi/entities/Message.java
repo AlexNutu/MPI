@@ -25,6 +25,9 @@ public class Message {
     @JoinColumn(name = "id_conversation")
     private Conversation conversation;
 
+    @Column(name = "id_receiver")
+    private Long id_receiver;
+
     public Long getId() {
         return id;
     }
@@ -63,5 +66,13 @@ public class Message {
 
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
+    }
+
+    public Long getId_receiver() {
+        return id_receiver;
+    }
+
+    public void setId_receiver(Long id_receiver) {
+        this.id_receiver = id_receiver;
     }
 }

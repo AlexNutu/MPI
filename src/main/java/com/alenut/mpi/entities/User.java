@@ -205,4 +205,12 @@ public class User {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
 }

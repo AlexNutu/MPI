@@ -367,8 +367,8 @@
                                             <p sec:authorize="isAuthenticated()" style="margin-left: 10px; display: inline-block;">
                                                 <a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>
                                             </p>
-                                            <p sec:authorize="isAnonymous()" style="margin-left: 10px; display: inline-block;">
-                                                <a class="btn btn-read-more" th:href="'/home/viewIdea/' + ${idea.getId()}">Read more</a>
+                                            <p sec:authorize="" style="margin-left: 10px; display: inline-block;">
+                                                <a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>
                                             </p>
 
                                             <br/>

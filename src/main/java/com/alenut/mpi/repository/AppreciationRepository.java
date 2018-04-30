@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface AppreciationRepository extends JpaRepository<Appreciation, Long> {
     List<Appreciation> getByIdea(Idea idea);
+
 }

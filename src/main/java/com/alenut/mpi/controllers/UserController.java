@@ -40,7 +40,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         request.getSession().invalidate();
-        return "redirect:/user/home";
+        return "redirect:/user/home/?page=0";
     }
 
 

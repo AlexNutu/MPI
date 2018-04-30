@@ -24,7 +24,7 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String redirectToLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return "redirect:/home";
+        return "redirect:/home/?page=0";
     }//redirect:login
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -54,7 +54,7 @@ public class LoginController extends BaseController {
         if (user.getRole() == 0) {
             return "redirect:/admin/home";
         } else {//if (user.getRole() == 1) {
-            return "redirect:/user/home";
+            return "redirect:/user/home/?page=0";
         }
         //return "redirect:/error";
     }

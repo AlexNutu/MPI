@@ -13,6 +13,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import paralleldots.ParallelDots;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 public class IdeaServiceImpl {
@@ -41,10 +44,14 @@ public class IdeaServiceImpl {
     @Autowired
     private TagRepository tagRepository;
 
-
-    public List<Idea> getAllIdeas() {
-        return ideaRepository.findAllByOrderByIdDesc(); // gaseste toate ideile salvate in baza de date
+    public Page<Idea> getAllIdeas(int pageNumber) {
+        return ideaRepository.findAll(new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
     }
+
+    public Page<Idea> getByTitleLike(int pageNumber, String title) {
+        return ideaRepository.findByTitleLike(title, new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
+    }
+
 
     public List<Idea> getIdeasByUser(User user) {
         return ideaRepository.getIdeasObjectsByUser(user);
@@ -162,5 +169,9 @@ public class IdeaServiceImpl {
 
     public void addComment(Comment comment) {
         commentRepository.save(comment);
+    }
+
+    public void deleteIdea(Idea idea) {
+        ideaRepository.delete(idea);
     }
 }

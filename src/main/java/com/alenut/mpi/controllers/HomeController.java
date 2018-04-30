@@ -2,15 +2,13 @@ package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.IdeaValidator;
 import com.alenut.mpi.entities.*;
+import com.alenut.mpi.repository.ConversationRepository;
+import com.alenut.mpi.repository.IdeaRepository;
+import com.alenut.mpi.repository.UserRepository;
 import com.alenut.mpi.service.UserService;
-import com.alenut.mpi.service.impl.CategoryServiceImpl;
-import com.alenut.mpi.service.impl.ConversationService;
-import com.alenut.mpi.service.impl.IdeaServiceImpl;
-import com.alenut.mpi.service.impl.MessageService;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import org.apache.poi.ss.formula.functions.Match;
+import com.alenut.mpi.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,8 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -46,20 +46,142 @@ public class HomeController extends BaseController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private CommentsService commentsService;
+
+    @Autowired
+    private MatchService matchService;
+
+    @Autowired
+    private AppreciationService appreciationService;
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ConversationRepository conversationRepository;
+
+    @Autowired
+    private IdeaRepository ideaRepository;
+
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String displayAllIdeas(HttpServletRequest request, Model model) {
+    public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "") String q) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
-//        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("currentUser", user);
 
-        List<Idea> ideas = ideaService.getAllIdeas();
+        Page<Idea> ideas = null;
+        int ideasNumber = 0; // numarul va depinde si de filtrare
+        if (!q.trim().toLowerCase().equals("")) {
+            ideas = ideaService.getByTitleLike(page, "%" + q + "%");
+            for (Idea idea : ideas.getContent()) {
+                if (idea.getUser().equals(user)) {
+                    ideasNumber++;
+                }
+            }
+        } else {
+            ideas = ideaService.getAllIdeas(page);
+            for (Idea idea : ideas.getContent()) {
+                if (idea.getUser().equals(user)) {
+                    ideasNumber++;
+                }
+            }
+        }
+
+        model.addAttribute("ideasNumber", ideasNumber);
         model.addAttribute("ideasList", ideas);
-
-//        retrieve the last conversation, if it not affects performance
-//        List<Conversation> conversations = conversationService.getAllUserConversations(user);
-//        model.addAttribute("messagesNumber", messageService.getMessagesByUser(user).size());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("messagesNumber", user.getMessages().size());
 
         return "userHome";
+    }
+
+    @GetMapping("/findOne")
+    @ResponseBody
+    public User findOne(Long id) {
+        User user2 = userRepository.findOne(id);
+        User user = new User();
+        user.setId(user2.getId());
+        user.setFull_name(user2.getFull_name());
+        return user;
+    }
+
+    @GetMapping("/findOneIdea")
+    @ResponseBody
+    public Idea findOneIdea(Long id) {
+        Idea idea2 = ideaRepository.findOne(id);
+        Idea idea = new Idea();
+        idea.setId(idea2.getId());
+        return idea;
+    }
+
+    @PostMapping("/send")
+    public String sendMessage(Message m, @RequestParam(defaultValue = "0") int page) {
+
+        // check if conversation exists
+        User currentUser = getCurrentUser();
+        Long idReceiver = m.getId_receiver();
+        List<Conversation> conversations = conversationService.getAllUserConversations(currentUser); // get all conversations from the current user
+        boolean exists = false;
+        Conversation findConversation = null;
+        for (Conversation conversation : conversations) {
+            if ((conversation.getUser().getId().equals(currentUser.getId()) && conversation.getUser2().getId().equals(idReceiver)) ||
+                    (conversation.getUser().getId().equals(idReceiver) && conversation.getUser2().getId().equals(currentUser.getId()))) {
+                exists = true;
+                findConversation = conversation;
+            }
+        }
+        if (!exists) {
+            Conversation newConversation = new Conversation();
+            newConversation.setCreatedDate(new Date());
+            newConversation.setUser(currentUser);
+            newConversation.setUser2(userService.getById(idReceiver));
+            // adding the new conversation
+            conversationRepository.save(newConversation);
+
+            // if the new conversation was created
+            // retrieve the updated list of conversations
+            conversations = conversationService.getAllUserConversations(currentUser);
+            //setting the conversation's last message and the message's conversation
+            for (Conversation conversation : conversations) {
+                if ((conversation.getUser().getId().equals(currentUser.getId()) && conversation.getUser2().getId().equals(idReceiver)) ||
+                        (conversation.getUser().getId().equals(idReceiver) && conversation.getUser2().getId().equals(currentUser.getId()))) {
+                    findConversation = conversation;
+                }
+            }
+        }
+
+        m.setConversation(findConversation);
+        m.setSender(currentUser);
+        m.setId_receiver(idReceiver);
+        m.setSend_date(new Date().toString());
+        messageService.addMessage(m);
+
+        return "redirect:/user/home/?page=" + page;
+    }
+
+    @PostMapping("/deleteIdea")
+    public String deleteIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page) {
+        // delete all info that corresponds to this idea
+        //TODO: pentru performanta sa dau ca parametru pentru metoda, ideea din antet
+        Idea idea = ideaRepository.getById(ideaDelete.getId());
+
+        //delete matchings (verify if it idea or the matching idea)
+        matchService.deleteMatchingsByIdea(idea);
+        //delete comments
+        commentsService.deleteCommentsByIdea(idea);
+        //delete appreciations
+        appreciationService.deleteAppreciationsByIdea(idea);
+        //delete tags
+        tagService.deleteTagsByIdea(idea);
+
+        ideaService.deleteIdea(idea);
+        return "redirect:/user/home/?page=" + page;
     }
 
     @RequestMapping(value = "/myIdeas", method = RequestMethod.GET)
@@ -229,6 +351,11 @@ public class HomeController extends BaseController {
         sentMessage.setSend_date(new Date().toString());
         sentMessage.setSender(user);
         sentMessage.setConversation(convOpen);
+        if (convOpen.getUser().equals(user)) {
+            sentMessage.setId_receiver(convOpen.getUser2().getId());
+        } else {
+            sentMessage.setId_receiver(user.getId());
+        }
         messageService.addMessage(sentMessage);
 
         return "redirect:{conversationId}";

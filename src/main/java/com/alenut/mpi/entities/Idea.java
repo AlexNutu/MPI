@@ -54,6 +54,21 @@ public class Idea {
     public Idea() {
     }
 
+    public Idea(Idea idea2){
+        this.title = idea2.title;
+        this.body = idea2.body;
+        this.posted_date = idea2.posted_date;
+        this.image_path = idea2.image_path;
+        this.category = idea2.category;
+        this.user = idea2.user;
+        this.comments = idea2.comments;
+        this.appreciations = idea2.appreciations;
+        this.tags = idea2.tags;
+        this.matchings = idea2.matchings;
+        this.semantic = idea2.semantic;
+        this.sintactic = idea2.sintactic;
+    }
+
     public Long getId() {
         return id;
     }
