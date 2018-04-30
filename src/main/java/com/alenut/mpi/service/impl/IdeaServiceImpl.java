@@ -1,10 +1,7 @@
 package com.alenut.mpi.service.impl;
 
 import com.alenut.mpi.entities.*;
-import com.alenut.mpi.repository.CommentRepository;
-import com.alenut.mpi.repository.IdeaRepository;
-import com.alenut.mpi.repository.MatchRepository;
-import com.alenut.mpi.repository.TagRepository;
+import com.alenut.mpi.repository.*;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -44,6 +41,9 @@ public class IdeaServiceImpl {
     @Autowired
     private TagRepository tagRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     public Page<Idea> getAllIdeas(int pageNumber) {
         return ideaRepository.findAll(new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
     }
@@ -52,6 +52,9 @@ public class IdeaServiceImpl {
         return ideaRepository.findByTitleLike(title, new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
     }
 
+    public Page<Idea> getByCategory(int pageNumber, Category category){
+        return ideaRepository.findByCategory(category, new PageRequest(pageNumber, 5));
+    }
 
     public List<Idea> getIdeasByUser(User user) {
         return ideaRepository.getIdeasObjectsByUser(user);

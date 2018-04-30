@@ -2,6 +2,7 @@ package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.IdeaValidator;
 import com.alenut.mpi.entities.*;
+import com.alenut.mpi.repository.CategoryRepository;
 import com.alenut.mpi.repository.ConversationRepository;
 import com.alenut.mpi.repository.IdeaRepository;
 import com.alenut.mpi.repository.UserRepository;
@@ -65,37 +66,40 @@ public class HomeController extends BaseController {
     private ConversationRepository conversationRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private IdeaRepository ideaRepository;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "") String q) {
+                                  @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
         model.addAttribute("currentUser", user);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
+        String categoryName = "";
         Page<Idea> ideas = null;
-        int ideasNumber = 0; // numarul va depinde si de filtrare
-        if (!q.trim().toLowerCase().equals("")) {
-            ideas = ideaService.getByTitleLike(page, "%" + q + "%");
-            for (Idea idea : ideas.getContent()) {
-                if (idea.getUser().equals(user)) {
-                    ideasNumber++;
-                }
-            }
-        } else {
-            ideas = ideaService.getAllIdeas(page);
-            for (Idea idea : ideas.getContent()) {
-                if (idea.getUser().equals(user)) {
-                    ideasNumber++;
-                }
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChose = categoryRepository.getById(category);
+            ideas = ideaService.getByCategory(page, categoryChose);
+            categoryName = categoryChose.getBody();
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLike(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeas(page);
             }
         }
 
-        model.addAttribute("ideasNumber", ideasNumber);
+        List<Idea> myIdeas = ideaService.getIdeasByUser(user);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("ideasList", ideas);
         model.addAttribute("currentPage", page);
         model.addAttribute("qTitle", q);
+        model.addAttribute("categoryName", categoryName);
         model.addAttribute("messagesNumber", user.getMessages().size());
 
         return "userHome";

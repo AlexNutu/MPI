@@ -16,6 +16,8 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     Idea getById(Long id);
 
+    Page<Idea> findByCategory(Category c, Pageable p);
+
     List<Idea> getIdeasObjectsByUser(User user);
 
     List<Idea> getIdeaByTitle(String title);
