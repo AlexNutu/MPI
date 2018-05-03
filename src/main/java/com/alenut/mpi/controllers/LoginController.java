@@ -29,6 +29,11 @@ public class LoginController extends BaseController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getLoginForm(HttpServletRequest request, Model model) {
+        // if user is authenticated redirect to homePage, else retrieve loginPage
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!authentication.getPrincipal().equals("anonymousUser")) {
+            return "redirect:/user/home/?page=0";
+        }
         return "login";
     }
 
@@ -51,11 +56,11 @@ public class LoginController extends BaseController {
         }
 
         // 0 admin, 1 user
-        if (user.getRole() == 0) {
-            return "redirect:/admin/home";
-        } else {//if (user.getRole() == 1) {
-            return "redirect:/user/home/?page=0";
-        }
+        //if (user.getRole() == 0) {
+        //  return "redirect:/admin/home";
+        //} else {//if (user.getRole() == 1) {
+        return "redirect:/user/home/?page=0";
+        //}
         //return "redirect:/error";
     }
 

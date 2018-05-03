@@ -53,7 +53,8 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li th:each="category : ${categoryList}"><a th:href="@{/user/home/(category=${category.getId()}, page=0)}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                 </ul>
             </li>
 
@@ -68,7 +69,6 @@
 
 
         <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
-
 
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -85,7 +85,17 @@
             </li>
         </ul>
 
-        <form th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form sec:authorize="isAnonymous()" th:action="@{/home/(page=0)}" method="get" class="navbar-form navbar-left">
             <div class="input-group" style="width: auto">
                 <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
                 <div class="input-group-btn">
@@ -266,10 +276,10 @@
 </script>
 
 
-<div style="margin-top: 51px;" class="welcome">
+<div sec:authorize="isAnonymous()" style="margin-top: 51px;" class="welcome">
     <img src="../../img/cover11.jpg " />
     <h4 class="title" style="font-family: 'Lobster', cursive; font-size: 45px;">Welcome to My Project Idea</h4>
-    <div sec:authorize="isAuthenticated()" class="text-center submitIdea" style="margin-bottom: 100px; margin-left: 270px; margin-top: 100px">
+    <div class="text-center submitIdea" style="margin-bottom: 100px; margin-left: 270px; margin-top: 100px">
         <a href="/user/postIdea">
             <button class='myButt four'>
                  <div class='icon'>&#10010;</div>
@@ -278,18 +288,31 @@
         </a>
     </div>
 </div>
+<div sec:authorize="isAuthenticated()" style="margin-top: 0px;" class="welcome">
+    <img style="height: 130px;" src="../../img/cover14.jpg " />
+    <h4 class="title" style="left: 6%; top:54%; font-family: 'Lobster', cursive; font-size: 28px;">My Project Idea</h4>
+    <div class="text-center submitIdea" style="margin-bottom: 100px; margin-left: 280px; margin-top: 42px">
+        <a href="/user/postIdea">
+            <button class='myButt four'>
+                <div class='icon'>&#10010;</div>
+                <span>SUBMIT IDEA </span>
+            </button>
+        </a>
+    </div>
+    <i class="fa fa-lightbulb-o title" style="color:#E7D05D; left:96%; top:70%; font-size:80px"></i>
 
+</div>
 
 <div style="margin-top:25px" class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
 
-<h2 th:if="${categoryName} != ''" th:text="'Category/ ' + ${categoryName} " style=" position: absolute; margin-top: -80px;margin-left: 19px; margin-bottom: 60px; font-weight: bold"></h2>
+<h2 th:if="${categoryName} != ''" th:text="'Category / ' + ${categoryName} " style="color:white; text-shadow: 2px 2px 4px #000000; font-size: 18px; position: absolute; margin-top: -67px;margin-left: 300px; margin-bottom: 60px; font-weight: bold"></h2>
 
-<h1 th:if="${qTitle} != ''" th:text="'Search Results for &quot;' + ${qTitle} + '&quot;' " style="margin-bottom: 60px"></h1>
+<h1 th:if="${qTitle} != ''" th:text=" ${ideasList.getTotalElements()} + ' Ideas found for &quot;' + ${qTitle} + '&quot;' " style="margin-left:50px; margin-bottom: 60px"></h1>
 
 <div th:if="${ideasList.totalPages} == 0" class="container" style="margin-bottom: 50px; width:920px; margin-top: 80px">
     <div class="row">
-        <div class="oaerror warning">
-            <strong>Oops!</strong> - 0 Ideas found with this filter
+        <div class="oaerror info">
+            <strong>Notice!</strong> - 0 Ideas found with this filter
         </div>
     </div>
 </div>
@@ -300,20 +323,23 @@
         <div class="container bootstrap snippet" style="margin-top: -35px">
             <section id="team" class="white-bg padding-top-bottom">
                 <div class="container bootstrap snippet">
-                    <h1 class="section-title text-center page-title" style="margin-left:290px; margin-top: 70px; ">Most Liked/ Most Commented</h1>
-                    <p class="section-description text-center" style="margin-left:290px;margin-bottom: 80px" > Make your ideas count </p>
+
+                    <div th:if="${ideasList.totalPages} > 0">
+                        <h1 class="section-title text-center page-title" style="margin-left:290px; margin-top: 70px; ">Most Liked/ Most Commented</h1>
+                        <p class="section-description text-center" style="margin-left:290px;margin-bottom: 80px" > Make your ideas count </p>
+                    </div>
 
                     <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: -60px;">
                         <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 7.333333%">
                             <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><img class="img-responsive img-center img-thumbnail img-circle" th:src="@{'../../img/' + ${idea.getUser().getImage()}}" style="width: 82px; height: 82px;" alt="Profile image"/></a>
                             <a th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><h4 id="3qa" th:text="${idea.getUser().getFull_name()}" th:value="${idea.getUser().getFull_name()}" style="color:#5CC9DF;">El jefe</h4></a>
                             <p th:text="${idea.getUser().getOccupation()}" style="color:black; font-size: 13px" class="title">Lead Designer &amp; Founder</p>
-                            <p th:if="${idea.getUser().getId()} != ${currentUser.getId()}" data-placement="top" title="Edit"><a th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a></p>
+                            <p sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" data-placement="top" title="Edit"><a th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a></p>
 
                         </div>
                         <div class="col-sm-7">
                             <div class="details">
-                                <a th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
                                 <h4 th:text="${idea.getTitle()}" style="font-weight: bold; display:inline-block;margin-right:10px;"></h4>
                                 <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                                 <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
@@ -372,15 +398,35 @@
         <div class="clearfix"></div>
         <ul th:if="${ideasList.totalPages} > 0" class="pagination" style="margin-left:660px">
             <li th:if="${currentPage} == 0" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-            <li th:if="${currentPage} != 0"><a th:href=" @{/user/home/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/user/home/(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/user/home/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${categoryName} != ''"><a th:href=" @{/user/home/(page=${currentPage-1}, category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/home/(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/home/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${categoryName} != ''"><a th:href=" @{/home/(page=${currentPage-1}, category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+
             <li th:classappend="${currentPage} == ${i}?'active':''" th:each="i : ${#numbers.sequence(0, ideasList.totalPages-1)}">
 
-                <a th:if="${qTitle} == ''" th:href="@{/user/home/(page=${i})}" th:text="${i}">1</a>
-                <a th:if="${qTitle} != ''" th:href="@{/user/home/(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
+                <a sec:authorize="isAuthenticated()" th:if="${qTitle} != '' and ${categoryName} == ''" th:href="@{/user/home/(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
+                <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/user/home/(page=${i})}" th:text="${i}">1</a>
+                <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} != ''" th:href="@{/user/home/(page=${i},category=${currentCategory})}" th:text="${i}">1</a>
+
+                <a sec:authorize="isAnonymous()" th:if="${qTitle} != '' and ${categoryName} == ''" th:href="@{/home/(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
+                <a sec:authorize="isAnonymous()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/home/(page=${i})}" th:text="${i}">1</a>
+                <a sec:authorize="isAnonymous()" th:if="${qTitle} == '' and ${categoryName} != ''" th:href="@{/home/(page=${i},category=${currentCategory})}" th:text="${i}">1</a>
 
             </li>
             <li th:if="${currentPage} == ${ideasList.totalPages-1}" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-            <li th:if="${currentPage} != ${ideasList.totalPages-1}"> <a th:href=" @{/user/home/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} != '' and ${categoryName} == ''"> <a th:href=" @{/user/home/(page=${currentPage+1},q=${qTitle})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/user/home/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${categoryName} != ''"> <a th:href=" @{/user/home/(page=${currentPage+1},category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} != '' and ${categoryName} == ''"> <a th:href=" @{/home/(page=${currentPage+1},q=${qTitle})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/home/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${categoryName} != ''"> <a th:href=" @{/home/(page=${currentPage+1},category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
         </ul>
 
     </div>

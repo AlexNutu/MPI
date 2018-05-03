@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/**").authenticated()
-                .antMatchers("/home/**").permitAll()
+                .antMatchers("/home/**").anonymous()
                 .antMatchers("/admin/**").authenticated()
                 .antMatchers("/").permitAll()
                 .antMatchers("/css/**").permitAll()
@@ -47,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
                 .antMatchers("/update").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/success").permitAll()
-                .antMatchers("/employee/**").permitAll()
 //                .antMatchers("/user/**").hasAuthority("ADMIN")
 //                .antMatchers("/employee/**").hasAuthority("ADMIN")
 //                .antMatchers("/tracker/**").hasAnyAuthority()
@@ -57,9 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/success", true)
                 .and()
-                .logout().logoutSuccessUrl("/home")
+                .logout().logoutSuccessUrl("/home/?page=0")
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                .headers()
+                .frameOptions()
+                .sameOrigin();
     }
 
     @Autowired

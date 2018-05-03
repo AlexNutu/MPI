@@ -1,9 +1,11 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.MD5Encryption;
+import com.alenut.mpi.entities.Category;
 import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
+import com.alenut.mpi.service.impl.CategoryServiceImpl;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import com.alenut.mpi.service.impl.PictureLoaderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class UserController extends BaseController {
     @Autowired
     PictureLoaderService pictureLoaderService;
 
+    @Autowired
+    CategoryServiceImpl categoryService;
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         request.getSession().invalidate();
@@ -48,7 +53,10 @@ public class UserController extends BaseController {
     public ModelAndView createUserView(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         ModelAndView modelAndView = new ModelAndView("createUser");
         modelAndView.addObject("user", new User());
@@ -60,6 +68,10 @@ public class UserController extends BaseController {
     public String thankYou(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         return "thanks";
     }
@@ -71,7 +83,10 @@ public class UserController extends BaseController {
         model.addAttribute("fullname", user.getFull_name());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("occupation", user.getOccupation());
-        model.addAttribute("ideasNumber", ideaList.size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("image", user.getImage());
 
         model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
@@ -90,7 +105,10 @@ public class UserController extends BaseController {
         model.addAttribute("fullname", user.getFull_name());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("occupation", user.getOccupation());
-        model.addAttribute("ideasNumber", ideaList.size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("image", user.getImage());
 
         model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
@@ -101,13 +119,15 @@ public class UserController extends BaseController {
         return "viewProfile";
     }
 
-
     @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)
     public ModelAndView accountSettings(HttpServletRequest request, Model model) {
         User currentUser = getCurrentUser();
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(currentUser).size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(currentUser).size());
+        model.addAttribute("messagesNumber", currentUser.getMessages().size());
         model.addAttribute("username", currentUser.getUsername());
         model.addAttribute("image", currentUser.getImage());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         ModelAndView modelAndView = new ModelAndView("accountSettings");
         modelAndView.addObject("user", currentUser);

@@ -100,6 +100,7 @@ public class HomeController extends BaseController {
         model.addAttribute("currentPage", page);
         model.addAttribute("qTitle", q);
         model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentCategory", category);
         model.addAttribute("messagesNumber", user.getMessages().size());
 
         return "userHome";
@@ -197,7 +198,11 @@ public class HomeController extends BaseController {
 
         List<Idea> ideas = ideaService.getIdeasByUser(user);
         model.addAttribute("ideasList", ideas);
-        model.addAttribute("ideasNumber", ideas.size());
+        model.addAttribute("myIdeasNumber", ideas.size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
         List<Category> categories = categoryService.getUniqueCategoriesByUser(ideas);
         model.addAttribute("categoryList", categories);
 
@@ -208,8 +213,10 @@ public class HomeController extends BaseController {
     public ModelAndView postIdeaView(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         ModelAndView modelAndView = new ModelAndView("postIdea");
         modelAndView.addObject("idea", new Idea());
@@ -272,8 +279,12 @@ public class HomeController extends BaseController {
     @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.GET)
     public String viewIdea(HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {//(@RequestParam Idea idea) {
         User user = getCurrentUser();
+        model.addAttribute("currentUser", user);
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         model.addAttribute("comment", new Comment());
 
@@ -318,7 +329,10 @@ public class HomeController extends BaseController {
         User user = getCurrentUser();
         model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         model.addAttribute("sentMessage", new Message());
 
@@ -370,7 +384,10 @@ public class HomeController extends BaseController {
     public String about(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         return "about";
     }
@@ -379,7 +396,10 @@ public class HomeController extends BaseController {
     public String contactUs(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         return "contact";
     }

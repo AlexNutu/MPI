@@ -1,15 +1,16 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.UserValidator;
-import com.alenut.mpi.entities.Comment;
-import com.alenut.mpi.entities.Idea;
-import com.alenut.mpi.entities.Matching;
-import com.alenut.mpi.entities.User;
+import com.alenut.mpi.entities.*;
+import com.alenut.mpi.repository.CategoryRepository;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.AutoLoginService;
+import com.alenut.mpi.service.impl.CategoryServiceImpl;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,13 +42,65 @@ public class AnonymousController extends BaseController {
     @Autowired
     private AutoLoginService autoLoginService;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page) {
+    @Autowired
+    private CategoryServiceImpl categoryService;
 
-        Page<Idea> ideas = ideaService.getAllIdeas(page);
-        model.addAttribute("ideasList", ideas.getContent());
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        String categoryName = "";
+        Page<Idea> ideas = null;
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChose = categoryRepository.getById(category);
+            ideas = ideaService.getByCategory(page, categoryChose);
+            categoryName = categoryChose.getBody();
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLike(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeas(page);
+            }
+        }
+
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("currentCategory", category);
+        model.addAttribute("categoryName", categoryName);
 
         return "userHome";
+    }
+
+    @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.GET)
+    public String viewIdea(HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
+
+        Idea idea = ideaService.getIdeaById(ideaId);
+        model.addAttribute(idea);
+
+        List<Idea> matchingIdeas = new ArrayList<>();
+        List<Matching> matchings = idea.getMatchings();
+        if(matchings.size() > 0){
+            for (Matching matching : matchings) {
+                Idea idea1 = matching.getIdeaMatch();
+                idea1.setSemantic(matching.getSemantic());
+                idea1.setSintactic(matching.getSintactic());
+                if (idea1.getBody().length() > 209) {
+                    idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
+                }
+                matchingIdeas.add(idea1);
+            }
+        }
+
+        model.addAttribute(matchingIdeas);
+
+        return "viewIdea";
     }
 
     @RequestMapping(value = "/createUser", method = RequestMethod.GET)
@@ -89,33 +142,6 @@ public class AnonymousController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.GET)
-    public String viewIdea(HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
-
-        Idea idea = ideaService.getIdeaById(ideaId);
-        model.addAttribute(idea);
-
-        List<Idea> matchingIdeas = new ArrayList<>();
-        List<Matching> matchings = idea.getMatchings();
-        if(matchings.size() > 0){
-            for (Matching matching : matchings) {
-                Idea idea1 = matching.getIdeaMatch();
-                idea1.setSemantic(matching.getSemantic());
-                idea1.setSintactic(matching.getSintactic());
-                if (idea1.getBody().length() > 209) {
-                    idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
-                }
-                matchingIdeas.add(idea1);
-            }
-        }
-
-        model.addAttribute(matchingIdeas);
-
-        return "viewIdea";
-    }
-
-
-
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public String contactUs(HttpServletRequest request, Model model) {
         return "contact";
@@ -125,21 +151,5 @@ public class AnonymousController extends BaseController {
     public String about(HttpServletRequest request, Model model) {
         return "about";
     }
-
-
-    //    public String populateTable(Model model) {
-//        int[] days;
-//        Long id;
-//
-//        id = getCurrentUser().getId();
-//        days = userDataServiceImpl.getDates(id, userService, holidayService, requestService);
-//        int additionalVacation = userService.getById(id).getAdditionalVacation();
-//        model.addAttribute("remainingDays", days[0] + additionalVacation);
-//        model.addAttribute("remainingDaysToDate", days[2] + additionalVacation);
-//        model.addAttribute("requestedDays", days[1]);
-//        model.addAttribute("approvedDays", userDataServiceImpl.getApprovedDaysThisYear(holidayService.getAll(), requestRepository.getVacationRequestOnly(id)));
-//        model.addAttribute("medicalDays", days[4]);
-//        return "userHome";
-//    }
 
 }
