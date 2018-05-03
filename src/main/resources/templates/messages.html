@@ -12,6 +12,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
     <script src="../../js/messages.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
@@ -25,6 +27,53 @@
 
     <title>My messages</title>
 </head>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var imagePath = /*[[${userImage}]]*/ 'default';
+
+    // wait for the DOM to be loaded
+    $(document).ready(
+
+        function newMessage() {
+        // bind 'myForm' and provide a simple callback function
+        $('#messageSend').ajaxForm(function() {
+
+                message = $(".message-input input").val();
+                if($.trim(message) == '') {
+                    return false;
+                }
+                $('<li class="sent">' +
+                    '<img src=' + '"' + imagePath + '"'
+                    + ' alt="" />' +
+                    '<p>' + message + '</p>' +
+                    '</li>')
+                    .appendTo($('.messages ul'));
+                $('.message-input input').val(null);
+                $(".messages").animate(
+
+                { scrollTop: $('.messages').prop("scrollHeight")}, 500);
+
+            // var node = document.createElement("LI");
+            // node.className = "sent";
+            //
+            // var textFromInput = $('#messageInput').val();
+            // var textnode = document.createTextNode(textFromInput);
+            // var elementFromNode = document.createElement("p");
+            // elementFromNode.appendChild(textnode);
+            // node.appendChild(elementFromNode);
+            //
+            // var m = document.getElementById("messageList");
+            // m.appendChild(node);
+            // // $("#messageList").html(data).slideDown('slow');
+            //
+            // $('#messageInput').val("");
+
+        });
+    });
+    /*]]>*/
+</script>
 
 <body style="font-family: Helvetica Neue, Helvetica,Arial,sans-serif; font-size: 14px;">
 
@@ -263,7 +312,10 @@
 <script>try{Typekit.load({ async: true });}catch(e){}</script>
 
 <!--<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script><script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>-->
-<script >$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+<script >
+
+    $(".messages").animate(
+        { scrollTop: $('.messages').prop("scrollHeight")}, 500);
 
 $("#profile-img").click(function() {
     $("#status-options").toggleClass("active");
@@ -297,16 +349,20 @@ $("#status-options ul li").click(function() {
     $("#status-options").removeClass("active");
 });
 
-function newMessage() {
-    message = $(".message-input input").val();
-    if($.trim(message) == '') {
-        return false;
-    }
-    $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-    $('.message-input input').val(null);
-    // $('.contact.active .preview').html('<span>You: </span>' + message);
-    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-};
+// function newMessage() {
+
+//     message = $(".message-input input").val();
+//     if($.trim(message) == '') {
+//         return false;
+//     }
+//     $('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
+//     $('.message-input input').val(null);
+//     // $('.contact.active .preview').html('<span>You: </span>' + message);
+//     $(".messages").animate(
+//
+//     { scrollTop: $('.messages').prop("scrollHeight")}, 500);
+//
+//     };
 
 $('.submit').click(function() {
     newMessage();
@@ -318,7 +374,7 @@ $(window).on('keydown', function(e) {
         return false;
     }
 });
-//# sourceURL=pen.js
+
 </script>
 
 
@@ -399,9 +455,9 @@ $(window).on('keydown', function(e) {
                 <i class="fa fa-instagram" aria-hidden="true"></i>
             </div>
         </div>
-        <div class="messages">
-            <ul>
-                <li th:each="message : ${convOpen.getMessages()}" class="sent">
+        <div class="messages" name="messages">
+            <ul id="messageList" name="messageList">
+                <li th:each="message : ${convOpen.getMessages()}" th:classappend="${message.getSender().getId()} == ${user.getId()}?'sent':'replies'">
                     <img th:src="@{'../../img/' + ${message.getSender().getImage()}}" alt="" />
                     <p th:text="${message.getBody()}">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
                 </li>
@@ -410,10 +466,10 @@ $(window).on('keydown', function(e) {
 
         <div class="message-input">
             <div class="wrap">
-                <form th:action="@{'/user/messages/' + ${convOpen.getId()}}" th:object="${sentMessage}" method="post" data-toggle="validator" role="form">
-                    <input th:field="*{body}" type="text" required="" placeholder="Write your message..." />
+                <form id="messageSend" th:action="@{'/user/messages/' + ${convOpen.getId()}}" th:object="${sentMessage}" method="post" data-toggle="validator" role="form">
+                    <input id="messageInput" name="messageInput" th:field="*{body}" type="text" required="" placeholder="Write your message..." />
                     <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                    <button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    <button onclick="$.post('/user/messages/')" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </form>
             </div>
         </div>

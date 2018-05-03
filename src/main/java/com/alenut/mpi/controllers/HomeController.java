@@ -329,6 +329,7 @@ public class HomeController extends BaseController {
         User user = getCurrentUser();
         model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("userImage", "../../img/" + user.getImage());
         model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
