@@ -9,9 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
@@ -39,6 +39,63 @@
     <title>Idea</title>
 </head>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var imagePath = /*[[${userImage}]]*/ 'default';
+
+    // wait for the DOM to be loaded
+    $(document).ready(
+
+        function newComment() {
+            // bind 'myForm' and provide a simple callback function
+            $('#commentForm').ajaxForm(function() {
+
+                commentBody = $(".commentInput .commentBody").val();
+                userImage = /*[[${userImage}]]*/ 'default';
+                userName = /*[[${username}]]*/ 'default';
+                comDate = /*[[${commentDate}]]*/ 'default';
+
+                if($.trim(commentBody) == '') {
+                    return false;
+                }
+
+                $('<div class="comment-wrap">' +
+                        '<div class="photo">' +
+                            '<img class="avatar2" src=' + '"' + userImage + '"' + ' alt="" />' +
+                        '</div>' +
+                        '<div class="comment-block">' +
+                            '<p class="comment-text">' + commentBody + '</p>' +
+                            '<div class="bottom-comment">' +
+                                '<div class="comment-date">' + comDate + '</div>' +
+                                '<ul class="comment-actions">' +
+                                    '<li class="complain"> by' + '</li>' +
+                                    '<li class="reply">' + userName + '</li>' +
+                                '</ul>' +
+                            '</div>' +
+                        '</div>' +
+                  '</div>'
+
+                ).prependTo($('.commentList'));
+
+                $(".commentInput .commentBody").val(null);
+            });
+
+            $('.btnComment').prop('disabled', true);
+            $('.commentBody').on('keyup' , function() {
+                if( $.trim($('.commentBody').val()).length > 0 ) {
+                    $('.btnComment').prop('disabled', false);
+                }
+                else {
+                    $('.btnComment').prop('disabled', true);
+                }
+            });
+        }
+    );
+
+    /*]]>*/
+</script>
+
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -46,8 +103,8 @@
             <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
         </div>
         <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
-            <li sec:authorize="isAnonymous()" class="active"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAuthenticated()" ><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()" ><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
@@ -400,14 +457,14 @@
 
                             <div class="comment-wrap" sec:authorize="isAuthenticated()">
                                 <div class="photo">
-                                    <div class="avatar" th:style="'background-image: url(' + @{'../../img/' + ${currentUser.getImage()}} + ')'" id="commentPhoto"
-                                         style=" margin-right: 10px; height: 4.25rem; width: 4.25rem">
+                                    <div class="avatar" th:style="'background-image: url(' + @{'../../img/' + ${currentUser.getImage()}} + '); margin-right:10px; '" id="commentPhoto"
+                                         style=" ">
                                     </div>
                                 </div>
-                                <div class="comment-block">
-                                    <form th:action="@{'/user/viewIdea/' + ${idea.getId()}}" th:object="${comment}" method="post" data-toggle="validator" role="form">
-                                        <textarea th:field="*{body}" name="" id="" cols="30" rows="3" placeholder="Add comment..." required=""></textarea>
-                                        <button  style="float: right" class="btn btn-success btn-circle text-uppercase" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Summit</button>
+                                <div class="comment-block commentInput">
+                                    <form id="commentForm" name="commentForm" th:action="@{'/user/viewIdea/' + ${idea.getId()}}" th:object="${comment}" method="post" data-toggle="validator" role="form">
+                                        <textarea class="commentBody" th:field="*{body}" required="" cols="30" rows="3" placeholder="Add comment..." ></textarea>
+                                        <button  style="float: right" class="btn btn-success btn-circle btnComment" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Comment </button>
                                     </form>
                                 </div>
                             </div>
@@ -418,28 +475,23 @@
                                 </div>
                             </div>
 
-                            <div th:each="com : ${idea.getComments()}" class="comment-wrap">
-                                <div class="photo">
-                                    <img th:src= "@{'../../img/' + ${com.getUser().getImage()}}" class="avatar"
-                                         style="margin-right: 10px; height: 4.25rem; width: 4.25rem" />
-                                </div>
-                                <div class="comment-block">
-                                    <p th:text="${com.getBody()}" class="comment-text" style="text-align: left">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto temporibus iste
-                                        nostrum dolorem natus recusandae incidunt voluptatum. Eligendi voluptatum ducimus architecto tempore,
-                                        quaerat explicabo veniam fuga corporis totam reprehenderit quasi
-                                        sapiente modi tempora at perspiciatis mollitia, dolores voluptate. Cumque, corrupti?</p>
-                                    <div class="bottom-comment">
-                                        <div th:text="${com.getPosted_date()}" class="comment-date">Aug 24, 2014 @ 2:35 AM</div>
-                                        <ul class="comment-actions">
-                                            <li class="complain" style="display: inline-block">by</li>
-                                            <li th:text="${com.getUser().getFull_name()}" class="reply" style="display: inline-block">Cinesadkjlnaskle</li>
-                                        </ul>
+                            <div class="commentList" name="commentList">
+                                <div th:each="com : ${comments}" class="comment-wrap">
+                                    <div class="photo">
+                                        <img th:src= "@{'../../img/' + ${com.getUser().getImage()}}" class="avatar2"/>
+                                    </div>
+                                    <div class="comment-block">
+                                        <p th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
+                                        <div class="bottom-comment">
+                                            <div th:text="${com.getPosted_date()}" class="comment-date">Aug 24, 2014 @ 2:35 AM</div>
+                                            <ul class="comment-actions">
+                                                <li class="complain">by</li>
+                                                <li th:text="${com.getUser().getFull_name()}" class="reply">Cineva</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>

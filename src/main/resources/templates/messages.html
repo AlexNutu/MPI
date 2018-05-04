@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
@@ -48,8 +49,11 @@
                     '<img src=' + '"' + imagePath + '"'
                     + ' alt="" />' +
                     '<p>' + message + '</p>' +
-                    '</li>')
-                    .appendTo($('.messages ul'));
+                    '</li>'
+                ).appendTo($('.messages ul'));
+                    //.setTimeout();
+
+
                 $('.message-input input').val(null);
                 $(".messages").animate(
 
@@ -457,7 +461,7 @@ $(window).on('keydown', function(e) {
         </div>
         <div class="messages" name="messages">
             <ul id="messageList" name="messageList">
-                <li th:each="message : ${convOpen.getMessages()}" th:classappend="${message.getSender().getId()} == ${user.getId()}?'sent':'replies'">
+                <li th:each="message : ${convMessages}" th:classappend="${message.getSender().getId()} == ${user.getId()}?'sent':'replies'">
                     <img th:src="@{'../../img/' + ${message.getSender().getImage()}}" alt="" />
                     <p th:text="${message.getBody()}">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
                 </li>

@@ -20,10 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -281,6 +281,11 @@ public class HomeController extends BaseController {
         User user = getCurrentUser();
         model.addAttribute("currentUser", user);
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("userImage", "../../img/" + user.getImage());
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        Date today = Calendar.getInstance().getTime();
+        String currentDate = df.format(today);
+        model.addAttribute("commentDate", currentDate);
         model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
@@ -290,6 +295,22 @@ public class HomeController extends BaseController {
 
         Idea idea = ideaService.getIdeaById(ideaId);
         model.addAttribute(idea);
+        List<Comment> comments = idea.getComments();
+
+        Collections.sort(comments, new Comparator<Comment>() {
+            DateFormat f = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+
+            @Override
+            public int compare(Comment o1, Comment o2) {
+                try {
+                    return f.parse(o1.getPosted_date()).compareTo(f.parse(o2.getPosted_date()));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+        Collections.reverse(comments);
+        model.addAttribute("comments", comments);
 
         List<Idea> matchingIdeas = new ArrayList<>();
         List<Matching> matchings = idea.getMatchings();
@@ -315,10 +336,13 @@ public class HomeController extends BaseController {
         User currentUser = getCurrentUser();
         Idea idea = ideaService.getIdeaById(ideaId);
         model.addAttribute(idea);
-
-        comment.setPosted_date(new Date().toString());
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        Date today = Calendar.getInstance().getTime();
+        String postedDate = df.format(today);
+        comment.setPosted_date(postedDate);
         comment.setUser(currentUser);
         comment.setIdea(idea);
+        comment.setBody(comment.getBody().replaceAll(" +", " "));
         ideaService.addComment(comment);
 
         return "redirect:{ideaId}";
@@ -350,7 +374,21 @@ public class HomeController extends BaseController {
         if (conversationId == -1) {
             conversationId = conversations.get(0).getId();
         }
-        model.addAttribute("convOpen", conversationService.getById(conversationId));
+        Conversation convOpen = conversationService.getById(conversationId);
+        model.addAttribute("convOpen", convOpen);
+        List<Message> convMessages = convOpen.getMessages();
+        Collections.sort(convMessages, new Comparator<Message>() {
+            DateFormat f = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+            @Override
+            public int compare(Message o1, Message o2) {
+                try {
+                    return f.parse(o1.getSend_date()).compareTo(f.parse(o2.getSend_date()));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+        model.addAttribute("convMessages", convMessages);
 
         return "messages";
     }
@@ -367,7 +405,11 @@ public class HomeController extends BaseController {
         Conversation convOpen = conversationService.getById(conversationId);
         model.addAttribute("convOpen", convOpen);
 
-        sentMessage.setSend_date(new Date().toString());
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        Date today = Calendar.getInstance().getTime();
+        String postedDate = df.format(today);
+        sentMessage.setSend_date(postedDate);
+
         sentMessage.setSender(user);
         sentMessage.setConversation(convOpen);
         if (convOpen.getUser().equals(user)) {
