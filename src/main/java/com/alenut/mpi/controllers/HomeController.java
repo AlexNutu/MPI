@@ -2,14 +2,12 @@ package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.IdeaValidator;
 import com.alenut.mpi.entities.*;
-import com.alenut.mpi.repository.CategoryRepository;
-import com.alenut.mpi.repository.ConversationRepository;
-import com.alenut.mpi.repository.IdeaRepository;
-import com.alenut.mpi.repository.UserRepository;
+import com.alenut.mpi.repository.*;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,6 +67,9 @@ public class HomeController extends BaseController {
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private AppreciationRepository appreciationRepository;
+
+    @Autowired
     private IdeaRepository ideaRepository;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
@@ -94,6 +95,21 @@ public class HomeController extends BaseController {
             }
         }
 
+        boolean ok = false;
+        for (Idea idea : ideas) {
+            List<Appreciation> appreciations = idea.getAppreciations();
+            ok = false;
+            for (Appreciation appreciation : appreciations) {
+                if (appreciation.getUser().equals(user) && appreciation.getIdea().equals(idea)) {
+                    idea.setLiked(1);
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                idea.setLiked(0);
+            }
+        }
+
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("ideasList", ideas);
@@ -114,6 +130,31 @@ public class HomeController extends BaseController {
         user.setId(user2.getId());
         user.setFull_name(user2.getFull_name());
         return user;
+    }
+
+    @PostMapping("/likedislike")
+    public String giveLikeDislike(@RequestParam(defaultValue = "0") long idIdea) {
+        User currentUser = getCurrentUser();
+        Idea currentIdea = ideaRepository.getById(idIdea);
+        List<Appreciation> appreciations = appreciationRepository.getByIdea(currentIdea);
+        Appreciation foundAppreciation = null;
+        for (Appreciation appreciation : appreciations) {
+            if (appreciation.getUser().equals(currentUser)) {
+                foundAppreciation = appreciation;
+                break;
+            }
+        }
+        if (foundAppreciation != null) {
+            appreciationRepository.delete(foundAppreciation);
+        } else {
+            Appreciation appreciation = new Appreciation();
+            appreciation.setIdea(currentIdea);
+            appreciation.setUser(currentUser);
+            appreciationRepository.save(appreciation);
+        }
+
+
+        return "redirect:/user/home";
     }
 
     @GetMapping("/findOneIdea")
@@ -164,7 +205,10 @@ public class HomeController extends BaseController {
         m.setConversation(findConversation);
         m.setSender(currentUser);
         m.setId_receiver(idReceiver);
-        m.setSend_date(new Date().toString());
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        Date today = Calendar.getInstance().getTime();
+        String postedDate = df.format(today);
+        m.setSend_date(postedDate);
         messageService.addMessage(m);
 
         return "redirect:/user/home/?page=" + page;
@@ -379,6 +423,7 @@ public class HomeController extends BaseController {
         List<Message> convMessages = convOpen.getMessages();
         Collections.sort(convMessages, new Comparator<Message>() {
             DateFormat f = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+
             @Override
             public int compare(Message o1, Message o2) {
                 try {

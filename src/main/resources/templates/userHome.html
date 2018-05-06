@@ -13,6 +13,9 @@
     <script src="../../js/scroll.js"></script>
     <script src="../../js/userHome.js"></script>
     <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
+    <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
@@ -263,7 +266,6 @@
 </nav>
 
 
-
 <div id="fb-root"></div>
 <script>
     (function(d, s, id) {
@@ -273,6 +275,62 @@
     js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v2.12&amp;appId=2441875726038205&amp;autoLogAppEvents=1';
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    // wait for the DOM to be loaded
+    $(document).ready(
+
+        function likeDislike() {
+
+            // bind 'likeForm' and provide a simple callback function
+
+            $('.details #likeForm').on('submit', function(e) {
+                e.preventDefault(); // prevent native submit
+
+                $(this).ajaxSubmit({
+                    target: 'myResultsDiv'
+                });
+
+                var thisObject = $(this);
+                // atributul value contine id-ul ideii pentru care se executa form-ul
+                var ideaCurrentId = parseInt(thisObject.children().attr('value'));
+
+                var copy = thisObject.html();
+                thisObject.html('<i style="float: right; font-size:1.5em" class="float-right fa fa-cog fa-spin fa-3x fa-fw"></i>');
+
+                var change = function(){
+                    if(copy.indexOf("<span>Like</span>") >= 0){
+                        $(".ideaNr").each(function(){
+                            // atributul value contine id-ul ideii
+                            var idIdea = parseInt($(this).attr("value"));
+                            if(idIdea === ideaCurrentId){
+                                var nr = parseInt($(this).text()) + 1;
+                                $(this).text(' ' + nr + ' ');
+                            }
+                        });
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + ideaCurrentId + '"' + ' type="submit" class="float-right btn btn-xs text-white btn-warning appreciations" style="float: right"> <i class="fa fa-thumbs-o-down"></i> <span>Dislike</span></button>');
+                    }else{
+                        $(".ideaNr").each(function(){
+                            // atributul value contine id-ul ideii
+                            var idIdea = parseInt($(this).attr("value"));
+                            if(idIdea === ideaCurrentId){
+                                var nr = parseInt($(this).text()) - 1;
+                                $(this).text(' ' + nr + ' ');
+                            }
+                        });
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + ideaCurrentId + '"' + ' type="submit" class="float-right btn btn-xs text-white btn-info appreciations" style="float: right"> <i class="fa fa-thumbs-o-up"></i> <span>Like</span></button>');
+                    }
+                };
+                setTimeout(change, 700);
+
+            });
+        }
+    );
+    /*]]>*/
 </script>
 
 
@@ -340,27 +398,31 @@
                         <div class="col-sm-7">
                             <div class="details">
                                 <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
-                                <h4 th:text="${idea.getTitle()}" style="font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                                <h4 th:text="${idea.getTitle()}" style="font-size: 19px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
                                 <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                                 <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+
+                                <form id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
+                                    <button id="likeB" th:value="${idea.getId()}" th:classappend="${idea.getLiked()} == 1 ? btn-warning : btn-info " type="submit" class="float-right btn btn-xs text-white appreciations" style="float: right"> <i th:classappend="${idea.getLiked()} == 1 ? fa-thumbs-o-down : fa-thumbs-o-up"  class="fa"></i> <span th:text="${idea.getLiked()} == 1 ? Dislike : Like"></span></button>
+                                </form>
 
                                 <a style="" sec:authorize="isAuthenticated()" class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
 
                                 <a style="" sec:authorize="isAnonymous()" class="read-more" th:href="@{'/home/viewIdea/' + ${idea.getId()}}">Read More</a>
                                 <br/>
                                 <br/>
-                                <br/>
-
-                                <ul class="social-content">
-                                    <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size() + ' Likes'}"></span></button></li>
-                                    <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
-                                    <li><button class="btn btn-info btn-xs"> <i class="fa fa-handshake-o"></i> <span th:text="${idea.getMatchings().size() + ' Matchings'} "></span></button></li>
-                                </ul>
-
-                                <p style="margin-top: 15px; margin-bottom: -10px; font-size: 10px; ">
-                                    <span style="color: #7A7C7F;" class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;
-                                    <span class="badge badge-primary" style="font-size: 10px; background-color: #337ab7;" th:text="${tag.getBody()}" th:each="tag : ${idea.getTags()}"> education</span>
-                                </p>
+                                <div class="row" style="font-size: 12px">
+                                    <div class="span8">
+                                        <p>
+                                            <i class="glyphicon glyphicon-thumbs-up"></i><i class="ideaNr" style="font-weight: bold;" th:text="${' ' + idea.getAppreciations().size() + ' '}" th:value="${idea.getId()}"></i><i style="color: #337ab7">Likes</i>
+                                            | <i class="glyphicon glyphicon-comment"></i><i style="font-weight: bold;" th:text="${' ' + idea.getComments().size() + ' '}"></i><i style="color: #337ab7">Comments</i>
+                                            | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getMatchings().size() + ' '}"></i><i style="color: #337ab7">Matchings</i>
+                                            | <i class="glyphicon glyphicon-tags" style="font-size: 10px"></i> <i> Tags :</i>
+                                            <a sec:authorize="isAuthenticated()" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
+                                            <a sec:authorize="isAnonymous()" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
+                                        </p>
+                                    </div>
+                                </div>
 
                                 <p class="posted" style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<span class="glyphicon glyphicon-tasks"></span> <span class="label label-default" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
                                 <br/>

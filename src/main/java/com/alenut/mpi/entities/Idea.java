@@ -51,6 +51,9 @@ public class Idea {
     @Column(name = "sintactic")
     private String sintactic;
 
+    @Transient
+    private long liked;
+
     public Idea() {
     }
 
@@ -171,5 +174,13 @@ public class Idea {
 
     public void setSintactic(String sintactic) {
         this.sintactic = sintactic;
+    }
+
+    public long getLiked() {
+        return liked;
+    }
+
+    public void setLiked(long liked) {
+        this.liked = liked;
     }
 }
