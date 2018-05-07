@@ -103,11 +103,37 @@ public class AnonymousController extends BaseController {
         return "viewIdea";
     }
 
+    @RequestMapping(value = "/viewProfile/{userId}", method = RequestMethod.GET)
+    public String userProfile(HttpServletRequest request, @PathVariable Long userId, Model model) {
+        User user = userService.getById(userId);
+
+        List<Idea> ideaList = ideaService.getIdeasByUser(user);
+        model.addAttribute("fullname", user.getFull_name());
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("occupation", user.getOccupation());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("image", user.getImage());
+
+
+        model.addAttribute("viewedUser", user);
+        model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
+        model.addAttribute("noOfMatchings", userService.getNoOfMatchings(ideaList));
+        model.addAttribute("noOfLikes", userService.getNoOfLikes(ideaList));
+        model.addAttribute("noOfComments", userService.getNoOfComments(ideaList));
+
+        return "viewProfile";
+    }
+
     @RequestMapping(value = "/createUser", method = RequestMethod.GET)
     public ModelAndView createUserView(HttpServletRequest request, Model model) {
 
         ModelAndView modelAndView = new ModelAndView("createUser");
         modelAndView.addObject("user", new User());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         return modelAndView;
     }

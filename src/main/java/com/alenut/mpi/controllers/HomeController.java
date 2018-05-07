@@ -7,7 +7,6 @@ import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -110,6 +109,7 @@ public class HomeController extends BaseController {
             }
         }
 
+        // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("ideasList", ideas);
@@ -217,6 +217,9 @@ public class HomeController extends BaseController {
     @PostMapping("/deleteIdea")
     public String deleteIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page) {
         // delete all info that corresponds to this idea
+
+        Page<Idea> ideas = ideaService.getAllIdeas(page);
+
         //TODO: pentru performanta sa dau ca parametru pentru metoda, ideea din antet
         Idea idea = ideaRepository.getById(ideaDelete.getId());
 
@@ -230,25 +233,82 @@ public class HomeController extends BaseController {
         tagService.deleteTagsByIdea(idea);
 
         ideaService.deleteIdea(idea);
-        return "redirect:/user/home/?page=" + page;
+
+        if (ideas.getContent().size() > 1) { // daca am macar 2 elemente pe pagina
+            return "redirect:/user/home/?page=" + page;
+        } else {
+            if (page > 0) {
+                page -= 1;
+            }
+            return "redirect:/user/home/?page=" + page;
+        }
+    }
+
+    @PostMapping("/deleteMyIdea")
+    public String deleteMyIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page) {
+        // delete all info that corresponds to this idea
+
+        // ne trebuie pentru a sti daca ramanem sau nu pe pagina asta dupa ce facem stergerea
+        Page<Idea> ideas = ideaService.getIdeasByUser(page, getCurrentUser());
+
+        //TODO: pentru performanta sa dau ca parametru pentru metoda, ideea din antet
+        Idea idea = ideaRepository.getById(ideaDelete.getId());
+
+        //delete matchings (verify if it idea or the matching idea)
+        matchService.deleteMatchingsByIdea(idea);
+        //delete comments
+        commentsService.deleteCommentsByIdea(idea);
+        //delete appreciations
+        appreciationService.deleteAppreciationsByIdea(idea);
+        //delete tags
+        tagService.deleteTagsByIdea(idea);
+
+        ideaService.deleteIdea(idea);
+
+        if (ideas.getContent().size() > 1) { // daca am macar 2 elemente pe pagina
+            return "redirect:/user/myIdeas/?page=" + page;
+        } else {
+            if (page > 0) {
+                page -= 1;
+            }
+            return "redirect:/user/myIdeas/?page=" + page;
+        }
     }
 
     @RequestMapping(value = "/myIdeas", method = RequestMethod.GET)
-    public String myIdeas(HttpServletRequest request, Model model) {
+    public String myIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page) {
         User user = getCurrentUser();
+        model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("fullname", user.getFull_name());
         model.addAttribute("occupation", user.getOccupation());
 
-        List<Idea> ideas = ideaService.getIdeasByUser(user);
+        Page<Idea> ideas = null;
+        ideas = ideaService.getIdeasByUser(page, user);
+
+        boolean ok = false;
+        for (Idea idea : ideas) {
+            List<Appreciation> appreciations = idea.getAppreciations();
+            ok = false;
+            for (Appreciation appreciation : appreciations) {
+                if (appreciation.getUser().equals(user) && appreciation.getIdea().equals(idea)) {
+                    idea.setLiked(1);
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                idea.setLiked(0);
+            }
+        }
+        List<Idea> myIdeas = ideaService.getIdeasByUser(user);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("ideasList", ideas);
-        model.addAttribute("myIdeasNumber", ideas.size());
+        model.addAttribute("currentPage", page);
         model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> myCategoryList = categoryService.getUniqueCategoriesByUser(myIdeas);
+        model.addAttribute("myCategoryList", myCategoryList);
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
-
-        List<Category> categories = categoryService.getUniqueCategoriesByUser(ideas);
-        model.addAttribute("categoryList", categories);
 
         return "myIdeas";
     }
@@ -280,7 +340,8 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/postIdea", method = RequestMethod.POST)
     public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir, @RequestParam("file") MultipartFile image) throws Exception {
-        model.addAttribute("categories", categoryService.getAllCategories());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
 
         User user = getCurrentUser();
 
@@ -415,25 +476,30 @@ public class HomeController extends BaseController {
         });
         model.addAttribute("conversations", conversations);
 
-        if (conversationId == -1) {
+        if (conversationId == -1 && conversations.size() > 0) {
             conversationId = conversations.get(0).getId();
         }
-        Conversation convOpen = conversationService.getById(conversationId);
-        model.addAttribute("convOpen", convOpen);
-        List<Message> convMessages = convOpen.getMessages();
-        Collections.sort(convMessages, new Comparator<Message>() {
-            DateFormat f = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        if (conversations.size() > 0) {
+            Conversation convOpen = conversationService.getById(conversationId);
+            model.addAttribute("convOpen", convOpen);
+            List<Message> convMessages = convOpen.getMessages();
+            Collections.sort(convMessages, new Comparator<Message>() {
+                DateFormat f = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 
-            @Override
-            public int compare(Message o1, Message o2) {
-                try {
-                    return f.parse(o1.getSend_date()).compareTo(f.parse(o2.getSend_date()));
-                } catch (ParseException e) {
-                    throw new IllegalArgumentException(e);
+                @Override
+                public int compare(Message o1, Message o2) {
+                    try {
+                        return f.parse(o1.getSend_date()).compareTo(f.parse(o2.getSend_date()));
+                    } catch (ParseException e) {
+                        throw new IllegalArgumentException(e);
+                    }
                 }
-            }
-        });
-        model.addAttribute("convMessages", convMessages);
+            });
+            model.addAttribute("convMessages", convMessages);
+        } else {
+            model.addAttribute("convMessages", new ArrayList<>());
+            model.addAttribute("convOpen", null);
+        }
 
         return "messages";
     }

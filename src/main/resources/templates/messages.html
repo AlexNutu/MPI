@@ -90,7 +90,7 @@
             <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
             <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
             <li sec:authorize="isAuthenticated()" class="active"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
 
@@ -385,7 +385,12 @@ $(window).on('keydown', function(e) {
 <h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px; font-size: 36px;">Messages</h1>
 <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
-<div id="frame" style="margin-left: 220px; max-width: 1040px; height: 75vh; margin-top:-10px">
+
+<div th:if="${convMessages.size()} == 0" style="text-align: center; margin-top: 59px; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-info alert-dismissible fade in" >
+    You have no <strong style="font-weight: bold "> messages </strong> yet!
+</div>
+
+<div th:if="${conversations.size()} > 0" id="frame" style="margin-left: 220px; max-width: 1040px; height: 75vh; margin-top:-10px">
     <div id="sidepanel">
         <div id="profile">
             <div class="wrap">
@@ -394,7 +399,7 @@ $(window).on('keydown', function(e) {
                 <!--<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>-->
                 <div id="status-options">
                     <ul>
-                        <li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+                        <li id="status-online" class="active"><spanf class="status-circle"></spanf> <p>Online</p></li>
                         <li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
                         <li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
                         <li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
@@ -416,7 +421,7 @@ $(window).on('keydown', function(e) {
         </div>
         <div id="contacts">
             <ul id="allConversations">
-                <li th:each="conversation : ${conversations}" th:classappend="${convOpen.id} == ${conversation.id}?'active':''" class="contact" style="padding: 5px 0 5px 0;">
+                <li th:if="${conversations.size()} > 0" th:each="conversation : ${conversations}" th:classappend="${convOpen.id} == ${conversation.id}?'active':''" class="contact" style="padding: 5px 0 5px 0;">
                     <a th:href="@{'/user/messages/' + ${conversation.getId()}}" style="color:#f5f5f5; text-decoration: none;">
                         <div class="wrap">
                             <img th:if="${conversation.getUser().getId() == user.getId()}" th:src="@{'../../img/' + ${conversation.getUser2().getImage()}}" alt="" />
@@ -429,16 +434,6 @@ $(window).on('keydown', function(e) {
                         </div>
                     </a>
                 </li>
-                <!--<li class="contact active">-->
-                    <!--<div class="wrap">-->
-                        <!--<span class="contact-status busy"></span>-->
-                        <!--<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />-->
-                        <!--<div class="meta">-->
-                            <!--<p class="name">Harvey Specter</p>-->
-                            <!--<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</li>-->
             </ul>
         </div>
 
@@ -449,26 +444,30 @@ $(window).on('keydown', function(e) {
     </div>
     <div class="content">
         <div class="contact-profile">
-            <img th:if="${convOpen.getUser().getId() == user.getId()}" th:src="@{'../../img/' + ${convOpen.getUser2().getImage()}}" alt="" />
-            <img th:if="${convOpen.getUser2().getId() == user.getId()}"  th:src="@{'../../img/' + ${convOpen.getUser().getImage()}}" alt="" />
-            <p th:if="${convOpen.getUser().getId() == user.getId()}" th:text="${convOpen.getUser2().getFull_name()}">Harvey Specter</p>
-            <p th:if="${convOpen.getUser2().getId() == user.getId()}" th:text="${convOpen.getUser().getFull_name()}">Harvey Specter</p>
-            <div class="social-media">
-                <i class="fa fa-facebook" aria-hidden="true"></i>
-                <i class="fa fa-twitter" aria-hidden="true"></i>
-                <i class="fa fa-instagram" aria-hidden="true"></i>
+            <div th:if="${convOpen} != null">
+                <img th:if="${convOpen.getUser().getId() == user.getId()}" th:src="@{'../../img/' + ${convOpen.getUser2().getImage()}}" alt="" />
+                <img th:if="${convOpen.getUser2().getId() == user.getId()}"  th:src="@{'../../img/' + ${convOpen.getUser().getImage()}}" alt="" />
+                <p th:if="${convOpen.getUser().getId() == user.getId()}" th:text="${convOpen.getUser2().getFull_name()}">Harvey Specter</p>
+                <p th:if="${convOpen.getUser2().getId() == user.getId()}" th:text="${convOpen.getUser().getFull_name()}">Harvey Specter</p>
+                <div class="social-media">
+                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                    <i class="fa fa-instagram" aria-hidden="true"></i>
+                </div>
             </div>
+
         </div>
         <div class="messages" name="messages">
-            <ul id="messageList" name="messageList">
+            <ul th:if="${convMessages.size()} > 0" id="messageList" name="messageList">
                 <li th:each="message : ${convMessages}" th:classappend="${message.getSender().getId()} == ${user.getId()}?'sent':'replies'">
                     <img th:src="@{'../../img/' + ${message.getSender().getImage()}}" alt="" />
                     <p th:text="${message.getBody()}">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
                 </li>
             </ul>
+            <div th:if="${convMessages.size()} == 0" > You have no messages yet </div>
         </div>
 
-        <div class="message-input">
+        <div class="message-input" th:if="${conversations.size()} > 0">
             <div class="wrap">
                 <form id="messageSend" th:action="@{'/user/messages/' + ${convOpen.getId()}}" th:object="${sentMessage}" method="post" data-toggle="validator" role="form">
                     <input id="messageInput" name="messageInput" th:field="*{body}" type="text" required="" placeholder="Write your message..." />
@@ -480,8 +479,6 @@ $(window).on('keydown', function(e) {
 
     </div>
 </div>
-
-
 
 
     <!--<div class="container">-->

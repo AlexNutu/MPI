@@ -2,29 +2,89 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../css/ideas.css" />
-    <link rel="stylesheet" href="../css/messages.css"/>
+    <link rel="stylesheet" href="../../css/ideas.css" />
+    <link rel="stylesheet" href="../../css/messages.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../../js/scroll.js"></script>
+    <script src="../../js/userHome.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
 
-    <link href="../css/bootstrap-notifications.css" rel="stylesheet"/>
-    <link href="../css/bootstrap-notifications.min.css" rel="stylesheet"/>
-    <link href="../css/notification.css" rel="stylesheet"/>
-    <link href="../css/animate.min.css" rel="stylesheet"/>
-    <link href="../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
+
+    <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../../css/notification.css" rel="stylesheet"/>
+    <link href="../../css/animate.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link rel="shortcut icon" href="../img/icon.png"/>
+    <link rel="shortcut icon" href="../../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
     <title>My Ideas</title>
 </head>
-<body>
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    // wait for the DOM to be loaded
+    $(document).ready(
+
+        function likeDislike() {
+
+            // bind 'likeForm' and provide a simple callback function
+
+            $('.details #likeForm').on('submit', function(e) {
+                e.preventDefault(); // prevent native submit
+
+                $(this).ajaxSubmit({
+                    target: 'myResultsDiv'
+                });
+
+                var thisObject = $(this);
+                // atributul value contine id-ul ideii pentru care se executa form-ul
+                var ideaCurrentId = parseInt(thisObject.children().attr('value'));
+
+                var copy = thisObject.html();
+                thisObject.html('<i style="float: right; font-size:1.5em" class="float-right fa fa-cog fa-spin fa-3x fa-fw"></i>');
+
+                var change = function(){
+                    if(copy.indexOf("<span>Like</span>") >= 0){
+                        $(".ideaNr").each(function(){
+                            // atributul value contine id-ul ideii
+                            var idIdea = parseInt($(this).attr("value"));
+                            if(idIdea === ideaCurrentId){
+                                var nr = parseInt($(this).text()) + 1;
+                                $(this).text(' ' + nr + ' ');
+                            }
+                        });
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + ideaCurrentId + '"' + ' type="submit" class="float-right btn btn-xs text-white btn-warning appreciations" style="float: right"> <i class="fa fa-thumbs-o-down"></i> <span>Dislike</span></button>');
+                    }else{
+                        $(".ideaNr").each(function(){
+                            // atributul value contine id-ul ideii
+                            var idIdea = parseInt($(this).attr("value"));
+                            if(idIdea === ideaCurrentId){
+                                var nr = parseInt($(this).text()) - 1;
+                                $(this).text(' ' + nr + ' ');
+                            }
+                        });
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + ideaCurrentId + '"' + ' type="submit" class="float-right btn btn-xs text-white btn-info appreciations" style="float: right"> <i class="fa fa-thumbs-o-up"></i> <span>Like</span></button>');
+                    }
+                };
+                setTimeout(change, 700);
+
+            });
+        }
+    );
+    /*]]>*/
+</script>
+
+<body style="overflow:auto;">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -35,7 +95,7 @@
             <li sec:authorize="isAuthenticated()" ><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
             <li sec:authorize="isAnonymous()" ><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
 
@@ -60,7 +120,6 @@
 
 
         <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
-
 
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -258,23 +317,23 @@
     <div class="row">
         <h1 style="margin-bottom: -10px; text-align:center; margin-top: 77px;">My Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
         <hr class="hr-primary" style="  height: 4px;" />
-        <ol th:if="${not #lists.isEmpty(ideasList)}" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
-            <button href="#" style="background-color: #5bc0de; border-color: #46b8da;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
-            <li th:each="category : ${categoryList}" th:text="${category.getBody()}"><a href="#">MY TOPICS</a></li>
+        <ol th:if="${myCategoryList.size()} > 0" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
+            <button href="#" style="background-color: #b2bdc6; border-color: #b2bdc6;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
+            <li th:each="category : ${myCategoryList}" th:text="${category.getBody()}"><a href="#">MY TOPICS</a></li>
         </ol>
         <div style="text-align: center; margin-bottom: 10px">
-            <div th:if="${#lists.isEmpty(ideasList)}" class="alert alert-info" role="alert">
-                <span>You got 0 ideas posted!</span>
+
+            <div th:if="${myCategoryList.size()} == 0" style="text-align: center; margin-top: 59px; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-info alert-dismissible fade in" >
+                You have <strong style="font-weight: bold "> 0 </strong> ideas posted!
             </div>
-            <button class="btn btn-info btn-lg" >
+
+            <a href="/user/postIdea" class="btn btn-info btn-lg" >
                 <span class="glyphicon glyphicon-edit"></span>  Submit Idea
-            </button>
+            </a>
         </div>
 
     </div>
 </div>
-
-
 
 
 <div class="container bootstrap snippet">
@@ -282,33 +341,172 @@
         <div class="container bootstrap snippet">
             <br/><br/>
 
-            <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: -10.666667%; float:none;">
-                <img class="img-responsive img-center img-thumbnail img-circle" src="../img/av1.png" style="width:30%;height: 30%" alt=""/>
-                <h4 th:text="${fullname}">El jefe</h4>
-                <p th:text="${occupation}" class="title">Lead Designer &amp; Founder</p>
+            <div th:if="${ideasList.totalPages} > 0" class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: -10.666667%; float:none;">
+                <a><img class="img-responsive img-center img-thumbnail img-circle" th:src="@{'../../img/' + ${user.getImage()}}" style="width: 82px; height: 82px;" alt="Profile image"/></a>
+                <a href="/user/profile"><h4 id="3qa" th:text="${fullname}" style="color:#5CC9DF;">El jefe</h4></a>
+                <p th:text="${occupation}" style="color:black; font-size: 13px" class="title">Lead Designer</p>
             </div>
 
-            <div th:each="idea : ${ideasList}" class="row member-content" style="margin-bottom: 60px; margin-left: 28%">
-                <div class="col-sm-7">
-                    <div class="details" style="margin: -40px -180px 45px -90px;">
-                        <h4 th:text="${idea.getTitle()}" style="font-weight: bold"></h4>
-                        <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        <ul class="social-content">
-                            <li><a href="mailto:mail@example.com"><i class="fa fa-envelope fa-fw"></i></a></li>
-                            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
-                            <li><button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size() + ' Likes'}"></span></button></li>
-                            <li><button class="btn btn-warning btn-xs"> <span class="glyphicon glyphicon-comment"></span> <span th:text="${idea.getComments().size() + '  Comments'}"></span></button></li>
-                            <li><button class="btn btn-info"> Matchings <i class="fa fa-handshake-o"></i></button></li>
-                        </ul>
-                        <br/>
-                        <p style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em style="color:#999;" th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<i class="fa fa-tags"></i> <span class="badge badge-info" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
+            <div id="ideasList" style="margin-top: -66px">
+
+                <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: 25%">
+                    <div class="col-sm-7">
+                        <div class="details" style="margin: -40px -180px 45px -90px;">
+                            <a th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
+                            <h4 th:text="${idea.getTitle()}" style="font-size: 19px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                            <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
+                            <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
+
+                            <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
+                                <button id="likeB" th:value="${idea.getId()}" th:classappend="${idea.getLiked()} == 1 ? btn-warning : btn-info " type="submit" class="float-right btn btn-xs text-white appreciations" style="float: right"> <i th:classappend="${idea.getLiked()} == 1 ? fa-thumbs-o-down : fa-thumbs-o-up"  class="fa"></i> <span th:text="${idea.getLiked()} == 1 ? Dislike : Like"></span></button>
+                            </form>
+
+                            <a class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
+                            <br/>
+                            <br/>
+                            <div class="row" style="font-size: 12px">
+                                <div class="span8">
+                                    <p>
+                                        <i class="glyphicon glyphicon-thumbs-up"></i><i class="ideaNr" style="font-weight: bold;" th:text="${' ' + idea.getAppreciations().size() + ' '}" th:value="${idea.getId()}"></i><i style="color: #337ab7">Likes</i>
+                                        | <i class="glyphicon glyphicon-comment"></i><i style="font-weight: bold;" th:text="${' ' + idea.getComments().size() + ' '}"></i><i style="color: #337ab7">Comments</i>
+                                        | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getMatchings().size() + ' '}"></i><i style="color: #337ab7">Matchings</i>
+                                        | <i class="glyphicon glyphicon-tags" style="font-size: 10px"></i> <i> Tags :</i>
+                                        <a sec:authorize="isAuthenticated()" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
+                                        <a sec:authorize="isAnonymous()" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="posted" style="float:right; font-size: 11px"><i class="fa fa-calendar"></i><em th:text="' Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM</em>&nbsp;&nbsp;<span class="glyphicon glyphicon-tasks"></span> <span class="label label-default" style="font-size: 10px" th:text="${idea.getCategory().getBody()}"> Education</span></p>
+                            <br/>
+
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 </div>
+
+<div class="clearfix"></div>
+<ul th:if="${ideasList.totalPages} > 0" class="pagination" style="margin-left:720px;margin-bottom: 100px">
+    <li th:if="${currentPage} == 0" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+
+    <li th:if="${currentPage} != 0"><a th:href=" @{/user/myIdeas/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+
+    <li th:classappend="${currentPage} == ${i}?'active':''" th:each="i : ${#numbers.sequence(0, ideasList.totalPages-1)}">
+
+        <a th:href="@{/user/myIdeas/(page=${i})}" th:text="${i}">1</a>
+
+    </li>
+    <li th:if="${currentPage} == ${ideasList.totalPages-1}" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+
+    <li th:if="${currentPage} != ${ideasList.totalPages-1}"> <a th:href=" @{/user/myIdeas/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+
+</ul>
+
+
+<div class="myFormDelete">
+    <form id="deleteMyIdeaForm" th:action="@{/user/deleteMyIdea/(page=${currentPage})}" method="post">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Delete this idea</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id" name="id" type="hidden" value=""/>
+                        <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Idea?</div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
+
+<div class="scroll-top-wrapper ">
+  <span class="scroll-top-inner">
+    <i class="fa fa-2x fa-arrow-circle-up"></i>
+  </span>
+</div>
+
+<br/>
+<br/>
+<footer>
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+
+                    <li>
+                        <p></p>
+                    </li>
+
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
 
 
 

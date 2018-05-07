@@ -39,10 +39,10 @@
             <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
         </div>
         <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
-            <li sec:authorize="isAnonymous()" class="active"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
 

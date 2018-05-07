@@ -40,7 +40,7 @@
             <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
             <li sec:authorize="isAnonymous()" ><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
 

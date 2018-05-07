@@ -35,10 +35,10 @@
             <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
         </div>
         <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
-            <li sec:authorize="isAnonymous()" class="active"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
 
@@ -68,11 +68,11 @@
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
-                    <span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <span th:text="'Welcome, ' + ${currentUser.getUsername()}" th:remove="tag"></span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> User Profile</a></li>
+                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
                     <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
                     <li class="divider"></li>
                     <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
@@ -259,7 +259,7 @@
 
 <div class="container">
     <div class="row">
-        <h1 style="text-align:center; margin-top: 81px;">My Profile</h1>
+        <h1 style="text-align:center; margin-top: 81px;">User Profile</h1>
         <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
     </div>
@@ -286,7 +286,7 @@
                                 <h3 style="color: #7FDBFF" class="count" id="ideaNr" th:text="${noOfIdeas} ">12</h3>
                                 <br/>
                                 <h3>
-                                    <i class="icon glyphicon glyphicon-ok-sign"></i>
+                                    <i style="font-size: 27px" class="icon fa fa-lightbulb-o"></i>
                                     <br/>
                                     <small>Ideas</small>
                                 </h3>
@@ -297,7 +297,7 @@
                                 <h3 class="count2" style="color:#FF4136;" id="matchNr" th:text="${noOfMatchings}" >45</h3>
                                 <br/>
                                 <h3>
-                                    <i class="icon glyphicon glyphicon-fire"></i>
+                                    <i class="icon fa fa-handshake-o"></i>
                                     <br/>
                                     <small>Matchings</small>
                                 </h3>
@@ -326,7 +326,9 @@
                             </div>
                         </li >
                     </ul>
-                    <a href="#" class="btn btn-primary followbtn"><i class="glyphicon glyphicon-plus"></i> Follow </a>
+                    <a sec:authorize="isAuthenticated()" href="#" class="btn btn-primary followbtn"><i class="glyphicon glyphicon-plus"></i> Follow </a>
+                    <a sec:authorize="isAuthenticated()" href="#" class="btn btn-info followbtn"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas  </a>
+                    <a sec:authorize="isAnonymous()" href="#" class="btn btn-info followbtn"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas </a>
                 </div>
                 <div class="clearfix"></div>
             </div>

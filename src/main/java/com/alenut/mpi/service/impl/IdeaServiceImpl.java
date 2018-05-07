@@ -60,6 +60,10 @@ public class IdeaServiceImpl {
         return ideaRepository.getIdeasObjectsByUser(user);
     }
 
+    public Page<Idea> getIdeasByUser(int pageNumber, User user) {
+        return ideaRepository.findByUser(user, new PageRequest(pageNumber, 5));
+    }
+
     public Idea getIdeaById(Long id) {
         return ideaRepository.getById(id);
     }

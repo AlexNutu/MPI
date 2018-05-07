@@ -4,6 +4,7 @@ import com.alenut.mpi.entities.Category;
 import com.alenut.mpi.entities.Idea;
 import com.alenut.mpi.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
