@@ -29,4 +29,15 @@ public class CategoryServiceImpl {
         }
         return categories;
     }
+
+    public List<Category> getUniqueCategoriesByUser(Page<Idea> ideaList) {
+        List<Category> categories = new ArrayList<>();
+        for (Idea idea : ideaList) {
+            if (!categories.contains(idea.getCategory())) {
+                categories.add(idea.getCategory());
+            }
+        }
+        return categories;
+    }
+
 }

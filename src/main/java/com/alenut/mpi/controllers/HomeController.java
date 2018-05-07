@@ -167,8 +167,8 @@ public class HomeController extends BaseController {
     }
 
     @PostMapping("/send")
-    public String sendMessage(Message m, @RequestParam(defaultValue = "0") int page) {
-
+    public String sendMessage(HttpServletRequest request, Message m, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int pageType ) {
+        //pageType: 1 = userHome; 0 = userIdeas;
         // check if conversation exists
         User currentUser = getCurrentUser();
         Long idReceiver = m.getId_receiver();
@@ -211,7 +211,12 @@ public class HomeController extends BaseController {
         m.setSend_date(postedDate);
         messageService.addMessage(m);
 
-        return "redirect:/user/home/?page=" + page;
+        String uri = request.getRequestURI();
+        if(pageType == 0){
+            return "redirect:/user/userIdeas/?page=" + page + "&userId=" + idReceiver;
+        }else{
+            return "redirect:/user/home/?page=" + page;
+        }
     }
 
     @PostMapping("/deleteIdea")
@@ -311,6 +316,44 @@ public class HomeController extends BaseController {
         model.addAttribute("categoryList", categoryList);
 
         return "myIdeas";
+    }
+
+    @RequestMapping(value = "/userIdeas", method = RequestMethod.GET)
+    public String userIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") Long userId) {
+        User user = getCurrentUser();
+
+        User viewedUser = userRepository.getById(userId);
+        model.addAttribute("currentUser", user);
+        model.addAttribute("viewedUser", viewedUser);
+
+        Page<Idea> ideas = null;
+        ideas = ideaService.getIdeasByUser(page, viewedUser);
+
+        boolean ok = false;
+        for (Idea idea : ideas) {
+            List<Appreciation> appreciations = idea.getAppreciations();
+            ok = false;
+            for (Appreciation appreciation : appreciations) {
+                if (appreciation.getUser().equals(user) && appreciation.getIdea().equals(idea)) {
+                    idea.setLiked(1);
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                idea.setLiked(0);
+            }
+        }
+        List<Idea> myIdeas = ideaService.getIdeasByUser(user);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> myCategoryList = categoryService.getUniqueCategoriesByUser(ideas);
+        model.addAttribute("myCategoryList", myCategoryList);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        return "userIdeas";
     }
 
     @RequestMapping(value = "/postIdea", method = RequestMethod.GET)
@@ -474,7 +517,11 @@ public class HomeController extends BaseController {
                 return -1;
             return 1;
         });
+//        for(Conversation conversation : conversations){
+//            conversation.setLastMessage(conversation.getMessages().get(conversation.getMessages().size()-1).getBody());
+//        }
         model.addAttribute("conversations", conversations);
+
 
         if (conversationId == -1 && conversations.size() > 0) {
             conversationId = conversations.get(0).getId();

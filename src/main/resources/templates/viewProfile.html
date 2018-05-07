@@ -327,8 +327,8 @@
                         </li >
                     </ul>
                     <a sec:authorize="isAuthenticated()" href="#" class="btn btn-primary followbtn"><i class="glyphicon glyphicon-plus"></i> Follow </a>
-                    <a sec:authorize="isAuthenticated()" href="#" class="btn btn-info followbtn"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas  </a>
-                    <a sec:authorize="isAnonymous()" href="#" class="btn btn-info followbtn"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas </a>
+                    <a sec:authorize="isAuthenticated()" th:href="@{/user/userIdeas/(page=0,userId=${viewedUser.getId()})}" class="btn btn-info followbtn"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas  </a>
+                    <a sec:authorize="isAnonymous()" th:href="@{/home/userIdeas/(page=0,userId=${viewedUser.getId()})}" class="btn btn-info followbtn"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas </a>
                 </div>
                 <div class="clearfix"></div>
             </div>

@@ -3,6 +3,7 @@ package com.alenut.mpi.controllers;
 import com.alenut.mpi.auxiliary.UserValidator;
 import com.alenut.mpi.entities.*;
 import com.alenut.mpi.repository.CategoryRepository;
+import com.alenut.mpi.repository.UserRepository;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.AutoLoginService;
 import com.alenut.mpi.service.impl.CategoryServiceImpl;
@@ -47,6 +48,9 @@ public class AnonymousController extends BaseController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
@@ -101,6 +105,25 @@ public class AnonymousController extends BaseController {
         model.addAttribute(matchingIdeas);
 
         return "viewIdea";
+    }
+
+    @RequestMapping(value = "/userIdeas", method = RequestMethod.GET)
+    public String userIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") Long userId) {
+
+        User viewedUser = userRepository.getById(userId);
+        model.addAttribute("viewedUser", viewedUser);
+
+        Page<Idea> ideas = null;
+        ideas = ideaService.getIdeasByUser(page, viewedUser);
+
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        List<Category> myCategoryList = categoryService.getUniqueCategoriesByUser(ideas);
+        model.addAttribute("myCategoryList", myCategoryList);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        return "userIdeas";
     }
 
     @RequestMapping(value = "/viewProfile/{userId}", method = RequestMethod.GET)

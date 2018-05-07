@@ -1,5 +1,7 @@
 package com.alenut.mpi.entities;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +28,9 @@ public class Conversation {
 
     @Column(name = "created_date")
     private Date createdDate;
+
+    @Transient
+    private String lastMessage;
 
     public Long getId() {
         return id;
@@ -65,5 +70,13 @@ public class Conversation {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
     }
 }
