@@ -2,6 +2,7 @@ package com.alenut.mpi.service.impl;
 
 import com.alenut.mpi.entities.*;
 import com.alenut.mpi.repository.*;
+import com.alenut.mpi.service.EmailServiceImpl;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -18,9 +19,9 @@ import paralleldots.ParallelDots;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
 
 @Service
 public class IdeaServiceImpl {
@@ -42,7 +43,13 @@ public class IdeaServiceImpl {
     private TagRepository tagRepository;
 
     @Autowired
+    private EmailServiceImpl emailService;
+
+    @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private FollowingRepository followingRepository;
 
     public Page<Idea> getAllIdeas(int pageNumber) {
         return ideaRepository.findAll(new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
@@ -52,7 +59,7 @@ public class IdeaServiceImpl {
         return ideaRepository.findByTitleLike(title, new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
     }
 
-    public Page<Idea> getByCategory(int pageNumber, Category category){
+    public Page<Idea> getByCategory(int pageNumber, Category category) {
         return ideaRepository.findByCategory(category, new PageRequest(pageNumber, 5));
     }
 
@@ -78,7 +85,29 @@ public class IdeaServiceImpl {
         }
         idea.setPosted_date(new Date().toString());
 
+//        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+//        session.getTransaction().begin();
         ideaRepository.save(idea);
+    }
+
+    public void sendEmails(User currentUser, Integer idNewIdea, Idea idea) {
+        List<User> users = new ArrayList<>();
+        List<Following> followings = followingRepository.getByUser(currentUser);
+        for (Following following : followings) {
+            users.add(following.getFollowingUser());
+        }
+        if (users.size() > 0) {
+            for (User user : users) {
+                emailService.sendSimpleMessage(
+                        "alexg.nutu@gmail.com",
+                        "New Idea",
+                        "Dear " + user.getFull_name() + ", \n\n The user " + idea.getUser().getFull_name() + " just posted a new idea! \n\n " +
+                                "The idea: http://localhost:8090/user/viewIdea/" + idNewIdea + "\n\n" +
+                                " Check out his/hers ideas here: http://localhost:8090/user/viewIdeas/userId=" + idea.getUser().getId() + "\n" +
+                                " Check out his/hers profile here: http://localhost:8090/user/userIdeas/?page=0&userId=" + idea.getUser().getId() + "\n\n" +
+                                " Best Regards, \n MPI Service");
+            }
+        }
     }
 
     public String savePhoto(MultipartFile image, Idea idea) throws IOException {

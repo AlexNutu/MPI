@@ -153,7 +153,6 @@ public class HomeController extends BaseController {
             appreciationRepository.save(appreciation);
         }
 
-
         return "redirect:/user/home";
     }
 
@@ -167,7 +166,7 @@ public class HomeController extends BaseController {
     }
 
     @PostMapping("/send")
-    public String sendMessage(HttpServletRequest request, Message m, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int pageType ) {
+    public String sendMessage(HttpServletRequest request, Message m, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int pageType) {
         //pageType: 1 = userHome; 0 = userIdeas;
         // check if conversation exists
         User currentUser = getCurrentUser();
@@ -212,9 +211,9 @@ public class HomeController extends BaseController {
         messageService.addMessage(m);
 
         String uri = request.getRequestURI();
-        if(pageType == 0){
+        if (pageType == 0) {
             return "redirect:/user/userIdeas/?page=" + page + "&userId=" + idReceiver;
-        }else{
+        } else {
             return "redirect:/user/home/?page=" + page;
         }
     }
@@ -416,6 +415,9 @@ public class HomeController extends BaseController {
             ideaService.addMatchings(idea);
             // Add tags/keywords for this idea
             ideaService.addTags(idea);
+            // Send emails to the followers
+            int idNewIdea = 10;//(Integer) session.save(user1);
+            ideaService.sendEmails(user, idNewIdea, idea);
 
             redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());

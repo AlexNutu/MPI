@@ -137,6 +137,12 @@ body {
     float: right;
     margin: 22px;
 }
+
+.viewIdeas {
+    float: right;
+    margin-top: -281px;
+}
+
 .userprofile.social {
     background: url(../img/p4.jpg) no-repeat top center;
     background-size: 100%;

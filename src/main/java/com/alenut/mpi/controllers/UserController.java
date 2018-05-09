@@ -1,9 +1,9 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.auxiliary.MD5Encryption;
-import com.alenut.mpi.entities.Category;
-import com.alenut.mpi.entities.Idea;
-import com.alenut.mpi.entities.User;
+import com.alenut.mpi.entities.*;
+import com.alenut.mpi.repository.FollowingRepository;
+import com.alenut.mpi.service.EmailServiceImpl;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.CategoryServiceImpl;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -41,6 +38,12 @@ public class UserController extends BaseController {
 
     @Autowired
     CategoryServiceImpl categoryService;
+
+    @Autowired
+    FollowingRepository followingRepository;
+
+    @Autowired
+    EmailServiceImpl emailService;
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
@@ -102,7 +105,6 @@ public class UserController extends BaseController {
         User currentUser = getCurrentUser();
         User viewedUser = userService.getById(userId);
 
-
         List<Idea> ideaList = ideaService.getIdeasByUser(viewedUser);
         model.addAttribute("fullname", viewedUser.getFull_name());
         model.addAttribute("username", viewedUser.getUsername());
@@ -121,8 +123,48 @@ public class UserController extends BaseController {
         model.addAttribute("noOfMatchings", userService.getNoOfMatchings(ideaList));
         model.addAttribute("noOfLikes", userService.getNoOfLikes(ideaList));
         model.addAttribute("noOfComments", userService.getNoOfComments(ideaList));
+        List<Following> followings = followingRepository.getByUser(currentUser);
+        boolean ok = false;
+        for (Following following : followings) {
+            if (following.getFollowingUser().equals(viewedUser)) {
+                ok = true;
+                break;
+            }
+        }
+        if (ok) {
+            model.addAttribute("following", true);
+        } else {
+            model.addAttribute("following", false);
+        }
 
         return "viewProfile";
+    }
+
+    @PostMapping("/follow")
+    public String followUser(@RequestParam(defaultValue = "0") long idUser) {
+        User currentUser = getCurrentUser();
+        User followingUser = userService.getById(idUser);
+
+        List<Following> followings = followingRepository.getByUser(currentUser);
+        boolean ok = false;
+        Following foundFollowing = null;
+        for (Following following : followings) {
+            if (following.getFollowingUser().equals(followingUser)) {
+                ok = true;
+                foundFollowing = following;
+                break;
+            }
+        }
+        if (ok) {
+            followingRepository.delete(foundFollowing);
+        } else {
+            Following following = new Following();
+            following.setFollowingUser(followingUser);
+            following.setUser(currentUser);
+            followingRepository.save(following);
+        }
+
+        return "redirect:/user/viewProfile/" + idUser;
     }
 
     @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)
