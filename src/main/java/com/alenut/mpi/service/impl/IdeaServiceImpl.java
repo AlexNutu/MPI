@@ -79,18 +79,16 @@ public class IdeaServiceImpl {
         return ideaRepository.getIdeaByTitle(title);
     }
 
-    public long insert(Idea idea, User user) {
+    public void insert(Idea idea, User user) {
         if (idea.getImage_path() == null) {
             idea.setImage_path("idea.jpg");
         }
         idea.setPosted_date(new Date().toString());
 
         ideaRepository.save(idea);
-        return idea.getId();
     }
 
-    public void sendEmails(User currentUser, long idInsertedIdea) {
-        Idea idea = ideaRepository.getById(idInsertedIdea);
+    public void sendEmails(User currentUser, Idea idea) {
         List<User> users = new ArrayList<>();
         List<Following> followings = followingRepository.getByFollowingUser(currentUser);
         for (Following following : followings) {
@@ -102,7 +100,7 @@ public class IdeaServiceImpl {
                         user.getEmail(),
                         "New Idea",
                         "Dear " + user.getFull_name() + ", \n\n The user " + idea.getUser().getFull_name() + " just posted a new idea! \n\n " +
-                                "The idea: http://localhost:8090/user/viewIdea/" + idInsertedIdea + "\n\n" +
+                                "The idea: http://localhost:8090/user/viewIdea/" + idea.getId() + "\n\n" +
                                 " Check out his/hers ideas here: http://localhost:8090/user/viewIdeas/userId=" + idea.getUser().getId() + "\n" +
                                 " Check out his/hers profile here: http://localhost:8090/user/userIdeas/?page=0&userId=" + idea.getUser().getId() + "\n\n" +
                                 " Best Regards, \n MPI Service");

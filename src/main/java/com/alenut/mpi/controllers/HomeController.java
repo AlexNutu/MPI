@@ -410,14 +410,13 @@ public class HomeController extends BaseController {
             } else {
                 idea.setImage_path("idea7.jpg");
             }
-            long idInsertedIdea = ideaService.insert(idea, user);
+            ideaService.insert(idea, user);
             // Add matchings with this idea
             ideaService.addMatchings(idea);
             // Add tags/keywords for this idea
             ideaService.addTags(idea);
             // Send emails to the followers
-            //TODO: VERIFIC DACA POT OBTIENE ID_UL in obiectul idea, fara sa trimit id-ul in sendEmails
-            ideaService.sendEmails(user, idInsertedIdea);
+            ideaService.sendEmails(user, idea);
 
             redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());
