@@ -79,30 +79,30 @@ public class IdeaServiceImpl {
         return ideaRepository.getIdeaByTitle(title);
     }
 
-    public void insert(Idea idea, User user) {
+    public long insert(Idea idea, User user) {
         if (idea.getImage_path() == null) {
             idea.setImage_path("idea.jpg");
         }
         idea.setPosted_date(new Date().toString());
 
-//        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-//        session.getTransaction().begin();
         ideaRepository.save(idea);
+        return idea.getId();
     }
 
-    public void sendEmails(User currentUser, Integer idNewIdea, Idea idea) {
+    public void sendEmails(User currentUser, long idInsertedIdea) {
+        Idea idea = ideaRepository.getById(idInsertedIdea);
         List<User> users = new ArrayList<>();
-        List<Following> followings = followingRepository.getByUser(currentUser);
+        List<Following> followings = followingRepository.getByFollowingUser(currentUser);
         for (Following following : followings) {
-            users.add(following.getFollowingUser());
+            users.add(following.getUser());
         }
         if (users.size() > 0) {
             for (User user : users) {
                 emailService.sendSimpleMessage(
-                        "alexg.nutu@gmail.com",
+                        user.getEmail(),
                         "New Idea",
                         "Dear " + user.getFull_name() + ", \n\n The user " + idea.getUser().getFull_name() + " just posted a new idea! \n\n " +
-                                "The idea: http://localhost:8090/user/viewIdea/" + idNewIdea + "\n\n" +
+                                "The idea: http://localhost:8090/user/viewIdea/" + idInsertedIdea + "\n\n" +
                                 " Check out his/hers ideas here: http://localhost:8090/user/viewIdeas/userId=" + idea.getUser().getId() + "\n" +
                                 " Check out his/hers profile here: http://localhost:8090/user/userIdeas/?page=0&userId=" + idea.getUser().getId() + "\n\n" +
                                 " Best Regards, \n MPI Service");
