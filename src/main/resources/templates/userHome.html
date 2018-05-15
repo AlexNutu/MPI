@@ -16,6 +16,7 @@
     <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="../../js/mk-notifications.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
@@ -24,6 +25,8 @@
     <link href="../../css/animate.min.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/mk-notifications.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous"/>
 
     <link rel="shortcut icon" href="../../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
@@ -66,6 +69,8 @@
                     <li><a th:href="${'/user/viewAll/'}">View All</a></li>
                 </ul>
             </li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> MPI Chart </a></li>
+
 
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
@@ -75,6 +80,7 @@
                     <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                     <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                 </ul>
+
             </li>
 
             <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
@@ -300,6 +306,46 @@
     $(document).ready(
 
         function likeDislike() {
+            // bind 'sendMessageForm' and provide a simple callback function
+
+            $('.myForm #sendForm').on('submit', function(e) {
+                e.preventDefault();
+
+                $(this).ajaxSubmit({
+                    target: 'myResultDiv'
+                });
+
+                var fullname = $('.myForm #send_date').val();
+
+                $('#exampleModal').modal('toggle');
+
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-info",
+                            background: "#5bc0de;"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Info</strong>",
+                    "Your message was sent to the user " + fullname,
+                    options
+                );
+
+                $('#body').val('');
+
+            });
+
 
             // bind 'likeForm' and provide a simple callback function
 
@@ -396,6 +442,7 @@
         <div class="container bootstrap snippet" style="margin-top: -35px">
             <section id="team" class="white-bg padding-top-bottom">
                 <div class="container bootstrap snippet">
+
 
                     <div th:if="${ideasList.totalPages} > 0">
                         <h1 class="section-title text-center page-title" style="margin-left:290px; margin-top: 70px; ">Most Liked/ Most Commented</h1>
@@ -543,7 +590,7 @@
 </div>
 
 <div class="myForm">
-    <form th:action="@{/user/send/(page=${currentPage},pageType=1)}" method="post">
+    <form id="sendForm" name="sendForm" th:action="@{/user/send/(page=${currentPage},pageType=1)}" method="post">
 
        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
@@ -562,7 +609,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>Send</button>
+                        <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Send</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->

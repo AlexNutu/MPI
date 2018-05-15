@@ -2,43 +2,91 @@
 <html class=''>
 <head>
 
-    <script src="/js/viewProfile.js"></script>
-
-
     <!--<meta name="robots" content="noindex"/>-->
     <!--<meta name="viewport" content="width=device-width"/>-->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>-->
 
 
-    <!--<link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!--<link rel="stylesheet" href="../../css/viewProfile.css"/>-->
-
-
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
-
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="../../js/mk-notifications.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <link rel="stylesheet" href="../../css/mk-notifications.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous"/>
+
+
+    <script>
+
+        $(document).ready(function() {
+
+          var config =
+              {
+                  positionX: "bottom",
+                  positionY: "right"
+              };
+
+          mkNotifications(config);
+
+            var options =
+                {
+                    icon: {
+                        class: "fa fa-info",
+                        background: "#17a2b8"
+                    },
+                    sound: 'true'
+                };
+
+            mkNoti(
+                "<strong>Info</strong>",
+                "Your message was sent to the user ",
+                options
+            );
+
+
+            // var mkConfig = {
+            //     positionX: 'bottom',
+            //     positionY: 'right',
+            //     max: 5,
+            //     scrollable: true
+            // };
+            //
+            // mkNotifications(mkConfig);
+            //
+            // mkNoti(
+            //     'MK Web Notifications (Info)',
+            //     'Example of generated notification with status Info',
+            //     {
+            //         status:'info'
+
+            //     }
+            // );
+
+
+
+        });
+
+
+
+
+  // mkNoti(
+        //     'MK Web Notifications (Info)',
+        //     'Example of generated notification with status Info',
+        //     { sound: true }
+        // );
+    </script>
 
 </head>
 
 
 <body>
 
-<div class="container">
-    <span class="button-checkbox">
-        <button type="submit" class="btn" data-color="primary">Unchecked</button>
-        <input type="checkbox" class="hidden" />
-    </span>
-
-    <span class="button-checkbox">
-        <button type="button" class="btn" data-color="success">Success</button>
-        <input type="checkbox" class="hidden" checked="" />
-    </span>
-</div>
-
-
+<h1>vasdas</h1>
 </body>
+
+
 </html>

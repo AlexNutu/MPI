@@ -581,6 +581,10 @@ public class HomeController extends BaseController {
         return "redirect:{conversationId}";
     }
 
+    @RequestMapping(value = "/chart", method = RequestMethod.GET)
+    public String calendar(HttpServletRequest request, Model model) {
+        return "calendar";
+    }
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about(HttpServletRequest request, Model model) {
