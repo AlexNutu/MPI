@@ -45,6 +45,15 @@ public class Idea {
     @OneToMany(mappedBy = "idea")
     private List<Matching> matchings;
 
+    @Column(name = "likenumber")
+    private Integer likenumber;
+
+    @Column(name = "comnumber")
+    private Integer comnumber;
+
+    @Column(name = "simnumber")
+    private Integer simnumber;
+
     @Column(name = "semantic")
     private String semantic;
 
@@ -182,5 +191,29 @@ public class Idea {
 
     public void setLiked(long liked) {
         this.liked = liked;
+    }
+
+    public Integer getLikenumber() {
+        return likenumber;
+    }
+
+    public void setLikenumber(Integer likenumber) {
+        this.likenumber = likenumber;
+    }
+
+    public Integer getComnumber() {
+        return comnumber;
+    }
+
+    public void setComnumber(Integer comnumber) {
+        this.comnumber = comnumber;
+    }
+
+    public Integer getSimnumber() {
+        return simnumber;
+    }
+
+    public void setSimnumber(Integer simnumber) {
+        this.simnumber = simnumber;
     }
 }

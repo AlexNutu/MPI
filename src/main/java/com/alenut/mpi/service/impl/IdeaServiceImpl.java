@@ -26,7 +26,6 @@ import java.util.List;
 @Service
 public class IdeaServiceImpl {
 
-
     @Autowired
     private IdeaRepository ideaRepository;
 
@@ -52,11 +51,47 @@ public class IdeaServiceImpl {
     private FollowingRepository followingRepository;
 
     public Page<Idea> getAllIdeas(int pageNumber) {
-        return ideaRepository.findAll(new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
+        return ideaRepository.findAll(new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getAllIdeasPopular(int pageNumber) {
+        return ideaRepository.findAllByOrderByLikenumberDesc(new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getAllIdeasSimilarities(int pageNumber) {
+        return ideaRepository.findAllByOrderBySimnumberDesc(new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getAllIdeasComments(int pageNumber) {
+        return ideaRepository.findAllByOrderByComnumberDesc(new PageRequest(pageNumber, 5));
     }
 
     public Page<Idea> getByTitleLike(int pageNumber, String title) {
-        return ideaRepository.findByTitleLike(title, new PageRequest(pageNumber, 5)); // gaseste toate ideile salvate in baza de date
+        return ideaRepository.findByTitleLike(title, new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getByTitleLikePopular(int pageNumber, String title) {
+        return ideaRepository.findByTitleLikeOrderByLikenumberDesc(title, new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getByTitleLikeSimilarities(int pageNumber, String title) {
+        return ideaRepository.findByTitleLikeOrderBySimnumberDesc(title, new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getByTitleLikeComments(int pageNumber, String title) {
+        return ideaRepository.findByTitleLikeOrderByComnumberDesc(title, new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getByCategoryPopular(int pageNumber, Category category) {
+        return ideaRepository.findByCategoryOrderByLikenumberDesc(category, new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getByCategorySimilarities(int pageNumber, Category category) {
+        return ideaRepository.findByCategoryOrderBySimnumberDesc(category, new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getByCategoryComments(int pageNumber, Category category) {
+        return ideaRepository.findByCategoryOrderByComnumberDesc(category, new PageRequest(pageNumber, 5));
     }
 
     public Page<Idea> getByCategory(int pageNumber, Category category) {
@@ -154,7 +189,7 @@ public class IdeaServiceImpl {
                 Double doubleSemantic = Double.parseDouble(scoreSemantic) * 100.0;
                 Double doubleSintactic = Double.parseDouble(scoreSintactic) * 100.0;
 
-                if (doubleSemantic >= 40.0) {
+                if (doubleSemantic >= 20.0) {
                     Matching matching = new Matching();
                     Matching matching2 = new Matching();
                     matching.setIdea(idea);

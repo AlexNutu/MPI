@@ -122,6 +122,162 @@ public class HomeController extends BaseController {
         return "userHome";
     }
 
+    @RequestMapping(value = "/popular", method = RequestMethod.GET)
+    public String displayPopularIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+        User user = getCurrentUser();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("currentUser", user);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        String categoryName = "";
+        Page<Idea> ideas = null;
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChosed = categoryRepository.getById(category);
+            categoryName = categoryChosed.getBody();
+            ideas = ideaService.getByCategoryPopular(page, categoryChosed);
+
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLikePopular(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeasPopular(page);
+            }
+        }
+
+        boolean ok = false;
+        for (Idea idea : ideas) {
+            List<Appreciation> appreciations = idea.getAppreciations();
+            ok = false;
+            for (Appreciation appreciation : appreciations) {
+                if (appreciation.getUser().equals(user) && appreciation.getIdea().equals(idea)) {
+                    idea.setLiked(1);
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                idea.setLiked(0);
+            }
+        }
+
+        // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
+        List<Idea> myIdeas = ideaService.getIdeasByUser(user);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentCategory", category);
+        model.addAttribute("messagesNumber", user.getMessages().size());
+
+        return "mostPopular";
+    }
+
+    @RequestMapping(value = "/multipleSimilarities", method = RequestMethod.GET)
+    public String displayMultipleSimilaritiesIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+        User user = getCurrentUser();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("currentUser", user);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        String categoryName = "";
+        Page<Idea> ideas = null;
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChosed = categoryRepository.getById(category);
+            categoryName = categoryChosed.getBody();
+            ideas = ideaService.getByCategorySimilarities(page, categoryChosed);
+
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLikeSimilarities(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeasSimilarities(page);
+            }
+        }
+
+        boolean ok = false;
+        for (Idea idea : ideas) {
+            List<Appreciation> appreciations = idea.getAppreciations();
+            ok = false;
+            for (Appreciation appreciation : appreciations) {
+                if (appreciation.getUser().equals(user) && appreciation.getIdea().equals(idea)) {
+                    idea.setLiked(1);
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                idea.setLiked(0);
+            }
+        }
+
+        // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
+        List<Idea> myIdeas = ideaService.getIdeasByUser(user);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentCategory", category);
+        model.addAttribute("messagesNumber", user.getMessages().size());
+
+        return "multipleSimilarities";
+    }
+
+    @RequestMapping(value = "/mostCommented", method = RequestMethod.GET)
+    public String displayMostCommentedIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+        User user = getCurrentUser();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("currentUser", user);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        String categoryName = "";
+        Page<Idea> ideas = null;
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChosed = categoryRepository.getById(category);
+            categoryName = categoryChosed.getBody();
+            ideas = ideaService.getByCategoryComments(page, categoryChosed);
+
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLikeComments(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeasComments(page);
+            }
+        }
+
+        boolean ok = false;
+        for (Idea idea : ideas) {
+            List<Appreciation> appreciations = idea.getAppreciations();
+            ok = false;
+            for (Appreciation appreciation : appreciations) {
+                if (appreciation.getUser().equals(user) && appreciation.getIdea().equals(idea)) {
+                    idea.setLiked(1);
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                idea.setLiked(0);
+            }
+        }
+
+        // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
+        List<Idea> myIdeas = ideaService.getIdeasByUser(user);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentCategory", category);
+        model.addAttribute("messagesNumber", user.getMessages().size());
+
+        return "mostCommented";
+    }
+
     @GetMapping("/findOne")
     @ResponseBody
     public User findOne(Long id) {

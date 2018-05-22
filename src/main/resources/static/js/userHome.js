@@ -23,7 +23,7 @@ $(document).ready(function () {
     });
 
     // $('.myFormDelete #deleteMyIdeaForm').on('submit', function(e) {
-    // trebuie adaugata atributul de dismiss de la butonul de No, pus pe un element din form
+    // trebuie adaugata atributul  dismiss de la butonul de No, pus pe un element din form
     // id-ul ideii, dupa care obtinute toate ideile din div-ul ce contine lista ideilor si stearsa
     // cea careia ii corespunde id-ul, apoi trigger-uita notificarea ca s-a sters ideea :)
     //     e.preventDefault(); // prevent native submit

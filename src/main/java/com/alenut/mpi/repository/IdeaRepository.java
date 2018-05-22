@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +16,18 @@ import java.util.List;
 public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     Idea getById(Long id);
+
+    Page<Idea> findAllByOrderByLikenumberDesc(Pageable p);
+
+    Page<Idea> findAllByOrderByComnumberDesc(Pageable p);
+
+    Page<Idea> findAllByOrderBySimnumberDesc(Pageable p);
+
+    Page<Idea> findByCategoryOrderByComnumberDesc(Category c, Pageable p);
+
+    Page<Idea> findByCategoryOrderBySimnumberDesc(Category c, Pageable p);
+
+    Page<Idea> findByCategoryOrderByLikenumberDesc(Category c, Pageable p);
 
     Page<Idea> findByCategory(Category c, Pageable p);
 
@@ -28,6 +41,10 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     Page<Idea> findByTitleLike(String title, Pageable p);
 
-    List<Idea> findAllByOrderByIdDesc();
+    Page<Idea> findByTitleLikeOrderByLikenumberDesc(String title, Pageable p);
+
+    Page<Idea> findByTitleLikeOrderByComnumberDesc(String title, Pageable p);
+
+    Page<Idea> findByTitleLikeOrderBySimnumberDesc(String title, Pageable p);
 
 }

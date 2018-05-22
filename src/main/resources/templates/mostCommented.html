@@ -36,7 +36,7 @@
     <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
     <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
-    <title> Home </title>
+    <title> Most Commented </title>
 </head>
 
 
@@ -78,7 +78,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/mostCommented/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                     <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                 </ul>
 
@@ -110,7 +110,7 @@
             </li>
         </ul>
 
-        <form sec:authorize="isAuthenticated()" th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/mostCommented/(page=0)}" method="get" class="navbar-form navbar-left">
             <div class="input-group" style="width: auto">
                 <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
                 <div class="input-group-btn">
@@ -291,12 +291,12 @@
 <div id="fb-root"></div>
 <script>
     (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v2.12&amp;appId=2441875726038205&amp;autoLogAppEvents=1';
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v2.12&amp;appId=2441875726038205&amp;autoLogAppEvents=1';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 </script>
 
 <script th:inline="javascript">
@@ -402,8 +402,8 @@
     <div class="text-center submitIdea" style="margin-bottom: 100px; margin-left: 270px; margin-top: 100px">
         <a href="/user/postIdea">
             <button class='myButt four'>
-                 <div class='icon'>&#10010;</div>
-                 <span>SUBMIT IDEA </span>
+                <div class='icon'>&#10010;</div>
+                <span>SUBMIT IDEA </span>
             </button>
         </a>
     </div>
@@ -451,16 +451,16 @@
 
                         <main style="margin-left: 330px; margin-bottom:120px;">
 
-                            <input class="inputs" id="tab4" type="radio" onclick="window.location='/user/home';" name="tabs" checked=""/>
+                            <input class="inputs" id="tab4" type="radio" onclick="window.location='/user/home';" name="tabs"/>
                             <label class="labels" for="tab4">Latest Ideas</label>
 
                             <input class="inputs" id="tab3" onclick="window.location='/user/multipleSimilarities?page=0';" type="radio" name="tabs"/>
                             <label class="labels" for="tab3">Multiple Similarities</label>
 
-                            <input class="inputs" id="tab2" onclick="window.location='/user/popular?page=0';" type="radio" name="tabs"/>
+                            <input class="inputs" id="tab2" onclick="window.location='/user/popular?page=0';" checked="" type="radio" name="tabs"/>
                             <label class="labels" for="tab2">Most Popular</label>
 
-                            <input class="inputs" id="tab1" onclick="window.location='/user/mostCommented?page=0';" type="radio" name="tabs"/>
+                            <input class="inputs" id="tab1" onclick="window.location='/user/mostCommented?page=0';" checked="" type="radio" name="tabs"/>
                             <label class="labels" for="tab1">Most Commented</label>
 
                         </main>
@@ -521,9 +521,9 @@
         <ul th:if="${ideasList.totalPages} > 0" class="pagination" style="margin-left:660px; margin-bottom: 100px">
             <li th:if="${currentPage} == 0" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 
-            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/user/home/(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/user/home/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${categoryName} != ''"><a th:href=" @{/user/home/(page=${currentPage-1}, category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/user/mostCommented/(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/user/mostCommented/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${categoryName} != ''"><a th:href=" @{/user/mostCommented/(page=${currentPage-1}, category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 
             <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/home/(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
             <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/home/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
@@ -531,9 +531,9 @@
 
             <li th:classappend="${currentPage} == ${i}?'active':''" th:each="i : ${#numbers.sequence(0, ideasList.totalPages-1)}">
 
-                <a sec:authorize="isAuthenticated()" th:if="${qTitle} != '' and ${categoryName} == ''" th:href="@{/user/home/(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
-                <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/user/home/(page=${i})}" th:text="${i}">1</a>
-                <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} != ''" th:href="@{/user/home/(page=${i},category=${currentCategory})}" th:text="${i}">1</a>
+                <a sec:authorize="isAuthenticated()" th:if="${qTitle} != '' and ${categoryName} == ''" th:href="@{/user/mostCommented/(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
+                <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/user/mostCommented/(page=${i})}" th:text="${i}">1</a>
+                <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} != ''" th:href="@{/user/mostCommented/(page=${i},category=${currentCategory})}" th:text="${i}">1</a>
 
                 <a sec:authorize="isAnonymous()" th:if="${qTitle} != '' and ${categoryName} == ''" th:href="@{/home/(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
                 <a sec:authorize="isAnonymous()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/home/(page=${i})}" th:text="${i}">1</a>
@@ -542,9 +542,9 @@
             </li>
             <li th:if="${currentPage} == ${ideasList.totalPages-1}" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 
-            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} != '' and ${categoryName} == ''"> <a th:href=" @{/user/home/(page=${currentPage+1},q=${qTitle})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/user/home/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${categoryName} != ''"> <a th:href=" @{/user/home/(page=${currentPage+1},category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} != '' and ${categoryName} == ''"> <a th:href=" @{/user/mostCommented/(page=${currentPage+1},q=${qTitle})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/user/mostCommented/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${categoryName} != ''"> <a th:href=" @{/user/mostCommented/(page=${currentPage+1},category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 
             <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} != '' and ${categoryName} == ''"> <a th:href=" @{/home/(page=${currentPage+1},q=${qTitle})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
             <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/home/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
@@ -554,9 +554,8 @@
     </div>
 
 
-
     <div class="second2" style="position:absolute;top: 385px;">
-        <h4 style="margin-left: 1301px"> <span class="glyphicon glyphicon-eye-open"></span> Most Viewed Ideas</h4>
+        <h4 style="margin-left: 1348px">Recent Ideas</h4>
         <div style="left: 1266px" class="col-md-2">
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                 <!-- Indicators -->
@@ -610,7 +609,7 @@
 <div class="myForm">
     <form id="sendForm" name="sendForm" th:action="@{/user/send/(page=${currentPage},pageType=1)}" method="post">
 
-       <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

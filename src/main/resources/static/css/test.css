@@ -1,51 +1,116 @@
 
-.myButt {
-    outline: none;
-    border: none;
-    padding: 20px;
-    display: block;
-    margin: 50px auto;
-    cursor: pointer;
-    font-size: 20px;
-    background-color: transparent;
-    position: relative;
-    border: 2px solid #fff;
-    transition: all 0.5s ease;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
+
+
+.custom-tab > li > a {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.custom-tab > li {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
 
-.four {
-    overflow: hidden;
+.custom-tab > li > a:link {
+    border-top: 3px solid #00bfff;
+    border-right: 1px solid #00bfff;
+    border-left: 1px solid #00bfff;
 }
-.four span {
-    color: #fff;
-    display: inline-block;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:visited {
+    background-color:#00bfff;
+    border-top: 3px solid #00bfff;
+    border-right: 1px solid #00bfff;
+    border-left: 1px solid #00bfff;
+    color:#FFF;
+    background-color:#00bfff;
 }
-.four .icon {
-    position: absolute;
-    left: -60px;
-    top: -3px;
-    padding: 20px;
-    color: black;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
+i{
+    color:#000;
 }
-.four:hover .icon {
-    left: 0px;
+.link-lable{
+    text-decoration:none;
+    color:#000;
 }
-.four:hover span {
-    color: black;
-    margin-left: 50px;
+@media screen and (max-width: 767px)
+{
+
+    .link-lable{
+        display:none;
+    }
 }
+
+/*@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');*/
+
+
+
+/*body {*/
+    /*font: 14px/1 'Open Sans', sans-serif;*/
+    /*color: #555;*/
+    /*background: #eee;*/
+/*}*/
+/*#titlul{*/
+    /*font-size:26px;*/
+    /*margin-bottom: 200px;*/
+/*}*/
+
+
+/*main {*/
+    /*min-width: 320px;*/
+    /*max-width: 1100px;*/
+    /*padding: 20px;*/
+    /*margin: 0 auto;*/
+    /*background: #fff;*/
+/*}*/
+
+/*section {*/
+    /*display: none;*/
+    /*padding: 20px 0 0;*/
+    /*border-top: 1px solid #ddd;*/
+/*}*/
+
+/*input {*/
+    /*display: none;*/
+/*}*/
+
+/*label {*/
+    /*display: inline-block;*/
+    /*margin: 0 0 -1px;*/
+    /*padding: 15px 25px;*/
+    /*font-weight: 600;*/
+    /*text-align: center;*/
+    /*color: #bbb;*/
+    /*border: 1px solid transparent;*/
+/*}*/
+
+/*label:before {*/
+    /*font-family: fontawesome;*/
+    /*font-weight: normal;*/
+    /*margin-right: 10px;*/
+/*}*/
+
+/*label[for*='1']:before { content: '\f2bc'; }*/
+/*label[for*='2']:before { content: '\f0ca'; }*/
+/*label[for*='3']:before { content: '\f02f'; }*/
+/*label[for*='4']:before { content: '\f1a9'; }*/
+
+/*label:hover {*/
+    /*color: #888;*/
+    /*cursor: pointer;*/
+/*}*/
+
+/*input:checked + label {*/
+    /*color: #555;*/
+    /*border: 1px solid #ddd;*/
+    /*border-top: 2px solid orange;*/
+    /*border-bottom: 1px solid #fff;*/
+/*}*/
+
+/*#tab1:checked ~ #content1,*/
+/*#tab2:checked ~ #content2,*/
+/*#tab3:checked ~ #content3,*/
+/*#tab4:checked ~ #content4 {*/
+    /*display: block;*/
+/*}*/
+
 
