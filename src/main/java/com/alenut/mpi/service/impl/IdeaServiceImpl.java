@@ -50,8 +50,24 @@ public class IdeaServiceImpl {
     @Autowired
     private FollowingRepository followingRepository;
 
+    public void updateLikesPlus(Idea idea) {
+        ideaRepository.setNewLikenumberFor(idea.getLikenumber() + 1, idea.getId());
+    }
+
+    public void updateLikesMinus(Idea idea) {
+        ideaRepository.setNewLikenumberFor(idea.getLikenumber() - 1, idea.getId());
+    }
+
+    public void updateComments(Idea idea) {
+        ideaRepository.setNewComnumberFor(idea.getComnumber() + 1, idea.getId());
+    }
+
+    public void updateSimilarities(Idea idea) {
+        ideaRepository.setNewSimnumberFor(idea.getSimnumber() + 1, idea.getId());
+    }
+
     public Page<Idea> getAllIdeas(int pageNumber) {
-        return ideaRepository.findAll(new PageRequest(pageNumber, 5));
+        return ideaRepository.findAllByOrderByIdDesc(new PageRequest(pageNumber, 5));
     }
 
     public Page<Idea> getAllIdeasPopular(int pageNumber) {
@@ -67,7 +83,7 @@ public class IdeaServiceImpl {
     }
 
     public Page<Idea> getByTitleLike(int pageNumber, String title) {
-        return ideaRepository.findByTitleLike(title, new PageRequest(pageNumber, 5));
+        return ideaRepository.findByTitleLikeOrderByIdDesc(title, new PageRequest(pageNumber, 5));
     }
 
     public Page<Idea> getByTitleLikePopular(int pageNumber, String title) {
@@ -95,7 +111,7 @@ public class IdeaServiceImpl {
     }
 
     public Page<Idea> getByCategory(int pageNumber, Category category) {
-        return ideaRepository.findByCategory(category, new PageRequest(pageNumber, 5));
+        return ideaRepository.findByCategoryOrderByIdDesc(category, new PageRequest(pageNumber, 5));
     }
 
     public List<Idea> getIdeasByUser(User user) {
@@ -119,7 +135,9 @@ public class IdeaServiceImpl {
             idea.setImage_path("idea.jpg");
         }
         idea.setPosted_date(new Date().toString());
-
+        idea.setLikenumber(0);
+        idea.setComnumber(0);
+        idea.setSimnumber(0);
         ideaRepository.save(idea);
     }
 
@@ -210,7 +228,10 @@ public class IdeaServiceImpl {
 
                     matchRepository.save(matching);
                     matchRepository.save(matching2);
-
+                    updateSimilarities(matching.getIdea());
+                    updateSimilarities(matching.getIdeaMatch());
+                    updateSimilarities(matching2.getIdea());
+                    updateSimilarities(matching2.getIdeaMatch());
                 }
             }
         }

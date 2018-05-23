@@ -302,11 +302,13 @@ public class HomeController extends BaseController {
         }
         if (foundAppreciation != null) {
             appreciationRepository.delete(foundAppreciation);
+            ideaService.updateLikesMinus(currentIdea);
         } else {
             Appreciation appreciation = new Appreciation();
             appreciation.setIdea(currentIdea);
             appreciation.setUser(currentUser);
             appreciationRepository.save(appreciation);
+            ideaService.updateLikesPlus(currentIdea);
         }
 
         return "redirect:/user/home";
@@ -649,6 +651,7 @@ public class HomeController extends BaseController {
         comment.setIdea(idea);
         comment.setBody(comment.getBody().replaceAll(" +", " "));
         ideaService.addComment(comment);
+        ideaService.updateComments(idea);
 
         return "redirect:{ideaId}";
     }
