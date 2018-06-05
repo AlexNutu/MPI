@@ -190,6 +190,98 @@ public class AnonymousController extends BaseController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/popular", method = RequestMethod.GET)
+    public String displayPopularIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        String categoryName = "";
+        Page<Idea> ideas = null;
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChosed = categoryRepository.getById(category);
+            categoryName = categoryChosed.getBody();
+            ideas = ideaService.getByCategoryPopular(page, categoryChosed);
+
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLikePopular(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeasPopular(page);
+            }
+        }
+
+
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentCategory", category);
+
+        return "mostPopular";
+    }
+
+    @RequestMapping(value = "/multipleSimilarities", method = RequestMethod.GET)
+    public String displayMultipleSimilaritiesIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        String categoryName = "";
+        Page<Idea> ideas = null;
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChosed = categoryRepository.getById(category);
+            categoryName = categoryChosed.getBody();
+            ideas = ideaService.getByCategorySimilarities(page, categoryChosed);
+
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLikeSimilarities(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeasSimilarities(page);
+            }
+        }
+
+
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentCategory", category);
+
+        return "multipleSimilarities";
+    }
+
+    @RequestMapping(value = "/mostCommented", method = RequestMethod.GET)
+    public String displayMostCommentedIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        String categoryName = "";
+        Page<Idea> ideas = null;
+        if (category != 0) { // daca este aleasa o categorie
+            Category categoryChosed = categoryRepository.getById(category);
+            categoryName = categoryChosed.getBody();
+            ideas = ideaService.getByCategoryComments(page, categoryChosed);
+
+        } else { //daca s-a ales o categorie atunci filtrarea de search dispare
+            if (!q.trim().toLowerCase().equals("")) {
+                ideas = ideaService.getByTitleLikeComments(page, "%" + q + "%");
+            } else {
+                ideas = ideaService.getAllIdeasComments(page);
+            }
+        }
+
+        model.addAttribute("ideasList", ideas);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("qTitle", q);
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("currentCategory", category);
+
+        return "mostCommented";
+    }
+
 
     @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public String contactUs(HttpServletRequest request, Model model) {
