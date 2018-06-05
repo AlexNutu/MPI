@@ -176,7 +176,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/multipleSimilarities", method = RequestMethod.GET)
     public String displayMultipleSimilaritiesIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+                                                   @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
         model.addAttribute("currentUser", user);
@@ -228,7 +228,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/mostCommented", method = RequestMethod.GET)
     public String displayMostCommentedIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
+                                            @RequestParam(defaultValue = "") String q, @RequestParam(defaultValue = "0") long category) {
         User user = getCurrentUser();
         model.addAttribute("username", user.getUsername());
         model.addAttribute("currentUser", user);
@@ -619,8 +619,11 @@ public class HomeController extends BaseController {
         Collections.reverse(comments);
         model.addAttribute("comments", comments);
 
-        List<Idea> matchingIdeas = new ArrayList<>();
+        List<Idea> matchingIdeasWithScores = new ArrayList<>();
         List<Matching> matchings = idea.getMatchings();
+        List<Matching> matchings2 = idea.getMatchings2();
+        matchings.addAll(matchings2);
+
         if (matchings.size() > 0) {
             for (Matching matching : matchings) {
                 Idea idea1 = matching.getIdeaMatch();
@@ -629,11 +632,11 @@ public class HomeController extends BaseController {
                 if (idea1.getBody().length() > 209) {
                     idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
                 }
-                matchingIdeas.add(idea1);
+                matchingIdeasWithScores.add(idea1);
             }
         }
 
-        model.addAttribute(matchingIdeas);
+        model.addAttribute(matchingIdeasWithScores);
 
         return "viewIdea";
     }

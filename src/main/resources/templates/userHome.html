@@ -500,9 +500,9 @@
                                 <div class="row" style="font-size: 12px">
                                     <div class="span8">
                                         <p>
-                                            <i class="glyphicon glyphicon-thumbs-up"></i><i class="ideaNr" style="font-weight: bold;" th:text="${' ' + idea.getAppreciations().size() + ' '}" th:value="${idea.getId()}"></i><i style="color: #337ab7">Likes</i>
-                                            | <i class="glyphicon glyphicon-comment"></i><i style="font-weight: bold;" th:text="${' ' + idea.getComments().size() + ' '}"></i><i style="color: #337ab7">Comments</i>
-                                            | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getMatchings().size() + ' '}"></i><i style="color: #337ab7">Similarities</i>
+                                            <i class="glyphicon glyphicon-thumbs-up"></i><i class="ideaNr" style="font-weight: bold;" th:text="${' ' + idea.getLikenumber() + ' '}" th:value="${idea.getId()}"></i><i style="color: #337ab7">Likes</i>
+                                            | <i class="glyphicon glyphicon-comment"></i><i style="font-weight: bold;" th:text="${' ' + idea.getComnumber() + ' '}"></i><i style="color: #337ab7">Comments</i>
+                                            | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getSimnumber() + ' '}"></i><i style="color: #337ab7">Similarities</i>
                                             | <i class="glyphicon glyphicon-tags" style="font-size: 10px"></i> <i> Tags :</i>
                                             <a sec:authorize="isAuthenticated()" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
                                             <a sec:authorize="isAnonymous()" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>

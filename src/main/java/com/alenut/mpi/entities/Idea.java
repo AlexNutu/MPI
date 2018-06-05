@@ -45,6 +45,9 @@ public class Idea {
     @OneToMany(mappedBy = "idea")
     private List<Matching> matchings;
 
+    @OneToMany(mappedBy = "ideaMatch")
+    private List<Matching> matchings2; // when id_idea is id_matching_idea
+
     @Column(name = "likenumber")
     private Integer likenumber;
 
@@ -167,6 +170,14 @@ public class Idea {
 
     public void setMatchings(List<Matching> matchings) {
         this.matchings = matchings;
+    }
+
+    public List<Matching> getMatchings2() {
+        return matchings2;
+    }
+
+    public void setMatchings2(List<Matching> matchings2) {
+        this.matchings2 = matchings2;
     }
 
     public String getSemantic() {

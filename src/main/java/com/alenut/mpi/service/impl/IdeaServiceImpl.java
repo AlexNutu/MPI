@@ -62,8 +62,8 @@ public class IdeaServiceImpl {
         ideaRepository.setNewComnumberFor(idea.getComnumber() + 1, idea.getId());
     }
 
-    public void updateSimilarities(Idea idea) {
-        ideaRepository.setNewSimnumberFor(idea.getSimnumber() + 1, idea.getId());
+    public void updateSimilarities(Idea idea, int val) {
+        ideaRepository.setNewSimnumberFor(idea.getSimnumber() + val, idea.getId());
     }
 
     public Page<Idea> getAllIdeas(int pageNumber) {
@@ -228,10 +228,10 @@ public class IdeaServiceImpl {
 
                     matchRepository.save(matching);
                     matchRepository.save(matching2);
-                    updateSimilarities(matching.getIdea());
-                    updateSimilarities(matching.getIdeaMatch());
-                    updateSimilarities(matching2.getIdea());
-                    updateSimilarities(matching2.getIdeaMatch());
+                    updateSimilarities(matching.getIdea(), 1);
+                    updateSimilarities(matching.getIdeaMatch(), 1);
+                    updateSimilarities(matching2.getIdea(), 1);
+                    updateSimilarities(matching2.getIdeaMatch(), 1);
                 }
             }
         }

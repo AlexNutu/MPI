@@ -14,6 +14,9 @@ public class MatchService {
     @Autowired
     MatchRepository matchRepository;
 
+    @Autowired
+    IdeaServiceImpl ideaService;
+
     public void deleteMatchingsByIdea(Idea idea) {
         List<Matching> matchings1 = matchRepository.getByIdea(idea);
         List<Matching> matchings2 = matchRepository.getByIdeaMatch(idea);
@@ -22,6 +25,10 @@ public class MatchService {
             matchRepository.delete(matchings1);
         }
         if (matchings2 != null) {
+            for (Matching matching : matchings2) {
+                Idea ideaToUpdate = matching.getIdea();
+                ideaService.updateSimilarities(ideaToUpdate, -1);
+            }
             matchRepository.delete(matchings2);
         }
     }
