@@ -83,6 +83,7 @@ public class UserController extends BaseController {
     public String myProfile(HttpServletRequest request, Model model) {
         User user = getCurrentUser();
         List<Idea> ideaList = ideaService.getIdeasByUser(user);
+        model.addAttribute("phone", user.getPhone_number());
         model.addAttribute("fullname", user.getFull_name());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("occupation", user.getOccupation());
@@ -109,6 +110,7 @@ public class UserController extends BaseController {
         model.addAttribute("fullname", viewedUser.getFull_name());
         model.addAttribute("username", viewedUser.getUsername());
         model.addAttribute("occupation", viewedUser.getOccupation());
+        model.addAttribute("phone", viewedUser.getPhone_number());
         List<Idea> myIdeas = ideaService.getIdeasByUser(currentUser);
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("messagesNumber", currentUser.getMessages().size());

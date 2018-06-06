@@ -143,6 +143,18 @@ body {
     margin-top: -281px;
 }
 
+.messageButton {
+    margin-left: 10px;
+    float: left;
+    margin-top: -245px;
+}
+
+.phoneNumber {
+    float: left;
+    margin-top: -258px;
+    margin-left: 10px;
+}
+
 .userprofile.social {
     background: url(../img/p4.jpg) no-repeat top center;
     background-size: 100%;

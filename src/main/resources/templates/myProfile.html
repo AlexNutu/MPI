@@ -36,8 +36,8 @@
             <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
         </div>
         <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()" class="active"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
-            <li sec:authorize="isAnonymous()" class="active"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
             <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
@@ -274,12 +274,13 @@
                         <div class="userpic"> <img th:src="${'../img/' + image}" alt="" class="userpicimg"/> </div>
                         <h3 class="username" th:text="${fullname}" style="font-size: 30px">Lucky Sans</h3>
                         <p th:text="'- ' +${occupation} + ' -'"> Developer </p>
-                        <!--<div class="socials tex-center"> <a href="" class="btn btn-circle btn-primary ">-->
-                            <!--<i class="fa fa-facebook"></i></a> <a href="" class="btn btn-circle btn-danger ">-->
-                            <!--<i class="fa fa-google-plus"></i></a> <a href="" class="btn btn-circle btn-info ">-->
-                            <!--<i class="fa fa-twitter"></i></a> <a href="" class="btn btn-circle btn-warning "><i class="fa fa-envelope"></i></a>-->
+                        <!--<div class="socials tex-center">-->
+                            <!--<a href="" class="btn btn-circle btn-warning "><i class="fa fa-envelope"></i></a>-->
                         <!--</div>-->
                     </div>
+
+                    <p th:if="${phone} != null" style=" margin-right: 14px; color: #ffffff; text-shadow: 2px 2px 4px #000000; font-weight: bold " class="phoneNumber"><i>Phone: </i><span th:text="${phone}">02130812931</span></p>
+
                     <div class="col-md-12 border-top border-bottom">
                         <ul class="nav nav-pills pull-left countlist" role="tablist">
                             <li role="presentation">

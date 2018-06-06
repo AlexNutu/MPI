@@ -383,11 +383,15 @@ $(window).on('keydown', function(e) {
 
 
 <h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px; font-size: 36px;">Messages</h1>
+<!--Hangout button-->
+<div style="margin-left: 1330px; height: 30px;">
+    <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
+    <div class="g-hangout" data-render="createhangout"></div>
+</div>
+
 <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
-<!--Hangout button-->
-<script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
-<div class="g-hangout" data-render="createhangout"></div>
+
 
 <div th:if="${convMessages.size()} == 0" style="text-align: center; margin-top: 59px; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-info alert-dismissible fade in" >
     You have no <strong style="font-weight: bold "> messages </strong> yet!

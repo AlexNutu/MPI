@@ -134,6 +134,7 @@ public class AnonymousController extends BaseController {
         model.addAttribute("fullname", user.getFull_name());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("occupation", user.getOccupation());
+        model.addAttribute("phone", user.getPhone_number());
         model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
