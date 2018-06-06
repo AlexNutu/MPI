@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../../css/messages.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
@@ -315,7 +316,7 @@
 
 <div class="container">
     <div class="row">
-        <h1 style="margin-bottom: -10px; text-align:center; margin-top: 77px;">My Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
+        <h1 style="font-family: 'Crete Round', serif; margin-bottom: -10px; text-align:center; margin-top: 77px;">My Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
         <hr class="hr-primary" style="  height: 4px;" />
         <ol th:if="${myCategoryList.size()} > 0" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
             <button href="#" style="background-color: #b2bdc6; border-color: #b2bdc6;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
@@ -353,7 +354,7 @@
                     <div class="col-sm-7">
                         <div class="details" style="margin: -40px -180px 45px -90px;">
                             <a th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
-                            <h4 th:text="${idea.getTitle()}" style="font-size: 19px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                            <h4 th:text="${idea.getTitle()}" style="font-size: 23px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
                             <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                             <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 

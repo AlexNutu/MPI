@@ -5,6 +5,7 @@
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="../css/ideas.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../js/navbar.js"></script>
@@ -260,7 +261,7 @@
 
     <div class="container">
         <div class="row">
-            <h1 style="text-align:center; margin-top: 81px;">My Profile</h1>
+            <h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px;">My Profile</h1>
             <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
         </div>
@@ -272,14 +273,14 @@
                 <div class="panel panel-default">
                     <div class="userprofile social ">
                         <div class="userpic"> <img th:src="${'../img/' + image}" alt="" class="userpicimg"/> </div>
-                        <h3 class="username" th:text="${fullname}" style="font-size: 30px">Lucky Sans</h3>
+                        <h3 class="username" th:text="${fullname}" style="line-height: 23px; font-size: 30px">Lucky Sans</h3>
                         <p th:text="'- ' +${occupation} + ' -'"> Developer </p>
                         <!--<div class="socials tex-center">-->
                             <!--<a href="" class="btn btn-circle btn-warning "><i class="fa fa-envelope"></i></a>-->
                         <!--</div>-->
                     </div>
 
-                    <p th:if="${phone} != null" style=" margin-right: 14px; color: #ffffff; text-shadow: 2px 2px 4px #000000; font-weight: bold " class="phoneNumber"><i>Phone: </i><span th:text="${phone}">02130812931</span></p>
+                    <p th:if="${phone} != null" style="margin-top: -258px; margin-right: 14px; color: #ffffff; text-shadow: 2px 2px 4px #000000; font-weight: bold " class="phoneNumber"><i>Phone: </i><span th:text="${phone}">02130812931</span></p>
 
                     <div class="col-md-12 border-top border-bottom">
                         <ul class="nav nav-pills pull-left countlist" role="tablist">
