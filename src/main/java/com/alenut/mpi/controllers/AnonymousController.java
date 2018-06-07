@@ -108,20 +108,36 @@ public class AnonymousController extends BaseController {
     }
 
     @RequestMapping(value = "/userIdeas", method = RequestMethod.GET)
-    public String userIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") Long userId) {
+    public String userIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") Long userId, @RequestParam(defaultValue = "-1") long category) {
 
         User viewedUser = userRepository.getById(userId);
         model.addAttribute("viewedUser", viewedUser);
+        Category choseCategory = new Category();
 
         Page<Idea> ideas = null;
-        ideas = ideaService.getIdeasByUser(page, viewedUser);
+        if (category != -1) {
+            choseCategory = categoryRepository.getById(category);
+            ideas = ideaService.getIdeasByUserAndCategory(page, viewedUser, choseCategory);
+        }else{
+            ideas = ideaService.getIdeasByUser(page, viewedUser);
+        }
 
         model.addAttribute("ideasList", ideas);
         model.addAttribute("currentPage", page);
-        List<Category> myCategoryList = categoryService.getUniqueCategoriesByUser(ideas);
-        model.addAttribute("myCategoryList", myCategoryList);
+        List<Category> userCategoryList = categoryService.getUniqueCategoriesByUser(ideas);
+        model.addAttribute("myCategoryList", userCategoryList);
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+
+        // construct the filteredCategoryList
+        List<Category> filteredCategoryList = new ArrayList<>();
+        if (category == -1) {
+            filteredCategoryList = userCategoryList;
+        } else {
+            filteredCategoryList.add(choseCategory);
+        }
+        model.addAttribute("filteredCategoryList", filteredCategoryList);
+        model.addAttribute("currentCategoryId", category);
 
         return "userIdeas";
     }

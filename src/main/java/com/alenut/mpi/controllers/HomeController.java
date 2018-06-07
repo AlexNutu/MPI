@@ -464,15 +464,21 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping(value = "/myIdeas", method = RequestMethod.GET)
-    public String myIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page) {
+    public String myIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "-1") long category) {
         User user = getCurrentUser();
         model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("fullname", user.getFull_name());
         model.addAttribute("occupation", user.getOccupation());
+        Category choseCategory = new Category();
 
         Page<Idea> ideas = null;
-        ideas = ideaService.getIdeasByUser(page, user);
+        if (category != -1) {
+            choseCategory = categoryRepository.getById(category);
+            ideas = ideaService.getIdeasByUserAndCategory(page, user, choseCategory);
+        }else{
+            ideas = ideaService.getIdeasByUser(page, user);
+        }
 
         boolean ok = false;
         for (Idea idea : ideas) {
@@ -502,22 +508,36 @@ public class HomeController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> myCategoryList = categoryService.getUniqueCategoriesByUser(myIdeas);
         model.addAttribute("myCategoryList", myCategoryList);
-        List<Category> categoryList = categoryService.getAllCategories();
-        model.addAttribute("categoryList", categoryList);
+
+        // construct the filteredCategoryList
+        List<Category> filteredCategoryList = new ArrayList<>();
+        if (category == -1) {
+            filteredCategoryList = myCategoryList;
+        } else {
+            filteredCategoryList.add(choseCategory);
+        }
+        model.addAttribute("filteredCategoryList", filteredCategoryList);
+        model.addAttribute("currentCategoryId", category);
 
         return "myIdeas";
     }
 
     @RequestMapping(value = "/userIdeas", method = RequestMethod.GET)
-    public String userIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") Long userId) {
+    public String userIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") Long userId, @RequestParam(defaultValue = "-1") long category) {
         User user = getCurrentUser();
 
         User viewedUser = userRepository.getById(userId);
         model.addAttribute("currentUser", user);
         model.addAttribute("viewedUser", viewedUser);
+        Category choseCategory = new Category();
 
         Page<Idea> ideas = null;
-        ideas = ideaService.getIdeasByUser(page, viewedUser);
+        if (category != -1) {
+            choseCategory = categoryRepository.getById(category);
+            ideas = ideaService.getIdeasByUserAndCategory(page, viewedUser, choseCategory);
+        }else{
+            ideas = ideaService.getIdeasByUser(page, viewedUser);
+        }
 
         boolean ok = false;
         for (Idea idea : ideas) {
@@ -545,10 +565,18 @@ public class HomeController extends BaseController {
         model.addAttribute("ideasList", ideas);
         model.addAttribute("currentPage", page);
         model.addAttribute("messagesNumber", user.getMessages().size());
-        List<Category> myCategoryList = categoryService.getUniqueCategoriesByUser(ideas);
-        model.addAttribute("myCategoryList", myCategoryList);
-        List<Category> categoryList = categoryService.getAllCategories();
-        model.addAttribute("categoryList", categoryList);
+        List<Category> userCategoryList = categoryService.getUniqueCategoriesByUser(ideas);
+        model.addAttribute("myCategoryList", userCategoryList);
+
+        // construct the filteredCategoryList
+        List<Category> filteredCategoryList = new ArrayList<>();
+        if (category == -1) {
+            filteredCategoryList = userCategoryList;
+        } else {
+            filteredCategoryList.add(choseCategory);
+        }
+        model.addAttribute("filteredCategoryList", filteredCategoryList);
+        model.addAttribute("currentCategoryId", category);
 
         return "userIdeas";
     }

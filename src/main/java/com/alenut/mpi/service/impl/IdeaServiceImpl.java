@@ -124,7 +124,11 @@ public class IdeaServiceImpl {
     }
 
     public Page<Idea> getIdeasByUser(int pageNumber, User user) {
-        return ideaRepository.findByUser(user, new PageRequest(pageNumber, 5));
+        return ideaRepository.findByUserOrderByIdDesc(user, new PageRequest(pageNumber, 5));
+    }
+
+    public Page<Idea> getIdeasByUserAndCategory(int pageNumber, User user, Category category){
+        return ideaRepository.findByUserAndCategoryOrderByIdDesc(user, category, new PageRequest(pageNumber, 5));
     }
 
     public Idea getIdeaById(Long id) {
