@@ -328,10 +328,10 @@
                             <p sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" data-placement="top" title="Edit"><a th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a></p>
 
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-7" style="width: 64.333333%">
                             <div class="details">
                                 <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
-                                <h4 th:text="${idea.getTitle()}" style="font-size: 23px; font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                                <h4 th:text="${idea.getTitle()}" style="font-size: 21px; font-weight: bold; display:inline-block;margin-right:10px;"></h4>
                                 <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                                 <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 

@@ -6,6 +6,7 @@ import com.alenut.mpi.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +25,7 @@ public class MatchService {
         if (matchings1 != null) {
             matchRepository.delete(matchings1);
         }
-        if (matchings2 != null) {
+        if (matchings2.size() > 0) {
             for (Matching matching : matchings2) {
                 Idea ideaToUpdate = matching.getIdea();
                 ideaService.updateSimilarities(ideaToUpdate, -1);

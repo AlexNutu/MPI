@@ -50,6 +50,10 @@ public class IdeaServiceImpl {
     @Autowired
     private FollowingRepository followingRepository;
 
+    public void updateImagePath(String imagePath, Idea idea) {
+        ideaRepository.setNewPathForImage(imagePath, idea.getId());
+    }
+
     public void updateLikesPlus(Idea idea) {
         ideaRepository.setNewLikenumberFor(idea.getLikenumber() + 1, idea.getId());
     }
@@ -63,7 +67,8 @@ public class IdeaServiceImpl {
     }
 
     public void updateSimilarities(Idea idea, int val) {
-        ideaRepository.setNewSimnumberFor(idea.getSimnumber() + val, idea.getId());
+        Idea updatedWithSimNumberIdea = ideaRepository.getById(idea.getId());
+        ideaRepository.setNewSimnumberFor(updatedWithSimNumberIdea.getSimnumber() + val, idea.getId());
     }
 
     public Page<Idea> getAllIdeas(int pageNumber) {
@@ -178,63 +183,51 @@ public class IdeaServiceImpl {
 
     public void addMatchings(Idea idea) throws UnirestException {
         List<Idea> ideasByCategory = ideaRepository.getIdeasByCategory(idea.getCategory());
-
+        int matchingsNr = 0;
         for (Idea idea1 : ideasByCategory) {
 
             if (!idea1.getId().equals(idea.getId())) { // sa nu existe matching cu propria idee
 
-                HttpResponse<JsonNode> responseSemantic = Unirest.post("https://api.dandelion.eu/datatxt/sim/v1")
+                HttpResponse<JsonNode> responseSemantic = Unirest.post("https://twinword-text-similarity-v1.p.mashape.com/similarity/")
+                        .header("X-Mashape-Key", "xQAgEeWKfhmshNOMu3BRfpS2gHCHp1R1gTBjsnyy76dxDTDwaf")
                         .header("Content-Type", "application/x-www-form-urlencoded")
                         .header("Accept", "application/json")
-                        .field("token", "a7252c0613ae465fa0fefbcd7a5894d6")
                         .field("text1", idea.getBody())
                         .field("text2", idea1.getBody())
                         .asJson();
 
                 String scoreSemantic = responseSemantic.getBody().getObject().get("similarity").toString();
+                if (scoreSemantic.contains("-")) {
+                    scoreSemantic = "0.0";
+                }
+                if (scoreSemantic.length() > 5) {
+                    scoreSemantic = scoreSemantic.substring(0, 6);
+                }
 
-                HttpResponse<JsonNode> responseSintactic = Unirest.post("https://api.dandelion.eu/datatxt/sim/v1")
-                        .header("Content-Type", "application/x-www-form-urlencoded")
-                        .header("Accept", "application/json")
-                        .field("token", "a7252c0613ae465fa0fefbcd7a5894d6")
-                        .field("bow", "always")
-                        .field("text1", idea.getBody())
-                        .field("text2", idea1.getBody())
-                        .asJson();
+                Double doubleSemantic = Double.parseDouble(scoreSemantic) * 100;
 
-                String scoreSintactic = responseSintactic.getBody().getObject().get("similarity").toString();
-
-                Double doubleSemantic = Double.parseDouble(scoreSemantic) * 100.0;
-                Double doubleSintactic = Double.parseDouble(scoreSintactic) * 100.0;
-
-                if (doubleSemantic >= 20.0) {
+                if (doubleSemantic >= 45.0) {
                     Matching matching = new Matching();
                     Matching matching2 = new Matching();
                     matching.setIdea(idea);
                     matching.setIdeaMatch(idea1);
                     matching2.setIdea(idea1);
                     matching2.setIdeaMatch(idea);
-                    String semantic = doubleSemantic.toString(), sintactic = doubleSintactic.toString();
-                    if (semantic.length() > 5) {
-                        semantic = semantic.substring(0, 5);
-                    }
-                    if (sintactic.length() > 5) {
-                        sintactic = sintactic.substring(0, 5);
-                    }
+                    String semantic = doubleSemantic.toString();
+
                     matching.setSemantic(semantic);
-                    matching.setSintactic(sintactic);
                     matching2.setSemantic(semantic);
-                    matching2.setSintactic(sintactic);
 
                     matchRepository.save(matching);
                     matchRepository.save(matching2);
-                    updateSimilarities(matching.getIdea(), 1);
+                    // update the other ideas simnumber
                     updateSimilarities(matching.getIdeaMatch(), 1);
-                    updateSimilarities(matching2.getIdea(), 1);
-                    updateSimilarities(matching2.getIdeaMatch(), 1);
+                    matchingsNr++;
                 }
             }
         }
+        // update simnumber for the new idea
+        updateSimilarities(idea, matchingsNr);
     }
 
     public void addTags(Idea idea) throws Exception {
@@ -245,16 +238,25 @@ public class IdeaServiceImpl {
 
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(keywords);
-        JSONArray jsonArray = (JSONArray) json.get("keywords");
+        // daca vectorul de keywords nu este gol
+        if (!json.get("keywords").toString().contains("keywords\":[]")) {
+            JSONArray jsonArray = (JSONArray) json.get("keywords");
 
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-            String keyword = jsonObject.get("keyword").toString();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                String keyword = jsonObject.get("keyword").toString();
+                Tag tag = new Tag();
+                tag.setIdea(idea);
+                tag.setBody(keyword);
+                tagRepository.save(tag);
+            }
+        }else{
             Tag tag = new Tag();
             tag.setIdea(idea);
-            tag.setBody(keyword);
+            tag.setBody(" No tags found");
             tagRepository.save(tag);
         }
+
     }
 
     public void addComment(Comment comment) {

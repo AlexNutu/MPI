@@ -20,8 +20,8 @@ public class Matching {
     @Column(name = "semantic")
     private String semantic;
 
-    @Column(name = "sintactic")
-    private String sintactic;
+//    @Column(name = "sintactic")
+//    private String sintactic;
 
     public Long getId() {
         return id;
@@ -55,11 +55,11 @@ public class Matching {
         this.semantic = semantic;
     }
 
-    public String getSintactic() {
-        return sintactic;
-    }
-
-    public void setSintactic(String sintactic) {
-        this.sintactic = sintactic;
-    }
+//    public String getSintactic() {
+//        return sintactic;
+//    }
+//
+//    public void setSintactic(String sintactic) {
+//        this.sintactic = sintactic;
+//    }
 }

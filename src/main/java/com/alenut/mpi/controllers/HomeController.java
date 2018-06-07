@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,6 +71,9 @@ public class HomeController extends BaseController {
 
     @Autowired
     private IdeaRepository ideaRepository;
+
+    @Autowired
+    private PictureLoaderService pictureLoaderService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
@@ -401,6 +405,14 @@ public class HomeController extends BaseController {
         tagService.deleteTagsByIdea(idea);
 
         ideaService.deleteIdea(idea);
+        // deleting the idea's image
+        if (!idea.getImage_path().contains("idea7.jpg")) {
+            try {
+                pictureLoaderService.deletePictureFromDisk(idea.getImage_path());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (ideas.getContent().size() > 1) { // daca am macar 2 elemente pe pagina
             return "redirect:/user/home/?page=" + page;
@@ -432,6 +444,14 @@ public class HomeController extends BaseController {
         tagService.deleteTagsByIdea(idea);
 
         ideaService.deleteIdea(idea);
+        // deleting the idea's image
+        if (!idea.getImage_path().contains("idea7.jpg")) {
+            try {
+                pictureLoaderService.deletePictureFromDisk(idea.getImage_path());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (ideas.getContent().size() > 1) { // daca am macar 2 elemente pe pagina
             return "redirect:/user/myIdeas/?page=" + page;
@@ -517,7 +537,8 @@ public class HomeController extends BaseController {
                 if (idea1.getBody().length() > 679) {
                     idea1.setBody(idea1.getBody().substring(0, 678) + " ...");
                 }
-            }}
+            }
+        }
 
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
@@ -580,13 +601,7 @@ public class HomeController extends BaseController {
             modelAndView.setViewName("postIdea");
         } else {
             modelAndView.setViewName("redirect:postIdea");
-            // image uploading on file disk
-            if (!idea.getImage_path().equals("")) {
-                String imagePath = ideaService.saveIdeaImage(image, idea);
-                idea.setImage_path(imagePath);
-            } else {
-                idea.setImage_path("idea7.jpg");
-            }
+
             ideaService.insert(idea, user);
             // Add matchings with this idea
             ideaService.addMatchings(idea);
@@ -594,6 +609,17 @@ public class HomeController extends BaseController {
             ideaService.addTags(idea);
             // Send emails to the followers
             ideaService.sendEmails(user, idea);
+
+            // image uploading on file disk
+            String imagePath = "";
+            if (!idea.getImage_path().equals("")) {
+                imagePath = ideaService.saveIdeaImage(image, idea);
+                //idea.setImage_path(imagePath);
+            } else {
+                imagePath = "idea7.jpg";
+                //idea.setImage_path("idea7.jpg");
+            }
+            ideaService.updateImagePath(imagePath, idea);
 
             redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());
@@ -641,13 +667,34 @@ public class HomeController extends BaseController {
         List<Idea> matchingIdeasWithScores = new ArrayList<>();
         List<Matching> matchings = idea.getMatchings();
         List<Matching> matchings2 = idea.getMatchings2();
-        matchings.addAll(matchings2);
+        List<Matching> matchings2NoDuplicates = new ArrayList<>();
+
+        //verificam daca matchings2 nu e de fapt matchings
+        for (Matching matching2 : matchings2) {
+            boolean ok = true;
+            for (Matching matching1 : matchings) {
+                if (!(matching1.getIdea().equals(matching2.getIdeaMatch()) && matching1.getIdeaMatch().equals(matching2.getIdea()))) {
+                    ok = false;
+                }
+            }
+            if (ok) {
+                matchings2NoDuplicates.add(matching2);
+            }
+        }
+
+        matchings.addAll(matchings2NoDuplicates);
 
         if (matchings.size() > 0) {
             for (Matching matching : matchings) {
-                Idea idea1 = matching.getIdeaMatch();
+                Idea idea1 = null;
+                if (matching.getIdea().equals(idea)) {
+                    idea1 = matching.getIdeaMatch();
+                } else if (matching.getIdeaMatch().equals(idea)) {
+                    idea1 = matching.getIdea();
+                }
+
                 idea1.setSemantic(matching.getSemantic());
-                idea1.setSintactic(matching.getSintactic());
+//                idea1.setSintactic(matching.getSintactic());
                 if (idea1.getBody().length() > 209) {
                     idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
                 }

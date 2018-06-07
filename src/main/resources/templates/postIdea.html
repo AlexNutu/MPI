@@ -347,7 +347,7 @@
             <div class="form-group" style="width: 100%; margin-bottom: 3%;">
                 <label for="selectImage" class="col-md-4 control-label">Image (Optional)</label>
                 <div class="col-md-4">
-                        <input type="file" accept="image/png, image/jpeg, image/jpg, image/gif" name="file" id="selectImage" class="file" />
+                        <input type="file" data-filesize="5000" accept="image/png, image/jpeg, image/jpg, image/gif" name="file" id="selectImage" class="file" />
                         <div class="input-group col-xs-12">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
                                  <input type="text" th:field="*{image_path}" style="background-color: white" class="form-control input-md" readonly="true" placeholder="Upload Image"/>

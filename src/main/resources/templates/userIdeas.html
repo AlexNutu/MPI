@@ -13,7 +13,7 @@
     <script src="../../js/userHome.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
 
-
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
     <link href="../../css/notification.css" rel="stylesheet"/>
@@ -156,77 +156,12 @@
             </div>
         </form>
 
-        <!--<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">-->
-            <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li class="dropdown dropdown-notifications">-->
-                    <!--<a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown">-->
-                        <!--<i data-count="2" class="glyphicon glyphicon-bell notification-icon"></i>-->
-                    <!--</a>-->
-
-                    <!--<div class="dropdown-container dropdown-position-bottomright">-->
-
-                        <!--<div class="dropdown-toolbar">-->
-                            <!--<div class="dropdown-toolbar-actions">-->
-                                <!--<a href="#"><i class="glyphicon glyphicon-search"></i> View All</a>-->
-                            <!--</div>-->
-                            <!--<h3 class="dropdown-toolbar-title">Recent (3)</h3>-->
-                        <!--</div>-->
-
-                        <!--&lt;!&ndash; /dropdown-toolbar &ndash;&gt;-->
-                        <!--<ul class="dropdown-menu notification drop-content">-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">Dave Lister</a> commented on <a href="#">DWARF-13 - Maintenance</a></strong>-->
-                                        <!--<p class="notification-desc">I totally don't wanna do it. Rimmer can do it.</p>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">27. 11. 2015, 15:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">1. 9. 2015, 08:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                        <!--</ul>-->
-
-                        <!--<div class="dropdown-footer text-center">-->
-                            <!--<a href="#"> <i class="fa fa-eye"></i> View All</a>-->
-                        <!--</div>&lt;!&ndash; /dropdown-footer &ndash;&gt;-->
-
-                    <!--</div>&lt;!&ndash; /dropdown-container &ndash;&gt;-->
-                <!--</li>&lt;!&ndash; /dropdown &ndash;&gt;-->
-            <!--</ul>-->
-        <!--</div>-->
-
     </div>
 </nav>
 
 <div class="container">
     <div class="row">
-        <h1 style="margin-bottom: -10px; text-align:center; margin-top: 77px;">User Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
+        <h1 style="font-family: 'Crete Round', serif; margin-bottom: -10px; text-align:center; margin-top: 77px;">User Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
         <hr class="hr-primary" style="  height: 4px;" />
         <ol th:if="${myCategoryList.size()} > 0" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
             <button href="#" style="background-color: #b2bdc6; border-color: #b2bdc6;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
@@ -266,7 +201,7 @@
                 <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: 25%">
                     <div class="col-sm-7">
                         <div class="details" style="margin: -40px -180px 45px -90px;">
-                            <h4 th:text="${idea.getTitle()}" style="font-size: 19px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                            <h4 th:text="${idea.getTitle()}" style="font-size: 21px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
                             <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 
                             <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
@@ -282,7 +217,7 @@
                                     <p>
                                         <i class="glyphicon glyphicon-thumbs-up"></i><i class="ideaNr" style="font-weight: bold;" th:text="${' ' + idea.getAppreciations().size() + ' '}" th:value="${idea.getId()}"></i><i style="color: #337ab7">Likes</i>
                                         | <i class="glyphicon glyphicon-comment"></i><i style="font-weight: bold;" th:text="${' ' + idea.getComments().size() + ' '}"></i><i style="color: #337ab7">Comments</i>
-                                        | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getMatchings().size() + ' '}"></i><i style="color: #337ab7">Matchings</i>
+                                        | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getMatchings().size() + ' '}"></i><i style="color: #337ab7">Similarities</i>
                                         | <i class="glyphicon glyphicon-tags" style="font-size: 10px"></i> <i> Tags :</i>
                                         <a sec:authorize="isAuthenticated()" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
                                         <a sec:authorize="isAnonymous()" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>

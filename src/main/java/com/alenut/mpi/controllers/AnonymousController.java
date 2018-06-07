@@ -94,7 +94,7 @@ public class AnonymousController extends BaseController {
             for (Matching matching : matchings) {
                 Idea idea1 = matching.getIdeaMatch();
                 idea1.setSemantic(matching.getSemantic());
-                idea1.setSintactic(matching.getSintactic());
+//                idea1.setSintactic(matching.getSintactic());
                 if (idea1.getBody().length() > 209) {
                     idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
                 }

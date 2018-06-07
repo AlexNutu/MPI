@@ -354,7 +354,7 @@
                     <div class="col-sm-7">
                         <div class="details" style="margin: -40px -180px 45px -90px;">
                             <a th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
-                            <h4 th:text="${idea.getTitle()}" style="font-size: 23px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                            <h4 th:text="${idea.getTitle()}" style="font-size: 21px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
                             <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                             <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 
@@ -370,7 +370,7 @@
                                     <p>
                                         <i class="glyphicon glyphicon-thumbs-up"></i><i class="ideaNr" style="font-weight: bold;" th:text="${' ' + idea.getAppreciations().size() + ' '}" th:value="${idea.getId()}"></i><i style="color: #337ab7">Likes</i>
                                         | <i class="glyphicon glyphicon-comment"></i><i style="font-weight: bold;" th:text="${' ' + idea.getComments().size() + ' '}"></i><i style="color: #337ab7">Comments</i>
-                                        | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getMatchings().size() + ' '}"></i><i style="color: #337ab7">Matchings</i>
+                                        | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getMatchings().size() + ' '}"></i><i style="color: #337ab7">Similarities</i>
                                         | <i class="glyphicon glyphicon-tags" style="font-size: 10px"></i> <i> Tags :</i>
                                         <a sec:authorize="isAuthenticated()" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
                                         <a sec:authorize="isAnonymous()" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>

@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     public Integer getNoOfMatchings(List<Idea> ideas) {
         int nr = 0;
         for (Idea idea : ideas) {
-            nr += matchRepository.getByIdea(idea).size();
+            nr += idea.getSimnumber();
         }
         return nr;
     }
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
     public Integer getNoOfLikes(List<Idea> ideas) {
         int nr = 0;
         for (Idea idea : ideas) {
-            nr += appreciationRepository.getByIdea(idea).size();
+            nr += idea.getLikenumber();
         }
         return nr;
     }
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
     public Integer getNoOfComments(List<Idea> ideas) {
         int nr = 0;
         for (Idea idea : ideas) {
-            nr += commentRepository.getByIdea(idea).size();
+            nr += idea.getComnumber();
         }
         return nr;
     }

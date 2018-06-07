@@ -19,6 +19,12 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     @Transactional(readOnly = false)
     @Modifying
+    @Query(value = "UPDATE Idea i SET i.image_path = :val WHERE i.id_idea = :id", nativeQuery = true)
+    void setNewPathForImage(@Param("val") String val, @Param("id") Long id);
+
+
+    @Transactional(readOnly = false)
+    @Modifying
     @Query(value = "UPDATE Idea i SET i.likenumber = :val WHERE i.id_idea = :id", nativeQuery = true)
     int setNewLikenumberFor(@Param("val") int val, @Param("id") Long id);
 
