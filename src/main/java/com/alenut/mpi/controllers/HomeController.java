@@ -476,7 +476,7 @@ public class HomeController extends BaseController {
         if (category != -1) {
             choseCategory = categoryRepository.getById(category);
             ideas = ideaService.getIdeasByUserAndCategory(page, user, choseCategory);
-        }else{
+        } else {
             ideas = ideaService.getIdeasByUser(page, user);
         }
 
@@ -535,7 +535,7 @@ public class HomeController extends BaseController {
         if (category != -1) {
             choseCategory = categoryRepository.getById(category);
             ideas = ideaService.getIdeasByUserAndCategory(page, viewedUser, choseCategory);
-        }else{
+        } else {
             ideas = ideaService.getIdeasByUser(page, viewedUser);
         }
 
@@ -838,8 +838,38 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping(value = "/chart", method = RequestMethod.GET)
-    public String calendar(HttpServletRequest request, Model model) {
-        return "calendar";
+    public String categoryChart(HttpServletRequest request, Model model) {
+        User user = getCurrentUser();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("currentUser", user);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+
+        Collections.sort(categoryList, new Comparator<Category>() {
+            @Override
+            public int compare(Category o1, Category o2) {
+                return o2.getIdeasFromCategory().size() - o1.getIdeasFromCategory().size();
+            }
+        });
+
+        // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
+        List<Idea> myIdeas = ideaService.getIdeasByUser(user);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+
+        model.addAttribute("category1", categoryList.get(0).getBody());
+        model.addAttribute("category2", categoryList.get(1).getBody());
+        model.addAttribute("category3", categoryList.get(2).getBody());
+        model.addAttribute("category4", categoryList.get(3).getBody());
+        model.addAttribute("category5", categoryList.get(4).getBody());
+        model.addAttribute("nrIdeas1", categoryList.get(0).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas2", categoryList.get(1).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas3", categoryList.get(2).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas4", categoryList.get(3).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas5", categoryList.get(4).getIdeasFromCategory().size());
+
+        return "categoryChart";
     }
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)

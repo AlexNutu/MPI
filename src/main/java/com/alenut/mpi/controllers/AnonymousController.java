@@ -22,9 +22,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -297,6 +295,32 @@ public class AnonymousController extends BaseController {
         model.addAttribute("currentCategory", category);
 
         return "mostCommented";
+    }
+
+    @RequestMapping(value = "/chart", method = RequestMethod.GET)
+    public String categoryChart(HttpServletRequest request, Model model) {
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        Collections.sort(categoryList, new Comparator<Category>() {
+            @Override
+            public int compare(Category o1, Category o2) {
+                return o2.getIdeasFromCategory().size() - o1.getIdeasFromCategory().size();
+            }
+        });
+
+        model.addAttribute("category1", categoryList.get(0).getBody());
+        model.addAttribute("category2", categoryList.get(1).getBody());
+        model.addAttribute("category3", categoryList.get(2).getBody());
+        model.addAttribute("category4", categoryList.get(3).getBody());
+        model.addAttribute("category5", categoryList.get(4).getBody());
+        model.addAttribute("nrIdeas1", categoryList.get(0).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas2", categoryList.get(1).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas3", categoryList.get(2).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas4", categoryList.get(3).getIdeasFromCategory().size());
+        model.addAttribute("nrIdeas5", categoryList.get(4).getIdeasFromCategory().size());
+
+        return "categoryChart";
     }
 
 

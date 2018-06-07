@@ -1,6 +1,7 @@
 package com.alenut.mpi.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Category {
@@ -12,6 +13,10 @@ public class Category {
 
     @Column(name = "body")
     private String body;
+
+    @OneToMany(mappedBy = "category")
+    @OrderBy("posted_date DESC")
+    private List<Idea> ideasFromCategory;
 
     public Long getId() {
         return id;
@@ -27,5 +32,13 @@ public class Category {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public List<Idea> getIdeasFromCategory() {
+        return ideasFromCategory;
+    }
+
+    public void setIdeasFromCategory(List<Idea> ideasFromCategory) {
+        this.ideasFromCategory = ideasFromCategory;
     }
 }
