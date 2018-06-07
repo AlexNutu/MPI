@@ -204,16 +204,20 @@ public class IdeaServiceImpl {
                     scoreSemantic = scoreSemantic.substring(0, 6);
                 }
 
-                Double doubleSemantic = Double.parseDouble(scoreSemantic) * 100;
+                double doubleSemantic = Double.parseDouble(scoreSemantic);
+                doubleSemantic = doubleSemantic * 100;
 
-                if (doubleSemantic >= 45.0) {
+                if (doubleSemantic >= 40.0) {
                     Matching matching = new Matching();
                     Matching matching2 = new Matching();
                     matching.setIdea(idea);
                     matching.setIdeaMatch(idea1);
                     matching2.setIdea(idea1);
                     matching2.setIdeaMatch(idea);
-                    String semantic = doubleSemantic.toString();
+                    if (doubleSemantic <= 49.9) {
+                        doubleSemantic = 50.0;
+                    }
+                    String semantic = Double.toString(doubleSemantic);
 
                     matching.setSemantic(semantic);
                     matching2.setSemantic(semantic);
@@ -250,7 +254,7 @@ public class IdeaServiceImpl {
                 tag.setBody(keyword);
                 tagRepository.save(tag);
             }
-        }else{
+        } else {
             Tag tag = new Tag();
             tag.setIdea(idea);
             tag.setBody(" No tags found");

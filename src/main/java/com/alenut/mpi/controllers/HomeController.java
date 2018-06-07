@@ -669,11 +669,11 @@ public class HomeController extends BaseController {
         List<Matching> matchings2 = idea.getMatchings2();
         List<Matching> matchings2NoDuplicates = new ArrayList<>();
 
-        //verificam daca matchings2 nu e de fapt matchings
+        // verificam daca matchings2 nu e de fapt matchings
         for (Matching matching2 : matchings2) {
             boolean ok = true;
             for (Matching matching1 : matchings) {
-                if (!(matching1.getIdea().equals(matching2.getIdeaMatch()) && matching1.getIdeaMatch().equals(matching2.getIdea()))) {
+                if ((matching1.getIdea().equals(matching2.getIdeaMatch()) && matching1.getIdeaMatch().equals(matching2.getIdea()))) {
                     ok = false;
                 }
             }
