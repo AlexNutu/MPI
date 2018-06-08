@@ -52,8 +52,13 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
                     <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
                     <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li class="divider"></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
                 </ul>
             </li>
 
@@ -265,7 +270,7 @@
 
 <div class="container" style="margin-top: 80px">
     <div class="row">
-        <h1 style="font-family: 'Crete Round', serif; margin-bottom: -10px; text-align:center; margin-top: 0;">Submit an Idea <i style="font-size: 28px" class="glyphicon glyphicon-edit"></i></h1>
+        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 0;">Submit an Idea <i style="font-size: 28px" class="glyphicon glyphicon-edit"></i></h1>
         <hr class="hr-primary" style="  height: 4px;" />
     </div>
 </div>

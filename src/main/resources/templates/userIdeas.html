@@ -105,10 +105,13 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/userIdeas/(page=0, userId=${viewedUser.getId()})}">All</a></li>
-                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/userIdeas/(page=0, userId=${viewedUser.getId()})}">All</a></li>
-                    <li sec:authorize="isAuthenticated()" th:each="category : ${myCategoryList}"><a th:href="@{/user/userIdeas/(page=0, userId=${viewedUser.getId()}, category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
-                    <li sec:authorize="isAnonymous()" th:each="category : ${myCategoryList}"><a th:href="@{/home/userIdeas/(page=0, userId=${viewedUser.getId()}, category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li class="divider"></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
                 </ul>
             </li>
 
@@ -172,7 +175,7 @@
 
 <div class="container">
     <div class="row">
-        <h1 style="font-family: 'Crete Round', serif; margin-bottom: -10px; text-align:center; margin-top: 77px;">User Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
+        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 77px;">User Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
         <hr class="hr-primary" style="  height: 4px;" />
         <ol th:if="${myCategoryList.size()} > 0" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
             <button href="#" style="background-color: #b2bdc6; border-color: #b2bdc6;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
