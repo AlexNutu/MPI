@@ -17,8 +17,11 @@
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="../../js/mk-notifications.min.js"></script>
+    <script src="../../js/newTabsHome.js"></script>
 
-    <link href="../../css/homePageTabs.css" rel="stylesheet"/>
+
+    <link href="../../css/sideAddButton.css" rel="stylesheet" />
+    <link href="../../css/newTabsHome.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
@@ -36,7 +39,7 @@
     <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
     <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
-    <title> Most Commented </title>
+    <title> Home </title>
 </head>
 
 
@@ -70,16 +73,14 @@
                     <li><a th:href="${'/user/viewAll/'}">View All</a></li>
                 </ul>
             </li>
-            <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> MPI Chart </a></li>
-
 
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
-                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/mostCommented/(page=0)}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/mostCommented/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                     <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
                     <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                     <li class="divider"></li>
@@ -125,7 +126,7 @@
                 </div>
             </div>
         </form>
-        <form sec:authorize="isAnonymous()" th:action="@{/home/(page=0)}" method="get" class="navbar-form navbar-left">
+        <form sec:authorize="isAnonymous()" th:action="@{/home/mostCommented(page=0)}" method="get" class="navbar-form navbar-left">
             <div class="input-group" style="width: auto">
                 <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
                 <div class="input-group-btn">
@@ -136,162 +137,16 @@
             </div>
         </form>
 
-        <!--<div sec:authorize="isAuthenticated()" class="collapse navbar-collapse">-->
-            <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li class="dropdown dropdown-notifications">-->
-                    <!--<a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown">-->
-                        <!--<i data-count="2" class="glyphicon glyphicon-bell notification-icon"></i>-->
-                    <!--</a>-->
-
-                    <!--<div class="dropdown-container dropdown-position-bottomright">-->
-
-                        <!--<div class="dropdown-toolbar">-->
-                            <!--<div class="dropdown-toolbar-actions">-->
-                                <!--<a href="#"><i class="glyphicon glyphicon-search"></i> View All</a>-->
-                            <!--</div>-->
-                            <!--<h3 class="dropdown-toolbar-title">Recent (3)</h3>-->
-                        <!--</div>-->
-
-                        <!--&lt;!&ndash; /dropdown-toolbar &ndash;&gt;-->
-                        <!--<ul class="dropdown-menu notification drop-content">-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">Dave Lister</a> commented on <a href="#">DWARF-13 - Maintenance</a></strong>-->
-                                        <!--<p class="notification-desc">I totally don't wanna do it. Rimmer can do it.</p>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">27. 11. 2015, 15:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">Nikola Tesla</a> resolved <a href="#">T-14 - Awesome stuff</a></strong>-->
-
-                                        <!--<p class="notification-desc">Resolution: Fixed, Work log: 4h</p>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">27. 10. 2015, 08:00</small>-->
-                                        <!--</div>-->
-
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">1. 9. 2015, 08:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">1. 9. 2015, 08:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">1. 9. 2015, 08:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">1. 9. 2015, 08:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                            <!--<li class="notification">-->
-                                <!--<div class="media">-->
-                                    <!--<div class="media-left">-->
-                                        <!--<div class="media-object">-->
-                                            <!--<img src="../img/notif.svg" class="img-circle" alt="Name"/>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                    <!--<div class="media-body">-->
-                                        <!--<strong class="notification-title"><a href="#">James Bond</a> resolved <a href="#">B-007 - Desolve Spectre organization</a></strong>-->
-
-                                        <!--<div class="notification-meta">-->
-                                            <!--<small class="timestamp">1. 9. 2015, 08:00</small>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</li>-->
-
-                        <!--</ul>-->
-
-                        <!--<div class="dropdown-footer text-center">-->
-                            <!--<a href="#"> <i class="fa fa-eye"></i> View All</a>-->
-                        <!--</div>&lt;!&ndash; /dropdown-footer &ndash;&gt;-->
-
-                    <!--</div>&lt;!&ndash; /dropdown-container &ndash;&gt;-->
-                <!--</li>&lt;!&ndash; /dropdown &ndash;&gt;-->
-            <!--</ul>-->
-        <!--</div>-->
-
     </div>
 </nav>
 
+<ul class='social'>
+    <li style="margin-left: -35px">
+        <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
+            <span>Add idea!</span>
+        </a>
+    </li>
+</ul>
 
 <div id="fb-root"></div>
 <script>
@@ -428,9 +283,9 @@
 
 </div>
 
-<div style="margin-top:25px" class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+<!--<div style="margin-top:25px" class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>-->
 
-<h2 th:if="${categoryName} != ''" th:text="'Category / ' + ${categoryName} " style="color:white; text-shadow: 2px 2px 4px #000000; font-size: 18px; position: absolute; margin-top: -67px;margin-left: 300px; margin-bottom: 60px; font-weight: bold"></h2>
+<h2 th:if="${categoryName} != ''" th:text="'Category / ' + ${categoryName} " style="color:white; text-shadow: 2px 2px 4px #000000; font-size: 18px; position: absolute; margin-top: -50px;margin-left: 300px; margin-bottom: 60px; font-weight: bold"></h2>
 
 <h1 th:if="${qTitle} != ''" th:text=" ${ideasList.getTotalElements()} + ' Ideas found for &quot;' + ${qTitle} + '&quot;' " style="margin-left:50px; margin-bottom: 60px"></h1>
 
@@ -443,49 +298,105 @@
 </div>
 
 <div class="" style="">
-
-    <div class="first1" style="position: absolute; z-index: 10;">
+    <div class="first1">
         <div class="container bootstrap snippet" style="margin-top: -35px">
             <section id="team" class="white-bg padding-top-bottom">
                 <div class="container bootstrap snippet">
 
-
                     <div th:if="${ideasList.totalPages} > 0">
 
-                        <button id="testB">da</button>
+                        <!--<button id="testB">da</button>-->
 
-                        <main style="margin-left: 330px; margin-bottom:120px;">
+                        <div class="container" style="margin-bottom: 130px; line-height: 0">
+                            <div class="row">
 
-                            <input class="inputs" id="tab4" type="radio" onclick="window.location='/user/home';" name="tabs"/>
-                            <label class="labels" for="tab4">Latest Ideas</label>
+                                <section>
+                                    <div class="wizard" style="width:900px; margin-left:80px">
+                                        <div class="wizard-inner">
+                                            <div class="connecting-line" style="top:33%"></div>
+                                            <ul class="nav nav-tabs" role="tablist" style="height: 99px; background: #fafafa url(http://subtlepatterns.com/patterns/geometry2.png);">
 
-                            <input class="inputs" id="tab3" onclick="window.location='/user/multipleSimilarities?page=0';" type="radio" name="tabs"/>
-                            <label class="labels" for="tab3">Multiple Similarities</label>
+                                                <li role="presentation" style="margin-top: -19px; margin-bottom: 22px;">
+                                                    <a sec:authorize="isAuthenticated()" href="/user/home" aria-controls="step1" role="tab" title="The latest ideas">
+                                                        <span class="round-tab">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </span>
+                                                    </a>
+                                                    <a sec:authorize="isAnonymous()" href="/home" aria-controls="step1" role="tab" title="The latest ideas">
+                                                        <span class="round-tab">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </span>
+                                                    </a>
+                                                    <p style=" font-size: 16px; font-weight: bold; text-align: center; margin-top: -9px; margin-bottom: 22px;"><small style="font-size: 82%;">Latest Ideas</small></p>
+                                                </li>
 
-                            <input class="inputs" id="tab2" onclick="window.location='/user/popular?page=0';" checked="" type="radio" name="tabs"/>
-                            <label class="labels" for="tab2">Most Popular</label>
+                                                <li role="presentation" style="margin-top: -19px; margin-bottom: 22px;">
+                                                    <a sec:authorize="isAuthenticated()" href="/user/multipleSimilarities" aria-controls="step2" role="tab" title="Ideas with many similarities">
+                                                        <span class="round-tab">
+                                                            <i class="fa fa-handshake-o"></i>
+                                                        </span>
+                                                    </a>
+                                                    <a sec:authorize="isAnonymous()" href="/home/multipleSimilarities" aria-controls="step2" role="tab" title="Ideas with many similarities">
+                                                        <span class="round-tab">
+                                                            <i class="fa fa-handshake-o"></i>
+                                                        </span>
+                                                    </a>
+                                                    <p style=" font-size: 16px; font-weight: bold; text-align: center; margin-top: -9px; margin-bottom: 22px;"><small style="font-size: 82%;">Multiple Similarities</small></p>
+                                                </li>
+                                                <li role="presentation" style="margin-top: -19px; margin-bottom: 22px;">
+                                                    <a sec:authorize="isAuthenticated()" href="/user/popular?page=0" aria-controls="step3" role="tab" title="Ideas with many likes">
+                                                        <span class="round-tab">
+                                                            <i class="glyphicon glyphicon-thumbs-up"></i>
+                                                        </span>
+                                                    </a>
+                                                    <a sec:authorize="isAnonymous()" href="/home/popular?page=0" aria-controls="step3" role="tab" title="Ideas with many likes">
+                                                        <span class="round-tab">
+                                                            <i class="glyphicon glyphicon-thumbs-up"></i>
+                                                        </span>
+                                                    </a>
+                                                    <p style=" font-size: 16px; font-weight: bold; text-align: center; margin-top: -9px; margin-bottom: 22px;"><small style="font-size: 82%;">Most Popular</small></p>
+                                                </li>
 
-                            <input class="inputs" id="tab1" onclick="window.location='/user/mostCommented?page=0';" checked="" type="radio" name="tabs"/>
-                            <label class="labels" for="tab1">Most Commented</label>
+                                                <li role="presentation" class="active" style="margin-top: -19px; margin-bottom: 22px;">
+                                                    <a sec:authorize="isAuthenticated()" href="/user/mostCommented?page=0" data-toggle="tab" aria-controls="complete" role="tab" title="Ideas with many comments">
+                                                        <span class="round-tab">
+                                                            <i class="glyphicon glyphicon-comment"></i>
+                                                        </span>
+                                                    </a>
+                                                    <a sec:authorize="isAnonymous()" href="/home/mostCommented?page=0" data-toggle="tab" aria-controls="complete" role="tab" title="Ideas with many comments">
+                                                        <span class="round-tab">
+                                                            <i class="glyphicon glyphicon-comment"></i>
+                                                        </span>
+                                                    </a>
+                                                    <p style="color: #5bc0de; font-size: 16px; font-weight: bold; text-align: center; margin-top: -9px; margin-bottom: 22px;"><small style="font-size: 82%;">Most Commented</small></p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </section>
 
-                        </main>
+                            </div>
+                        </div>
+
 
                     </div>
 
-                    <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: -60px;">
-                        <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: 7.333333%">
+                    <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: 25%;">
+
+                        <div class="col-sm-3 col-sm-offset-1 member-thumb  fade-right in" style="margin-left: -38%; margin-top: -30px">
                             <a><img class="img-responsive img-center img-thumbnail img-circle" th:src="@{'../../img/' + ${idea.getUser().getImage()}}" style="width: 82px; height: 82px;" alt="Profile image"/></a>
                             <a sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" href="/user/profile"><h4 id="3qa" th:text="${idea.getUser().getFull_name()}" th:value="${idea.getUser().getFull_name()}" style="color:#5CC9DF;">El jefe</h4></a>
                             <a sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="@{'/user/viewProfile/' + ${idea.getUser().getId()} }"><h4 id="3qa" th:text="${idea.getUser().getFull_name()}" th:value="${idea.getUser().getFull_name()}" style="color:#5CC9DF;">El jefe</h4></a>
                             <a sec:authorize="isAnonymous()" th:href="@{'/home/viewProfile/' + ${idea.getUser().getId()} }"><h4 id="3qa" th:text="${idea.getUser().getFull_name()}" th:value="${idea.getUser().getFull_name()}" style="color:#5CC9DF;">El jefe</h4></a>
                             <p th:text="${idea.getUser().getOccupation()}" style="color:black; font-size: 13px" class="title">Lead Designer &amp; Founder</p>
                             <p sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" data-placement="top" title="Edit"><a th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a></p>
-
                         </div>
+
                         <div class="col-sm-7">
-                            <div class="details">
+                            <div class="details" style="margin: -40px -192px 65px -80px;">
+
                                 <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
-                                <h4 th:text="${idea.getTitle()}" style="font-size: 19px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                                <h4 th:text="${idea.getTitle()}" style="font-size: 21px; font-weight: bold; display:inline-block; margin-right:10px;"></h4>
                                 <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                                 <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 
@@ -493,9 +404,9 @@
                                     <button id="likeB" th:value="${idea.getId()}" th:classappend="${idea.getLiked()} == 1 ? btn-warning : btn-info " type="submit" class="float-right btn btn-xs text-white appreciations" style="float: right"> <i th:classappend="${idea.getLiked()} == 1 ? fa-thumbs-o-down : fa-thumbs-o-up"  class="fa"></i> <span th:text="${idea.getLiked()} == 1 ? Dislike : Like"></span></button>
                                 </form>
 
-                                <a style="" sec:authorize="isAuthenticated()" class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
+                                <a sec:authorize="isAuthenticated()" class="read-more" th:href="@{'/user/viewIdea/' + ${idea.getId()}}">Read More</a>
+                                <a sec:authorize="isAnonymous()" class="read-more" th:href="@{'/home/viewIdea/' + ${idea.getId()}}">Read More</a>
 
-                                <a style="" sec:authorize="isAnonymous()" class="read-more" th:href="@{'/home/viewIdea/' + ${idea.getId()}}">Read More</a>
                                 <br/>
                                 <br/>
                                 <div class="row" style="font-size: 12px">
@@ -505,8 +416,8 @@
                                             | <i class="glyphicon glyphicon-comment"></i><i style="font-weight: bold;" th:text="${' ' + idea.getComnumber() + ' '}"></i><i style="color: #337ab7">Comments</i>
                                             | <i class="fa fa-handshake-o"></i><i style="font-weight: bold;" th:text="${' ' + idea.getSimnumber() + ' '}"></i><i style="color: #337ab7">Similarities</i>
                                             | <i class="glyphicon glyphicon-tags" style="font-size: 10px"></i> <i> Tags :</i>
-                                            <a sec:authorize="isAuthenticated()" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
-                                            <a sec:authorize="isAnonymous()" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
+                                            <a sec:authorize="isAuthenticated()" th:href="@{/user/mostCommented/(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
+                                            <a sec:authorize="isAnonymous()" th:href="@{/home/mostCommented(page=0,q=${tag.getBody()})}" th:each="tag : ${idea.getTags()}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span></a>
                                         </p>
                                     </div>
                                 </div>
@@ -530,9 +441,9 @@
             <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/user/mostCommented/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
             <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${categoryName} != ''"><a th:href=" @{/user/mostCommented/(page=${currentPage-1}, category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 
-            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/home/(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/home/(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${categoryName} != ''"><a th:href=" @{/home/(page=${currentPage-1}, category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/home/mostCommented(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${qTitle} == '' and ${categoryName} == ''"><a th:href=" @{/home/mostCommented(page=${currentPage-1})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != 0 and ${categoryName} != ''"><a th:href=" @{/home/mostCommented(page=${currentPage-1}, category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 
             <li th:classappend="${currentPage} == ${i}?'active':''" th:each="i : ${#numbers.sequence(0, ideasList.totalPages-1)}">
 
@@ -540,9 +451,9 @@
                 <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/user/mostCommented/(page=${i})}" th:text="${i}">1</a>
                 <a sec:authorize="isAuthenticated()" th:if="${qTitle} == '' and ${categoryName} != ''" th:href="@{/user/mostCommented/(page=${i},category=${currentCategory})}" th:text="${i}">1</a>
 
-                <a sec:authorize="isAnonymous()" th:if="${qTitle} != '' and ${categoryName} == ''" th:href="@{/home/(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
-                <a sec:authorize="isAnonymous()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/home/(page=${i})}" th:text="${i}">1</a>
-                <a sec:authorize="isAnonymous()" th:if="${qTitle} == '' and ${categoryName} != ''" th:href="@{/home/(page=${i},category=${currentCategory})}" th:text="${i}">1</a>
+                <a sec:authorize="isAnonymous()" th:if="${qTitle} != '' and ${categoryName} == ''" th:href="@{/home/mostCommented(page=${i}, q=${qTitle})}" th:text="${i}">1</a>
+                <a sec:authorize="isAnonymous()" th:if="${qTitle} == '' and ${categoryName} == ''" th:href="@{/home/mostCommented(page=${i})}" th:text="${i}">1</a>
+                <a sec:authorize="isAnonymous()" th:if="${qTitle} == '' and ${categoryName} != ''" th:href="@{/home/mostCommented(page=${i},category=${currentCategory})}" th:text="${i}">1</a>
 
             </li>
             <li th:if="${currentPage} == ${ideasList.totalPages-1}" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
@@ -551,64 +462,13 @@
             <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/user/mostCommented/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
             <li sec:authorize="isAuthenticated()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${categoryName} != ''"> <a th:href=" @{/user/mostCommented/(page=${currentPage+1},category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 
-            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} != '' and ${categoryName} == ''"> <a th:href=" @{/home/(page=${currentPage+1},q=${qTitle})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/home/(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${categoryName} != ''"> <a th:href=" @{/home/(page=${currentPage+1},category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} != '' and ${categoryName} == ''"> <a th:href=" @{/home/mostCommented(page=${currentPage+1},q=${qTitle})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${qTitle} == '' and ${categoryName} == ''"> <a th:href=" @{/home/mostCommented(page=${currentPage+1})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+            <li sec:authorize="isAnonymous()" th:if="${currentPage} != ${ideasList.totalPages-1} and ${categoryName} != ''"> <a th:href=" @{/home/mostCommented(page=${currentPage+1},category=${currentCategory})}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
         </ul>
 
     </div>
 
-
-    <div class="second2" style="position:absolute;top: 385px;">
-        <h4 style="margin-left: 1348px">Recent Ideas</h4>
-        <div style="left: 1266px" class="col-md-2">
-            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="4"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="5"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="6"></li>
-                </ol>
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <a style="text-align: center" href="/user/viewIdea/7"><h5>Some idea title bla bla bal</h5></a>
-                        <img src="http://placehold.it/292/16a085/FFF&amp;text=jQuery" alt="" class="img-responsive" />
-                    </div>
-                    <div class="item">
-                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
-                        <img src="http://placehold.it/292/d35400/FFF&amp;text=HTML5" alt="" class="img-responsive" />
-                    </div>
-                    <div class="item">
-                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
-                        <img src="http://placehold.it/292/2980b9/FFF&amp;text=CSS3" alt="" class="img-responsive" />
-                    </div>
-                    <div class="item">
-                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
-                        <img src="http://placehold.it/292/8e44ad/FFF&amp;text=jQuery2DotNet" alt="" class="img-responsive" />
-                    </div>
-                    <div class="item">
-                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
-                        <img src="http://placehold.it/292/8e44ad/FFF&amp;text=jQuery2DotNet" alt="" class="img-responsive" />
-                    </div>
-                    <div class="item">
-                        <a style="text-align: center" href="/user/viewIdea/7"><h5>ceva</h5></a>
-                        <img src="http://placehold.it/292/8e44ad/FFF&amp;text=jQuery2DotNet" alt="" class="img-responsive" />
-                    </div>
-                </div>
-                <!-- Controls -->
-                <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span></a><a class="right carousel-control"
-                                                                                 href="#carousel-example-generic" data-slide="next"><span class="glyphicon glyphicon-chevron-right">
-            </span>
-            </a>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="myForm">
@@ -674,7 +534,7 @@
 
 <br/>
 <br/>
-<footer style="margin-top: 2000px;">
+<footer style="margin-top: 0px;">
     <div class="container container2">
         <div class="row">
 

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../../css/ideas.css" />
+    <link rel="stylesheet" href="../../css/myIdeas.css" />
     <link rel="stylesheet" href="../../css/messages.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -29,6 +29,12 @@
 
     <title>My Ideas</title>
 </head>
+<style type="text/css">
+    .member-content.details:after {
+        content: none;
+    }
+</style>
+
 <script th:inline="javascript">
 
     /*<![CDATA[*/
@@ -211,10 +217,12 @@
             <div id="ideasList" style="margin-top: -66px">
 
                 <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: 25%">
+
                     <div class="col-sm-7">
                         <div class="details" style="margin: -40px -180px 45px -90px;">
+
                             <a th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
-                            <h4 th:text="${idea.getTitle()}" style="font-size: 21px;font-weight: bold; display:inline-block;margin-right:10px;"></h4>
+                            <h4 th:text="${idea.getTitle()}" style="font-size: 21px; font-weight: bold; display:inline-block; margin-right:10px;"></h4>
                             <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                             <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 

@@ -71,6 +71,12 @@ public class AnonymousController extends BaseController {
             }
         }
 
+        for (Idea idea : ideas) {
+            if (idea.getBody().length() > 679) {
+                idea.setBody(idea.getBody().substring(0, 678) + " ...");
+            }
+        }
+
         model.addAttribute("ideasList", ideas);
         model.addAttribute("currentPage", page);
         model.addAttribute("qTitle", q);
@@ -226,6 +232,11 @@ public class AnonymousController extends BaseController {
             }
         }
 
+        for (Idea idea : ideas) {
+            if (idea.getBody().length() > 679) {
+                idea.setBody(idea.getBody().substring(0, 678) + " ...");
+            }
+        }
 
         model.addAttribute("ideasList", ideas);
         model.addAttribute("currentPage", page);
@@ -257,6 +268,11 @@ public class AnonymousController extends BaseController {
             }
         }
 
+        for (Idea idea : ideas) {
+            if (idea.getBody().length() > 679) {
+                idea.setBody(idea.getBody().substring(0, 678) + " ...");
+            }
+        }
 
         model.addAttribute("ideasList", ideas);
         model.addAttribute("currentPage", page);
@@ -285,6 +301,12 @@ public class AnonymousController extends BaseController {
                 ideas = ideaService.getByTitleLikeComments(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeasComments(page);
+            }
+        }
+
+        for (Idea idea : ideas) {
+            if (idea.getBody().length() > 679) {
+                idea.setBody(idea.getBody().substring(0, 678) + " ...");
             }
         }
 

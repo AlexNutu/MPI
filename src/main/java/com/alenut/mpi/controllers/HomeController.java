@@ -171,6 +171,12 @@ public class HomeController extends BaseController {
             }
         }
 
+        for (Idea idea : ideas) {
+            if (idea.getBody().length() > 679) {
+                idea.setBody(idea.getBody().substring(0, 678) + " ...");
+            }
+        }
+
         // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
@@ -223,6 +229,12 @@ public class HomeController extends BaseController {
             }
         }
 
+        for (Idea idea : ideas) {
+            if (idea.getBody().length() > 679) {
+                idea.setBody(idea.getBody().substring(0, 678) + " ...");
+            }
+        }
+
         // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
@@ -272,6 +284,12 @@ public class HomeController extends BaseController {
             }
             if (!ok) {
                 idea.setLiked(0);
+            }
+        }
+
+        for (Idea idea : ideas) {
+            if (idea.getBody().length() > 679) {
+                idea.setBody(idea.getBody().substring(0, 678) + " ...");
             }
         }
 
