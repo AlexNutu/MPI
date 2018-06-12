@@ -61,6 +61,9 @@ public class HomeController extends BaseController {
     private UserRepository userRepository;
 
     @Autowired
+    private FollowingRepository followingRepository;
+
+    @Autowired
     private ConversationRepository conversationRepository;
 
     @Autowired
@@ -119,6 +122,19 @@ public class HomeController extends BaseController {
             }
         }
 
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
         // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
@@ -515,6 +531,24 @@ public class HomeController extends BaseController {
         userService.deleteUser(user);
 
         return "redirect:/user/dashboard/";
+    }
+
+    @PostMapping("/deleteFollowing")
+    public String deleteFollowing(User userFollowing) throws IOException {
+
+        User user = userRepository.getById(userFollowing.getId());
+        User currentUser = getCurrentUser();
+        List<Following> userFollowings = followingRepository.getByUser(currentUser);
+        Following toDeleteFollowing = null;
+        for (Following following : userFollowings) {
+            if (following.getFollowingUser().equals(user)) {
+                toDeleteFollowing = following;
+                break;
+            }
+        }
+        followingRepository.delete(toDeleteFollowing);
+
+        return "redirect:/user/followings/";
     }
 
     @PostMapping("/giveRights")
@@ -919,6 +953,55 @@ public class HomeController extends BaseController {
         return "dashboard";
     }
 
+
+    @RequestMapping(value = "/followings", method = RequestMethod.GET)
+    public String followingUsers(HttpServletRequest request, Model model) {
+        User currentUser = getCurrentUser();
+        model.addAttribute("username", currentUser.getUsername());
+        model.addAttribute("currentUser", currentUser);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+        Boolean existStudent, existDeveloper, existDirector, existTeamLeader, existFreelancer, existPrivate;
+        existStudent = existDeveloper = existDirector = existTeamLeader = existFreelancer = existPrivate = false;
+
+        List<Following> followingList = followingRepository.getByUser(currentUser);
+        List<User> followingUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            followingUsers.add(following.getFollowingUser());
+            if (following.getFollowingUser().getOccupation().equals("Student")) {
+                existStudent = true;
+            }
+            if (following.getFollowingUser().getOccupation().equals("Developer")) {
+                existDeveloper = true;
+            }
+            if (following.getFollowingUser().getOccupation().equals("Director")) {
+                existDirector = true;
+            }
+            if (following.getFollowingUser().getOccupation().equals("Team Leader")) {
+                existTeamLeader = true;
+            }
+            if (following.getFollowingUser().getOccupation().equals("Freelancer")) {
+                existFreelancer = true;
+            }
+            if (following.getFollowingUser().getOccupation().equals("Private occupation")) {
+                existPrivate = true;
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("existStudent", existStudent);
+        model.addAttribute("existDeveloper", existDeveloper);
+        model.addAttribute("existDirector", existDirector);
+        model.addAttribute("existTeamLeader", existTeamLeader);
+        model.addAttribute("existFreelancer", existFreelancer);
+        model.addAttribute("existPrivate", existPrivate);
+
+        // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
+        List<Idea> myIdeas = ideaService.getIdeasByUser(currentUser);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
+        model.addAttribute("messagesNumber", currentUser.getMessages().size());
+
+        return "followings";
+    }
 
     @RequestMapping(value = "/chart", method = RequestMethod.GET)
     public String categoryChart(HttpServletRequest request, Model model) {

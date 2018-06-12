@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" th:href="@{../../css/ideas.css}" />
+    <link rel="stylesheet" th:href="@{../../css/messages.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../../js/notification.js"></script>
+    <script src="../../js/scroll.js"></script>
+    <script src="../../js/userHome.js"></script>
+    <script src="../../js/dashboard.js"></script>
+    <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
+    <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="../../js/mk-notifications.min.js"></script>
+    <script src="../../js/followings.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{../../css/followings.css}" />
+    <link href="../../css/sideAddButton.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../../css/notification.css" rel="stylesheet"/>
+    <link href="../../css/animate.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/mk-notifications.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous"/>
+
+    <link rel="shortcut icon" href="../../img/icon.png"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
+    <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <title>Followings</title>
+</head>
+<body style="overflow:auto;">
+
+<h1 style="font-family: 'Crete Round', serif; text-align:center; text-decoration: underline; margin-top: 81px; font-size: 36px;">Following Users</h1>
+<hr class="hr-primary" style="height: 4px; margin-top: 5px" />
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i style="font-size: 16px" class="fa fa-rss" aria-hidden="true"></i> Following
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <!--<li th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>-->
+                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User1"></a></li>
+                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User2"></a></li>
+                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User3"></a></li>
+                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User4"></a></li>
+                    <li > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
+                    <li role="separator" class="divider"></li>
+                    <li><a th:href="${'/user/followings/'}">View All</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li class="divider"></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                </ul>
+
+            </li>
+
+            <li th:if="${currentUser.getRole() == 0}" sec:authorize="isAuthenticated()"><a href="/user/dashboard"><i class="fa fa-users"></i> Dashboard </a></li>
+
+            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+
+        </ul>
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
+        </ul>
+
+        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
+
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
+                    <i class="fa fa-user-circle-o" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                    <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
+                    <li class="divider"></li>
+                    <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form sec:authorize="isAnonymous()" th:action="@{/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div th:if="${followingUsers.size()} == 0" class="container" style="margin-bottom: 50px; width:920px; margin-top: 80px">
+            <div class="row">
+                <div class="oaerror info">
+                    <strong>Notice!</strong> - You are now following 0 users!
+                </div>
+            </div>
+        </div>
+
+        <section class="content" th:if="${followingUsers.size()} > 0" style="margin-top: 20px">
+            <div class="col-md-11 col-md-offset-0" style="margin-left: 50px; margin-bottom: -40px">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <button th:if="${existStudent}" type="button" class="btn btn-success btn-filter" data-target="student">Student</button>
+                                <button th:if="${existDeveloper}" type="button" class="btn btn-primary btn-filter" data-target="developer">Developer</button>
+                                <button th:if="${existDirector}" type="button" class="btn btn-filter" data-target="director">Director</button>
+                                <button th:if="${existTeamLeader}" type="button" class="btn btn-danger btn-filter" data-target="teamLeader">Team Leader</button>
+                                <button th:if="${existFreelancer}" type="button" class="btn btn-warning btn-filter" data-target="freeLancer">Freelancer</button>
+                                <button th:if="${existPrivate}" type="button" class="btn btn-info btn-filter" data-target="private">Private occupation</button>
+                                <button type="button" class="btn btn-default btn-filter" data-target="all">All</button>
+                            </div>
+                        </div>
+                        <div class="table-container tableDiv">
+                            <table class="table table-filter">
+                                <th style="">Unfollow</th>
+                                <th style="">User details</th>
+                                <tbody>
+                                <div th:each="user : ${followingUsers}">
+
+                                    <tr th:if="${user.getOccupation()} == 'Student'" data-status="student">
+                                        <td>
+                                            <div class="ckbox">
+                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="media">
+                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                </a>
+                                                <div class="media-body">
+                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                        <h4 class="title">
+                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="margin-right: 327px; font-size: 12px; margin-top: 10px" class="pull-right student">(Student)</span>
+                                                        </h4>
+                                                    </a>
+                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr th:if="${user.getOccupation()} == 'Developer'" data-status="developer">
+                                        <td>
+                                            <div class="ckbox">
+                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="media">
+                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                </a>
+                                                <div class="media-body">
+                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                        <h4 class="title">
+                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="margin-right: 315px; font-size: 12px; margin-top: 10px" class="pull-right developer">(Developer)</span>
+                                                        </h4>
+                                                    </a>
+                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr th:if="${user.getOccupation()} == 'Director'" data-status="director">
+                                        <td>
+                                            <div class="ckbox">
+                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="media">
+                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                </a>
+                                                <div class="media-body">
+                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                        <h4 class="title">
+                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="margin-right: 289px; font-size: 12px; margin-top: 10px" class="pull-right director">(Director)</span>
+                                                        </h4>
+                                                    </a>
+                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr th:if="${user.getOccupation()} == 'Team Leader'" data-status="teamLeader">
+                                        <td>
+                                            <div class="ckbox">
+                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="media">
+                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                </a>
+                                                <div class="media-body">
+                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                        <h4 class="title">
+                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="margin-right: 289px; font-size: 12px; margin-top: 10px" class="pull-right teamLeader">(Team Leader)</span>
+                                                        </h4>
+                                                    </a>
+                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr th:if="${user.getOccupation()} == 'Freelancer'" data-status="freeLancer">
+                                        <td>
+                                            <div class="ckbox">
+                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="media">
+                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                </a>
+                                                <div class="media-body">
+                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                        <h4 class="title">
+                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="margin-right: 302px; font-size: 12px; margin-top: 10px" class="pull-right freeLancer">(Freelancer)</span>
+                                                        </h4>
+                                                    </a>
+                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr th:if="${user.getOccupation()} == 'Private occupation'" data-status="private">
+                                        <td>
+                                            <div class="ckbox">
+                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="media">
+                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                </a>
+                                                <div class="media-body">
+                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                        <h4 class="title">
+                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="margin-right: 257px; font-size: 12px; margin-top: 10px;" class="pull-right private">(Private occupation)</span>
+                                                        </h4>
+                                                    </a>
+                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<div class="myFormDelete">
+    <form th:action="@{/user/deleteFollowing/}" method="post">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Unfollow this user</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id" name="id" type="hidden" value=""/>
+                        <div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to unfollow this user?</div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
+
+<footer style="margin-top: 183px;">
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+
+                    <li>
+                        <p></p>
+                    </li>
+
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+
+
+</body>
+</html>
