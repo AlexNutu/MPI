@@ -1,9 +1,7 @@
 package com.alenut.mpi.service.impl;
 
 import com.alenut.mpi.auxiliary.MD5Encryption;
-import com.alenut.mpi.entities.Comment;
-import com.alenut.mpi.entities.Idea;
-import com.alenut.mpi.entities.User;
+import com.alenut.mpi.entities.*;
 import com.alenut.mpi.repository.*;
 import com.alenut.mpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private IdeaRepository ideaRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
+
+    @Autowired
+    private ConversationRepository conversationRepository;
+
+    @Autowired
+    private FollowingRepository followingRepository;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -132,9 +139,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void editUser(User user, Long userId) throws NoSuchAlgorithmException {
-
         userRepository.editUserInfoById(user.getFull_name(), user.getUsername(), user.getEmail(), user.getPassword(),
                 user.getPhone_number(), user.getOccupation(), user.getImage(), userId);
+    }
+
+    @Override
+    public void editUser2(User user, Long userId) throws NoSuchAlgorithmException {
+        userRepository.editUserInfoById2(user.getFull_name(), user.getUsername(),
+                user.getPhone_number(), user.getOccupation(), userId);
     }
 
     public String savePhoto(MultipartFile image, User user) throws IOException {
@@ -152,4 +164,46 @@ public class UserServiceImpl implements UserService {
     public String saveImage(MultipartFile image, User user) throws IOException {
         return this.savePhoto(image, user);
     }
+
+    @Override
+    public void deleteUser(User user) throws IOException {
+        // delete user's image
+        if (!user.getImage().equals("av1.png") &&  !user.getImage().equals("user1.png")) {
+            try {
+                pictureLoaderService.deletePictureFromDisk(user.getImage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        userRepository.delete(user);
+    }
+
+    @Override
+    public void deleteUserConversations(User user) throws IOException {
+        List<Conversation> conversationList = conversationRepository.getByUser(user);
+        List<Conversation> conversationList2 = conversationRepository.getByUser2(user);
+
+        for (Conversation conversation : conversationList) {
+            List<Message> messageList = messageRepository.getByConversation(conversation);
+            messageRepository.delete(messageList);
+        }
+        for (Conversation conversation : conversationList2) {
+            List<Message> messageList = messageRepository.getByConversation(conversation);
+            messageRepository.delete(messageList);
+        }
+        // delete the conversations
+        conversationRepository.delete(conversationList);
+        conversationRepository.delete(conversationList2);
+    }
+
+    @Override
+    public void deleteUserFollowings(User user) throws IOException {
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<Following> followingList2 = followingRepository.getByFollowingUser(user);
+
+        followingRepository.delete(followingList);
+        followingRepository.delete(followingList2);
+    }
+
+
 }

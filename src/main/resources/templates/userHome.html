@@ -19,7 +19,6 @@
     <script src="../../js/mk-notifications.min.js"></script>
     <script src="../../js/newTabsHome.js"></script>
 
-
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="../../css/newTabsHome.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
@@ -89,6 +88,8 @@
                 </ul>
 
             </li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/dashboard"><i class="fa fa-users"></i> Dashboard </a></li>
 
             <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
             <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
@@ -311,10 +312,10 @@
                             <div class="row">
 
                                 <section>
-                                    <div class="wizard" style="width:900px; margin-left:80px">
+                                    <div class="wizard" style="width:900px; margin-left:80px;">
                                         <div class="wizard-inner">
-                                            <div class="connecting-line" style="top:33%"></div>
-                                            <ul class="nav nav-tabs" role="tablist" style="height: 99px; background: #fafafa url(http://subtlepatterns.com/patterns/geometry2.png);">
+                                            <div class="connecting-line"></div>
+                                            <ul id="tabList" class="nav nav-tabs" role="tablist" style="background: #fafafa url(http://subtlepatterns.com/patterns/geometry2.png);">
 
                                                 <li role="presentation" class="active" style="margin-top: -19px; margin-bottom: 22px;">
                                                     <a sec:authorize="isAuthenticated()" href="/user/home" data-toggle="tab" aria-controls="step1" role="tab" title="The latest ideas">

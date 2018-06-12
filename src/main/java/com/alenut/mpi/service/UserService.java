@@ -28,6 +28,9 @@ public interface UserService {
     void editUser(User user, Long userId) throws NoSuchAlgorithmException;
 
     @Transactional(readOnly = true)
+    void editUser2(User user, Long userId) throws NoSuchAlgorithmException;
+
+    @Transactional(readOnly = true)
     User getByUsername(String username);
 
     @Transactional(readOnly = true)
@@ -44,5 +47,14 @@ public interface UserService {
 
     @Transactional(readOnly = true)
     String saveImage(MultipartFile multipartFile, User user) throws IOException;
+
+    @Transactional(readOnly = true)
+    void deleteUser(User user) throws IOException;
+
+    @Transactional(readOnly = true)
+    void deleteUserConversations(User user) throws IOException;
+
+    @Transactional(readOnly = true)
+    void deleteUserFollowings(User user) throws IOException;
 
 }

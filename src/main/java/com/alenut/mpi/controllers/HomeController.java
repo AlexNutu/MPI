@@ -481,6 +481,52 @@ public class HomeController extends BaseController {
         }
     }
 
+    @PostMapping("/deleteUser")
+    public String deleteUser(User userDelete) throws IOException {
+
+        User user = userRepository.getById(userDelete.getId());
+
+        // delete all info from user's ideas
+        List<Idea> userIdeas = ideaRepository.getIdeasObjectsByUser(user);
+        for (Idea idea : userIdeas) {
+            //delete matchings (verify if it idea or the matching idea)
+            matchService.deleteMatchingsByIdea(idea);
+            //delete comments
+            commentsService.deleteCommentsByIdea(idea);
+            //delete appreciations
+            appreciationService.deleteAppreciationsByIdea(idea);
+            //delete tags
+            tagService.deleteTagsByIdea(idea);
+
+            // deleting the idea's image
+            if (!idea.getImage_path().contains("idea7.jpg")) {
+                try {
+                    pictureLoaderService.deletePictureFromDisk(idea.getImage_path());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            ideaService.deleteIdea(idea);
+        }
+
+        // delete all info that corresponds to this user
+        userService.deleteUserConversations(user);
+        userService.deleteUserFollowings(user);
+        userService.deleteUser(user);
+
+        return "redirect:/user/dashboard/";
+    }
+
+    @PostMapping("/giveRights")
+    public String giveRights(User userRights) throws IOException {
+
+        User user = userRepository.getById(userRights.getId());
+        // update role column
+        userRepository.setNewRole(0, user.getId());
+
+        return "redirect:/user/dashboard/";
+    }
+
     @RequestMapping(value = "/myIdeas", method = RequestMethod.GET)
     public String myIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "-1") long category) {
         User user = getCurrentUser();
@@ -854,6 +900,25 @@ public class HomeController extends BaseController {
 
         return "redirect:{conversationId}";
     }
+
+    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+    public String adminDashboard(HttpServletRequest request, Model model) {
+        User currentUser = getCurrentUser();
+        model.addAttribute("username", currentUser.getUsername());
+        model.addAttribute("currentUser", currentUser);
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+        List<User> usersList = userRepository.findAllByOrderByIdDesc();
+        model.addAttribute("usersList", usersList);
+
+        // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
+        List<Idea> myIdeas = ideaService.getIdeasByUser(currentUser);
+        model.addAttribute("myIdeasNumber", myIdeas.size());
+        model.addAttribute("messagesNumber", currentUser.getMessages().size());
+
+        return "dashboard";
+    }
+
 
     @RequestMapping(value = "/chart", method = RequestMethod.GET)
     public String categoryChart(HttpServletRequest request, Model model) {

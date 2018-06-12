@@ -234,5 +234,50 @@ public class UserController extends BaseController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/editUser/{userId}", method = RequestMethod.GET)
+    public ModelAndView editUser(HttpServletRequest request, @PathVariable Long userId, Model model) {
+
+        User currentUser = getCurrentUser();
+        User editUser = userService.getById(userId);
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(currentUser).size());
+        model.addAttribute("messagesNumber", currentUser.getMessages().size());
+
+        model.addAttribute("username", editUser.getUsername());
+        model.addAttribute("image", editUser.getImage());
+        model.addAttribute("userId", editUser.getId());
+        model.addAttribute("password", editUser.getPassword());
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        ModelAndView modelAndView = new ModelAndView("editUser");
+        modelAndView.addObject("user", editUser);
+
+        if (!model.containsAttribute("displaySuccess")) {
+            model.addAttribute("displaySuccess", "false");
+        }
+        if (!model.containsAttribute("displayError")) {
+            model.addAttribute("displayError", "false");
+        }
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/editUser/{userId}", method = RequestMethod.POST)
+    public ModelAndView editUser(@Valid User user, @PathVariable Long userId, BindingResult result, Model model, RedirectAttributes redir, HttpServletRequest request) throws NoSuchAlgorithmException, IOException {
+
+        ModelAndView modelAndView = new ModelAndView("redirect:{userId}");
+        User editUser = userService.getById(userId);
+        user.setPassword(editUser.getPassword());
+        modelAndView.addObject("user", user);
+
+        redir.addFlashAttribute("displaySuccess", "true");
+        user.setPassword(editUser.getPassword());
+        userService.editUser2(user, userId);
+
+        return modelAndView;
+    }
 
 }
