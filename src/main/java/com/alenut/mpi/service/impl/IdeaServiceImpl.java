@@ -267,8 +267,8 @@ public class IdeaServiceImpl {
 
     }
 
-    public void addComment(Comment comment) {
-        commentRepository.save(comment);
+    public Comment addComment(Comment comment) {
+        return commentRepository.save(comment);
     }
 
     public void deleteIdea(Idea idea) {

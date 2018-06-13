@@ -5,13 +5,35 @@
     <link rel="stylesheet" href="../../css/ideas.css"/>
     <link rel="stylesheet" href="../../css/viewIdea.css"/>
     <link rel="stylesheet" href="../../css/messages.css"/>
-
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+
+    <!--<script src="../../js/bootstrap-dropdownhover.min.js"></script>-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
+    <!--<script src="http://malsup.github.com/jquery.form.js"></script>-->
+    <!--<script src="../../js/comments.js"></script>-->
+    <!--<script src="../../js/notification.js"></script>-->
+    <!--<script src="../../js/scroll.js"></script>-->
+    <!--<script src="../../js/userHome.js"></script>-->
+    <!--<script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>-->
+    <!--&lt;!&ndash;corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>&ndash;&gt;-->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="../../js/notification.js"></script>
+    <script src="../../js/scroll.js"></script>
+    <script src="../../js/comments.js"></script>
+    <script src="../../js/dashboard.js"></script>
+    <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
+    <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="../../js/mk-notifications.min.js"></script>
+    <script src="../../js/followings.js"></script>
 
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
@@ -57,7 +79,7 @@
                 userImage = /*[[${userImage}]]*/ 'default';
                 userName = /*[[${username}]]*/ 'default';
                 comDate = /*[[${commentDate}]]*/ 'default';
-
+                // comId = /*[[${idComment}]]*/ 'default';
                 if($.trim(commentBody) == '') {
                     return false;
                 }
@@ -98,7 +120,7 @@
     /*]]>*/
 </script>
 
-<body>
+<body style="overflow:auto;">
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -386,13 +408,16 @@
                                 </div>
                             </div>
 
-                            <div class="commentList" name="commentList">
+                            <div class="commentList">
                                 <div th:each="com : ${comments}" class="comment-wrap">
                                     <div class="photo">
                                         <img th:src= "@{'../../img/' + ${com.getUser().getImage()}}" class="avatar2"/>
                                     </div>
                                     <div class="comment-block">
-                                        <p th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
+                                        <a sec:authorize="isAuthenticated()" th:if="${com.getUser().getId() == currentUser.getId() or currentUser.getRole() == 0}" data-toggle="tooltip" class="btn btn-danger btn-xs delBtn" th:href="@{/user/findOneComment/(id=${com.getId()})}" style="margin-bottom: 10px; margin-left: 724px"><span class="glyphicon glyphicon-trash"></span></a>
+                                        <p sec:authorize="isAuthenticated()" th:if="${com.getUser().getId() == currentUser.getId() or currentUser.getRole() == 0}" style="margin-top: -32px; margin-right:17px;" th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
+                                        <p sec:authorize="isAuthenticated()" th:if="${com.getUser().getId() != currentUser.getId() and currentUser.getRole() == 1}" th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
+                                        <p sec:authorize="isAnonymous()" th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
                                         <div class="bottom-comment">
                                             <div th:text="${com.getPosted_date()}" class="comment-date">Aug 24, 2014 @ 2:35 AM</div>
                                             <ul class="comment-actions">
@@ -411,8 +436,30 @@
     </div>
 </div>
 
-
-
+<div class="myFormDelete">
+    <form th:action="@{/user/deleteComment/}" method="post">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Delete this comment</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id" name="id" type="hidden" value=""/>
+                        <div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this comment?</div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
 
 
 <footer style="margin-top:112px !important; margin-bottom:-17px; !important; right: 0; bottom: 0; left: 0;">

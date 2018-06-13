@@ -76,6 +76,9 @@ public class HomeController extends BaseController {
     private IdeaRepository ideaRepository;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private PictureLoaderService pictureLoaderService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
@@ -409,6 +412,15 @@ public class HomeController extends BaseController {
         return idea;
     }
 
+    @GetMapping("/findOneComment")
+    @ResponseBody
+    public Comment findOneComment(Long id) {
+        Comment comment2 = commentRepository.findOne(id);
+        Comment comment = new Comment();
+        comment.setId(comment2.getId());
+        return comment;
+    }
+
     @PostMapping("/send")
     public String sendMessage(HttpServletRequest request, Message m, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "0") int pageType) {
         //pageType: 1 = userHome; 0 = userIdeas;
@@ -591,6 +603,16 @@ public class HomeController extends BaseController {
         followingRepository.delete(toDeleteFollowing);
 
         return "redirect:/user/followings/";
+    }
+
+    @PostMapping("/deleteComment")
+    public String deleteComment(Comment com) throws IOException {
+
+        Comment comment = commentRepository.getById(com.getId());
+        Long ideaId = comment.getIdea().getId();
+        commentRepository.delete(comment);
+
+        return "redirect:/user/viewIdea/" + ideaId;
     }
 
     @PostMapping("/giveRights")
@@ -862,6 +884,11 @@ public class HomeController extends BaseController {
         Date today = Calendar.getInstance().getTime();
         String currentDate = df.format(today);
         model.addAttribute("commentDate", currentDate);
+
+        //this doesn't work because page is not refreshing
+//        String stringIdComm = (String) model.asMap().get("idComment");
+//        model.addAttribute("idComment", stringIdComm);
+
         model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
@@ -945,7 +972,7 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.POST)
-    public String viewIdeaPostComment(@Valid Comment comment, BindingResult result, HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
+    public String viewIdeaPostComment(@Valid Comment comment, BindingResult result,RedirectAttributes redir, HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
         User currentUser = getCurrentUser();
         List<Following> followingList = followingRepository.getByUser(currentUser);
         List<User> followingUsers = new ArrayList<>();
@@ -970,7 +997,11 @@ public class HomeController extends BaseController {
         comment.setUser(currentUser);
         comment.setIdea(idea);
         comment.setBody(comment.getBody().replaceAll(" +", " "));
-        ideaService.addComment(comment);
+        Comment addedComment = ideaService.addComment(comment);
+        commentRepository.flush();
+        Long idComment = addedComment.getId();
+        redir.addFlashAttribute("idComment", idComment);
+
         ideaService.updateComments(idea);
 
         return "redirect:{ideaId}";
@@ -1117,7 +1148,6 @@ public class HomeController extends BaseController {
 
         return "dashboard";
     }
-
 
     @RequestMapping(value = "/followings", method = RequestMethod.GET)
     public String followingUsers(HttpServletRequest request, Model model) {
