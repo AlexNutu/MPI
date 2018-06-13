@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -60,6 +61,19 @@ public class UserController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         ModelAndView modelAndView = new ModelAndView("createUser");
         modelAndView.addObject("user", new User());
@@ -75,6 +89,19 @@ public class UserController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         return "thanks";
     }
@@ -92,6 +119,19 @@ public class UserController extends BaseController {
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("image", user.getImage());
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
         model.addAttribute("noOfMatchings", userService.getNoOfMatchings(ideaList));
@@ -117,6 +157,19 @@ public class UserController extends BaseController {
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("image", viewedUser.getImage());
+        List<Following> followingList = followingRepository.getByUser(currentUser);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         model.addAttribute("viewedUser", viewedUser);
         model.addAttribute("currentUser", currentUser);
@@ -178,6 +231,19 @@ public class UserController extends BaseController {
         model.addAttribute("image", currentUser.getImage());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(currentUser);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         ModelAndView modelAndView = new ModelAndView("accountSettings");
         modelAndView.addObject("user", currentUser);
@@ -251,6 +317,19 @@ public class UserController extends BaseController {
 
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(currentUser);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         ModelAndView modelAndView = new ModelAndView("editUser");
         modelAndView.addObject("user", editUser);

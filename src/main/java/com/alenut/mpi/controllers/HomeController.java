@@ -193,6 +193,20 @@ public class HomeController extends BaseController {
             }
         }
 
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
@@ -251,6 +265,20 @@ public class HomeController extends BaseController {
             }
         }
 
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
@@ -308,6 +336,20 @@ public class HomeController extends BaseController {
                 idea.setBody(idea.getBody().substring(0, 678) + " ...");
             }
         }
+
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         // trebuie sa luam din nou ideile utilizatorului pentru ca celelalte pot fi filtrate
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
@@ -599,6 +641,20 @@ public class HomeController extends BaseController {
             }
         }
 
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("ideasList", ideas);
@@ -658,6 +714,20 @@ public class HomeController extends BaseController {
             }
         }
 
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("ideasList", ideas);
@@ -687,6 +757,20 @@ public class HomeController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         ModelAndView modelAndView = new ModelAndView("postIdea");
         modelAndView.addObject("idea", new Idea());
@@ -749,6 +833,20 @@ public class HomeController extends BaseController {
 
             redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());
+
+            List<Following> followingList = followingRepository.getByUser(user);
+            List<User> followingUsers = new ArrayList<>();
+            List<User> displayedUsers = new ArrayList<>();
+            for (Following following : followingList) {
+                if(followingUsers.size() < 3){
+                    displayedUsers.add(following.getFollowingUser());
+                    followingUsers.add(following.getFollowingUser());
+                }else{
+                    followingUsers.add(following.getFollowingUser());
+                }
+            }
+            model.addAttribute("followingUsers", followingUsers);
+            model.addAttribute("displayedUsers", displayedUsers);
         }
 
         return modelAndView;
@@ -768,6 +866,19 @@ public class HomeController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         model.addAttribute("comment", new Comment());
 
@@ -836,6 +947,20 @@ public class HomeController extends BaseController {
     @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.POST)
     public String viewIdeaPostComment(@Valid Comment comment, BindingResult result, HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
         User currentUser = getCurrentUser();
+        List<Following> followingList = followingRepository.getByUser(currentUser);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         Idea idea = ideaService.getIdeaById(ideaId);
         model.addAttribute(idea);
         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
@@ -861,6 +986,19 @@ public class HomeController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         model.addAttribute("sentMessage", new Message());
 
@@ -912,9 +1050,22 @@ public class HomeController extends BaseController {
         model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("ideasNumber", ideaService.getIdeasByUser(user).size());
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         List<Conversation> conversations = conversationService.getAllUserConversations(user);
         model.addAttribute("conversations", conversations);
-
         Conversation convOpen = conversationService.getById(conversationId);
         model.addAttribute("convOpen", convOpen);
 
@@ -942,6 +1093,20 @@ public class HomeController extends BaseController {
         model.addAttribute("currentUser", currentUser);
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(currentUser);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         List<User> usersList = userRepository.findAllByOrderByIdDesc();
         model.addAttribute("usersList", usersList);
 
@@ -987,7 +1152,16 @@ public class HomeController extends BaseController {
                 existPrivate = true;
             }
         }
+
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+            }
+        }
         model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
         model.addAttribute("existStudent", existStudent);
         model.addAttribute("existDeveloper", existDeveloper);
         model.addAttribute("existDirector", existDirector);
@@ -1023,6 +1197,19 @@ public class HomeController extends BaseController {
         List<Idea> myIdeas = ideaService.getIdeasByUser(user);
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         model.addAttribute("category1", categoryList.get(0).getBody());
         model.addAttribute("category2", categoryList.get(1).getBody());
@@ -1046,6 +1233,19 @@ public class HomeController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         return "about";
     }
@@ -1058,6 +1258,19 @@ public class HomeController extends BaseController {
         model.addAttribute("messagesNumber", user.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if(followingUsers.size() < 3){
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            }else{
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         return "contact";
     }

@@ -19,7 +19,6 @@
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="../../js/mk-notifications.min.js"></script>
 
-
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="../../css/homePageTabs.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
@@ -41,9 +40,6 @@
     <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
     <title> Category Chart </title>
-
-
-
 
 
     <!--Load the AJAX API-->
@@ -125,6 +121,19 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    <li th:each="user : ${displayedUsers}"><a th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                    <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
+                    <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
+                    <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
+                    <li th:if="${followingUsers.size()} > 0"><a th:href="${'/user/followings/'}"><i class="glyphicon glyphicon-th-list"></i> View Separately</a></li>
+                </ul>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i style="font-size: 16px" class="fa fa-rss" aria-hidden="true"></i> Following
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
                     <!--<li th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>-->
                     <li ><a th:href="${'/user/viewProfile/'}" th:text="User1"></a></li>
                     <li ><a th:href="${'/user/viewProfile/'}" th:text="User2"></a></li>
@@ -150,8 +159,9 @@
                     <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
 
                 </ul>
-
             </li>
+
+            <li sec:authorize="isAuthenticated()" th:if="${currentUser.getRole() == 0}" ><a href="/user/dashboard"><i class="fa fa-users"></i> Dashboard </a></li>
 
             <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
             <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
@@ -202,6 +212,14 @@
 
     </div>
 </nav>
+
+<ul class='social'>
+    <li style="margin-left: -35px">
+        <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
+            <span>Add idea!</span>
+        </a>
+    </li>
+</ul>
 
 <div class="container">
     <div class="row">
