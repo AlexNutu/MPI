@@ -38,6 +38,11 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
     @Query(value = "UPDATE Idea i SET i.simnumber = :val WHERE i.id_idea = :id", nativeQuery = true)
     void setNewSimnumberFor(@Param("val") int val, @Param("id") Long id);
 
+    @Transactional
+    @Modifying
+    @Query("update Idea i set i.title =?1,  i.body = ?2, i.category = ?3 where i.id = ?4")
+    void editIdeaInfoById(String title, String body, Category category, Long ideaId);
+
     Idea getById(Long id);
 
     Page<Idea> findAllByOrderByIdDesc(Pageable p);

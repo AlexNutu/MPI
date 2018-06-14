@@ -31,11 +31,20 @@ public class IdeaValidator implements Validator {
         Idea idea = (Idea) o;
         List<Idea> ideaList = ideaService.getIdeasByUser(idea.getUser());
         if (ideaList.size() > 0) {
-            for (Idea idea1 : ideaList) {
-                if (idea1.getBody().equals(idea.getBody())) {
-                    errors.reject("duplicate");
+            if (idea.getId() != null && idea.getId() != 0) {
+                for (Idea idea1 : ideaList) {
+                    if (idea1.getBody().equals(idea.getBody()) && !idea.getId().equals(idea1.getId())) {
+                        errors.reject("duplicate");
+                    }
+                }
+            } else {
+                for (Idea idea1 : ideaList) {
+                    if (idea1.getBody().equals(idea.getBody())) {
+                        errors.reject("duplicate");
+                    }
                 }
             }
+
         }
 
         // Validarea descriereii(cea dupa care se face matching-ul)

@@ -253,6 +253,12 @@
     /*]]>*/
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
 
 <div sec:authorize="isAnonymous()" style="margin-top: 51px;" class="welcome">
     <img src="../../img/cover11.jpg " />
@@ -284,8 +290,6 @@
 <!--<div style="margin-top:25px" class="fb-share-button" data-href="http://127.0.0.1:8090/home" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8090%2Fhome&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>-->
 
 <h2 th:if="${categoryName} != ''" th:text="'Category / ' + ${categoryName} " style="color:white; text-shadow: 2px 2px 4px #000000; font-size: 18px; position: absolute; margin-top: -50px;margin-left: 300px; margin-bottom: 60px; font-weight: bold"></h2>
-
-<h1 th:if="${qTitle} != ''" th:text=" ${ideasList.getTotalElements()} + ' Ideas found for &quot;' + ${qTitle} + '&quot;' " style="margin-left:50px; margin-bottom: 60px"></h1>
 
 <div th:if="${ideasList.totalPages} == 0" class="container" style="margin-bottom: 50px; width:920px; margin-top: 80px">
     <div class="row">
@@ -373,6 +377,8 @@
                                     </div>
                                 </section>
 
+                                <h1 th:if="${qTitle} != ''" th:text=" ${ideasList.getTotalElements()} + ' Ideas found for &quot;' + ${qTitle} + '&quot;' " style="font-style: italic; margin-left:347px; margin-top: 45px; margin-bottom: 40px"></h1>
+
                             </div>
                         </div>
 
@@ -393,7 +399,9 @@
                         <div class="col-sm-7">
                             <div class="details" style="margin: -40px -192px 65px -80px;">
 
-                                <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" th:href="@{/user/findOneIdea/(id=${idea.getId()})}" data-toggle="tooltip" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
+                                <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" data-toggle="tooltip" data-title="Edit idea" style="margin-right: 10px; float:right;display:inline-block;" th:href="@{'/user/editIdea/' + ${idea.getId()}}"><span style="font-size: 25px" class="fa fa-pencil-square-o"></span></a>
+
                                 <h4 th:text="${idea.getTitle()}" style="font-size: 21px; font-weight: bold; display:inline-block; margin-right:10px;"></h4>
                                 <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                                 <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>

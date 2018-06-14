@@ -129,10 +129,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -200,10 +200,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -272,10 +272,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -344,10 +344,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -667,10 +667,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -740,10 +740,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -784,10 +784,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -856,20 +856,21 @@ public class HomeController extends BaseController {
             redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());
 
-            List<Following> followingList = followingRepository.getByUser(user);
-            List<User> followingUsers = new ArrayList<>();
-            List<User> displayedUsers = new ArrayList<>();
-            for (Following following : followingList) {
-                if(followingUsers.size() < 3){
-                    displayedUsers.add(following.getFollowingUser());
-                    followingUsers.add(following.getFollowingUser());
-                }else{
-                    followingUsers.add(following.getFollowingUser());
-                }
-            }
-            model.addAttribute("followingUsers", followingUsers);
-            model.addAttribute("displayedUsers", displayedUsers);
         }
+
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if (followingUsers.size() < 3) {
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            } else {
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
 
         return modelAndView;
     }
@@ -897,10 +898,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -972,16 +973,16 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.POST)
-    public String viewIdeaPostComment(@Valid Comment comment, BindingResult result,RedirectAttributes redir, HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
+    public String viewIdeaPostComment(@Valid Comment comment, BindingResult result, RedirectAttributes redir, HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {
         User currentUser = getCurrentUser();
         List<Following> followingList = followingRepository.getByUser(currentUser);
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -1021,10 +1022,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -1085,10 +1086,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -1128,10 +1129,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -1185,7 +1186,7 @@ public class HomeController extends BaseController {
 
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
             }
         }
@@ -1231,10 +1232,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -1267,10 +1268,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -1292,10 +1293,10 @@ public class HomeController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -1303,6 +1304,121 @@ public class HomeController extends BaseController {
         model.addAttribute("displayedUsers", displayedUsers);
 
         return "contact";
+    }
+
+    @RequestMapping(value = "/editIdea/{ideaId}", method = RequestMethod.GET)
+    public ModelAndView editIdeaGet(HttpServletRequest request, @PathVariable Long ideaId, Model model) {
+        User user = getCurrentUser();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
+        model.addAttribute("messagesNumber", user.getMessages().size());
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if (followingUsers.size() < 3) {
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            } else {
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
+        ModelAndView modelAndView = new ModelAndView("editIdea");
+        Idea editedIdea = ideaRepository.getById(ideaId);
+        modelAndView.addObject("idea", editedIdea);
+
+        if (!model.containsAttribute("displaySuccess")) {
+            model.addAttribute("displaySuccess", "false");
+        }
+        if (!model.containsAttribute("duplicate")) {
+            model.addAttribute("duplicate", "false");
+        }
+        if (!model.containsAttribute("format")) {
+            model.addAttribute("format", "false");
+        }
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/editIdea/{ideaId}", method = RequestMethod.POST)
+    public ModelAndView editIdeaPost(@Valid Idea idea, BindingResult result, @PathVariable Long ideaId, Model model, RedirectAttributes redir, @RequestParam("file") MultipartFile image) throws Exception {
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        User user = getCurrentUser();
+        Idea currentIdea = ideaRepository.getById(ideaId);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("idea", idea);
+
+        idea.setUser(user);
+        idea.setId(ideaId);
+        ideaValidator.validate(idea, result);
+
+        if (result.hasErrors()) {
+            String error = result.getAllErrors().get(0).getCode();
+            if (error.equals("duplicate")) {
+                model.addAttribute("duplicate", "true");
+            } else {
+                model.addAttribute("format", "true");
+            }
+            modelAndView.setViewName("editIdea");
+        } else {
+            modelAndView.setViewName("redirect:/user/editIdea/" + ideaId);
+
+            if (!idea.getBody().equals(currentIdea.getBody()) || !idea.getCategory().equals(currentIdea.getCategory()) ) {
+                // delete old similarities and tags and add the new ones
+                matchService.deleteMatchingsByIdea(currentIdea);
+                // Add matchings with this idea
+                ideaService.addMatchings(idea);
+                if(!idea.getBody().equals(currentIdea.getBody())){
+                    tagService.deleteTagsByIdea(currentIdea);
+                    // Add tags/keywords for this idea
+                    ideaService.addTags(idea);
+                }
+            }
+
+            ideaService.editIdea(idea, currentIdea.getId());
+
+            // if image was changed
+            if(!currentIdea.getImage_path().equals(idea.getImage_path())){
+                // image uploading on file disk
+                String imagePath = "";
+                if (!idea.getImage_path().equals("")) {
+                    imagePath = ideaService.saveIdeaImage(image, idea);
+                    //idea.setImage_path(imagePath);
+                } else {
+                    imagePath = "idea7.jpg";
+                    //idea.setImage_path("idea7.jpg");
+                }
+                ideaService.updateImagePath(imagePath, idea);
+            }
+
+            redir.addFlashAttribute("displaySuccess", "true");
+            redir.addFlashAttribute("idCreatedIdea", idea.getId());
+        }
+
+        List<Following> followingList = followingRepository.getByUser(user);
+        List<User> followingUsers = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
+        for (Following following : followingList) {
+            if (followingUsers.size() < 3) {
+                displayedUsers.add(following.getFollowingUser());
+                followingUsers.add(following.getFollowingUser());
+            } else {
+                followingUsers.add(following.getFollowingUser());
+            }
+        }
+        model.addAttribute("followingUsers", followingUsers);
+        model.addAttribute("displayedUsers", displayedUsers);
+
+        return modelAndView;
     }
 
 }

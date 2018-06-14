@@ -33,6 +33,12 @@ public class IdeaServiceImpl {
     private PictureLoaderService pictureLoaderService;
 
     @Autowired
+    private MatchService matchService;
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
     private MatchRepository matchRepository;
 
     @Autowired
@@ -148,6 +154,10 @@ public class IdeaServiceImpl {
         idea.setComnumber(0);
         idea.setSimnumber(0);
         ideaRepository.save(idea);
+    }
+
+    public void editIdea(Idea idea, Long ideaId){
+        ideaRepository.editIdeaInfoById(idea.getTitle(), idea.getBody(), idea.getCategory(), ideaId);
     }
 
     public void sendEmails(User currentUser, Idea idea) {
