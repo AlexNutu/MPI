@@ -7,15 +7,14 @@
     <link rel="stylesheet" href="../../css/ideas.css" />
     <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
     <script src="../../js/messages.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <!--nu merge tooltip daca il decomentez-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
-
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
@@ -24,11 +23,17 @@
     <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="shortcut icon" href="../../img/icon.png"/>
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
     <title>My messages</title>
 </head>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
 
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -85,7 +90,7 @@
     /*]]>*/
 </script>
 
-<body style="font-family: Helvetica Neue, Helvetica,Arial,sans-serif; font-size: 14px;">
+<body style="font-family: Helvetica Neue, Helvetica,Arial,sans-serif; overflow: auto; font-size: 14px;">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -301,10 +306,18 @@ $(window).on('keydown', function(e) {
                 </div>
             </div>
         </div>
-        <div id="search">
-            <label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
-            <input type="text" placeholder="Search contacts..." />
-        </div>
+        <form>
+            <div id="search">
+                <!--<button for=""><i class="fa fa-search" aria-hidden="true"></i></button>-->
+                <div class="input-group-btn">
+                    <button style="border-color:#435f7a; background-color:#435f7a; margin-bottom: -34px;" class="btn btn-default" type="submit">
+                        <i style="color: white;" class="fa fa-search"></i>
+                    </button>
+                </div>
+                <input type="text" placeholder="Search contacts..." />
+            </div>
+        </form>
+
         <div id="contacts">
             <ul id="allConversations">
                 <li th:if="${conversations.size()} > 0" th:each="conversation : ${conversations}" th:classappend="${convOpen.id} == ${conversation.id}?'active':''" class="contact" style="padding: 5px 0 5px 0;">
@@ -324,21 +337,20 @@ $(window).on('keydown', function(e) {
         </div>
 
         <div id="bottom-bar">
-            <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-            <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+            <a id="addcontact" th:href="@{/user/findOne/(id=5)}"  data-title="Edit" data-target="#edit" class="sBtn" style="text-decoration: none"><i class="fa fa-user-plus fa-fw" style="margin-left: 103px;" aria-hidden="true"></i> <span>New conversation</span></a>
+            <!--<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>-->
         </div>
     </div>
     <div class="content">
-        <div class="contact-profile">
+        <div class="contact-profile" style="height: 68px;">
             <div th:if="${convOpen} != null">
                 <img th:if="${convOpen.getUser().getId() == user.getId()}" th:src="@{'../../img/' + ${convOpen.getUser2().getImage()}}" alt="" />
                 <img th:if="${convOpen.getUser2().getId() == user.getId()}"  th:src="@{'../../img/' + ${convOpen.getUser().getImage()}}" alt="" />
                 <p th:if="${convOpen.getUser().getId() == user.getId()}" th:text="${convOpen.getUser2().getFull_name()}">Harvey Specter</p>
                 <p th:if="${convOpen.getUser2().getId() == user.getId()}" th:text="${convOpen.getUser().getFull_name()}">Harvey Specter</p>
-                <div class="social-media">
-                    <i class="fa fa-facebook" aria-hidden="true"></i>
-                    <i class="fa fa-twitter" aria-hidden="true"></i>
-                    <i class="fa fa-instagram" aria-hidden="true"></i>
+                <div class="social-media" style="margin-top: 8px">
+                    <a data-toggle="tooltip" data-title="Profile" th:if="${convOpen.getUser().getId() == user.getId()}" th:href="@{'/user/viewProfile/' + ${convOpen.getUser2().getId()}}"><i style="color:black;font-size: 16px" class="fa fa-id-card-o" aria-hidden="true"></i></a>
+                    <a data-toggle="tooltip" data-title="Profile" th:if="${convOpen.getUser2().getId() == user.getId()}" th:href="@{'/user/viewProfile/' + ${convOpen.getUser().getId()}}"><i style="color:black;font-size: 16px" class="fa fa-id-card-o" aria-hidden="true"></i></a>
                 </div>
             </div>
 
@@ -357,13 +369,50 @@ $(window).on('keydown', function(e) {
             <div class="wrap">
                 <form id="messageSend" th:action="@{'/user/messages/' + ${convOpen.getId()}}" th:object="${sentMessage}" method="post" data-toggle="validator" role="form">
                     <input id="messageInput" name="messageInput" th:field="*{body}" type="text" required="" placeholder="Write your message..." />
-                    <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                    <!--<i class="fa fa-paperclip attachment" aria-hidden="true"></i>-->
                     <button onclick="$.post('/user/messages/')" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </form>
             </div>
         </div>
 
     </div>
+</div>
+
+<div class="myForm">
+    <form id="sendForm" name="sendForm" th:action="@{/user/send/}" method="post">
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Send a message</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id_receiver" name="id_receiver" type="hidden" value=""/>
+                        <div class="form-group">
+                            <input id="send_date" name="send_date" value="" class="form-control" type="text" readonly="" />
+                        </div>
+                        <div class="form-group">
+                            <textarea id="body" name="body" rows="2" class="form-control" required="" value="" placeholder="Type your message here..."></textarea>
+                        </div>
+                        <select id="echelle"  name="echelle" class="form-control">
+                            <option value="mensuelle"> Mensuelle</option>
+                            <option value="trimestrielle">Trimestrielle</option>
+                            <option value="semestrielle" > Semestrielle</option>
+                            <option value="annuelle" > Annuelle</option>
+                            <option value="aucun"> Aucun</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Send</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
 </div>
 
 <footer style="margin-top: 70px;">

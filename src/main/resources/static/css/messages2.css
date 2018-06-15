@@ -303,7 +303,7 @@
 #frame #sidepanel #search input {
     /*font-family: "proxima-nova",  "Source Sans Pro", sans-serif;*/
     padding: 10px 0 10px 46px;
-    width: calc(100% - 25px);
+    width: calc(100% - 8px);
     border: none;
     background: #32465a;
     color: #f5f5f5;
@@ -447,10 +447,10 @@
     width: 100%;
     bottom: 0;
 }
-#frame #sidepanel #bottom-bar button {
+#frame #sidepanel #bottom-bar a {
     float: left;
     border: none;
-    width: 50%;
+    width: 100%;
     padding: 10px 0;
     background: #32465a;
     color: #f5f5f5;
@@ -459,38 +459,38 @@
     /*font-family: "proxima-nova",  "Source Sans Pro", sans-serif;*/
 }
 @media screen and (max-width: 735px) {
-    #frame #sidepanel #bottom-bar button {
+    #frame #sidepanel #bottom-bar a {
         float: none;
         width: 100%;
         padding: 15px 0;
     }
 }
-#frame #sidepanel #bottom-bar button:focus {
+#frame #sidepanel #bottom-bar a:focus {
     outline: none;
 }
-#frame #sidepanel #bottom-bar button:nth-child(1) {
+#frame #sidepanel #bottom-bar a:nth-child(1) {
     border-right: 1px solid #2c3e50;
 }
 @media screen and (max-width: 735px) {
-    #frame #sidepanel #bottom-bar button:nth-child(1) {
+    #frame #sidepanel #bottom-bar a:nth-child(1) {
         border-right: none;
         border-bottom: 1px solid #2c3e50;
     }
 }
-#frame #sidepanel #bottom-bar button:hover {
+#frame #sidepanel #bottom-bar a:hover {
     background: #435f7a;
 }
-#frame #sidepanel #bottom-bar button i {
+#frame #sidepanel #bottom-bar a i {
     margin-right: 3px;
     font-size: 1em;
 }
 @media screen and (max-width: 735px) {
-    #frame #sidepanel #bottom-bar button i {
+    #frame #sidepanel #bottom-bar a i {
         font-size: 1.3em;
     }
 }
 @media screen and (max-width: 735px) {
-    #frame #sidepanel #bottom-bar button span {
+    #frame #sidepanel #bottom-bar a span {
         display: none;
     }
 }
@@ -615,7 +615,7 @@
     /*font-family: "proxima-nova",  "Source Sans Pro", sans-serif;*/
     float: left;
     border: none;
-    width: calc(100% - 90px);
+    width: calc(100% - 51px);
     padding: 11px 32px 10px 8px;
     font-size: 0.8em;
     color: #32465a;
