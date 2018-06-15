@@ -474,6 +474,55 @@ public class HomeController extends BaseController {
         }
     }
 
+    @PostMapping("/sendNewMessage")
+    public String sendNewMessage(HttpServletRequest request, @Valid Message m, BindingResult result) {
+        //pageType: 1 = userHome; 0 = userIdeas;
+        // check if conversation exists
+        User currentUser = getCurrentUser();
+        Long idReceiver = m.getId_receiver();
+        List<Conversation> conversations = conversationService.getAllUserConversations(currentUser); // get all conversations from the current user
+        boolean exists = false;
+        Conversation findConversation = null;
+        for (Conversation conversation : conversations) {
+            if ((conversation.getUser().getId().equals(currentUser.getId()) && conversation.getUser2().getId().equals(idReceiver)) ||
+                    (conversation.getUser().getId().equals(idReceiver) && conversation.getUser2().getId().equals(currentUser.getId()))) {
+                exists = true;
+                findConversation = conversation;
+            }
+        }
+        if (!exists) {
+            Conversation newConversation = new Conversation();
+            newConversation.setCreatedDate(new Date());
+            newConversation.setUser(currentUser);
+            newConversation.setUser2(userService.getById(idReceiver));
+            // adding the new conversation
+            conversationRepository.save(newConversation);
+
+            // if the new conversation was created
+            // retrieve the updated list of conversations
+            conversations = conversationService.getAllUserConversations(currentUser);
+            //setting the conversation's last message and the message's conversation
+            for (Conversation conversation : conversations) {
+                if ((conversation.getUser().getId().equals(currentUser.getId()) && conversation.getUser2().getId().equals(idReceiver)) ||
+                        (conversation.getUser().getId().equals(idReceiver) && conversation.getUser2().getId().equals(currentUser.getId()))) {
+                    findConversation = conversation;
+                }
+            }
+        }
+
+        m.setConversation(findConversation);
+        m.setSender(currentUser);
+        m.setId_receiver(idReceiver);
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        Date today = Calendar.getInstance().getTime();
+        String postedDate = df.format(today);
+        m.setSend_date(postedDate);
+        messageService.addMessage(m);
+
+        assert findConversation != null;
+        return "redirect:/user/messages/" + findConversation.getId();
+    }
+
     @PostMapping("/deleteIdea")
     public String deleteIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page) {
         // delete all info that corresponds to this idea
@@ -1009,15 +1058,24 @@ public class HomeController extends BaseController {
     }
 
     @RequestMapping(value = "/messages/{conversationId}", method = RequestMethod.GET)
-    public String myMessagesGet(HttpServletRequest httpServletRequest, @PathVariable Long conversationId, Model model) {
+    public ModelAndView myMessagesGet(HttpServletRequest httpServletRequest, @PathVariable Long conversationId, @RequestParam(defaultValue = "") String q, Model model) {
         User user = getCurrentUser();
         model.addAttribute("user", user);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("userImage", "../../img/" + user.getImage());
         model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
         model.addAttribute("messagesNumber", user.getMessages().size());
+        model.addAttribute("currentConversationId", conversationId);
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
+        List<User> allUsers = userRepository.findAll();
+        List<User> userList = new ArrayList<>();
+        for (User user1 : allUsers) {
+            if (!user1.equals(user)) {
+                userList.add(user1);
+            }
+        }
+        model.addAttribute("userList", userList);
         List<Following> followingList = followingRepository.getByUser(user);
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
@@ -1034,7 +1092,13 @@ public class HomeController extends BaseController {
 
         model.addAttribute("sentMessage", new Message());
 
-        List<Conversation> conversations = conversationService.getAllUserConversations(user);
+        List<Conversation> conversations = new ArrayList<>();
+        if (!q.trim().toLowerCase().equals("")) {
+            conversations = conversationService.getUserConversationsFiltered(user, q);
+        } else {
+            conversations = conversationService.getAllUserConversations(user);
+        }
+
         Collections.sort(conversations, (c1, c2) -> {
             if (c1.getCreatedDate().equals(c2.getCreatedDate()))
                 return 0;
@@ -1073,7 +1137,10 @@ public class HomeController extends BaseController {
             model.addAttribute("convOpen", null);
         }
 
-        return "messages";
+        ModelAndView modelAndView = new ModelAndView("messages");
+        modelAndView.addObject("newMessage", new Message());
+
+        return modelAndView;
     }
 
     @RequestMapping(value = "/messages/{conversationId}", method = RequestMethod.POST)
@@ -1372,12 +1439,12 @@ public class HomeController extends BaseController {
         } else {
             modelAndView.setViewName("redirect:/user/editIdea/" + ideaId);
 
-            if (!idea.getBody().equals(currentIdea.getBody()) || !idea.getCategory().equals(currentIdea.getCategory()) ) {
+            if (!idea.getBody().equals(currentIdea.getBody()) || !idea.getCategory().equals(currentIdea.getCategory())) {
                 // delete old similarities and tags and add the new ones
                 matchService.deleteMatchingsByIdea(currentIdea);
                 // Add matchings with this idea
                 ideaService.addMatchings(idea);
-                if(!idea.getBody().equals(currentIdea.getBody())){
+                if (!idea.getBody().equals(currentIdea.getBody())) {
                     tagService.deleteTagsByIdea(currentIdea);
                     // Add tags/keywords for this idea
                     ideaService.addTags(idea);
@@ -1387,7 +1454,7 @@ public class HomeController extends BaseController {
             ideaService.editIdea(idea, currentIdea.getId());
 
             // if image was changed
-            if(!currentIdea.getImage_path().equals(idea.getImage_path())){
+            if (!currentIdea.getImage_path().equals(idea.getImage_path())) {
                 // image uploading on file disk
                 String imagePath = "";
                 if (!idea.getImage_path().equals("")) {

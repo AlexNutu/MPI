@@ -306,7 +306,7 @@ $(window).on('keydown', function(e) {
                 </div>
             </div>
         </div>
-        <form>
+        <form th:action="@{'/user/messages/' + ${currentConversationId}}" method="get">
             <div id="search">
                 <!--<button for=""><i class="fa fa-search" aria-hidden="true"></i></button>-->
                 <div class="input-group-btn">
@@ -314,7 +314,7 @@ $(window).on('keydown', function(e) {
                         <i style="color: white;" class="fa fa-search"></i>
                     </button>
                 </div>
-                <input type="text" placeholder="Search contacts..." />
+                <input name="q" id="q" type="text" placeholder="Search users..." />
             </div>
         </form>
 
@@ -337,7 +337,7 @@ $(window).on('keydown', function(e) {
         </div>
 
         <div id="bottom-bar">
-            <a id="addcontact" th:href="@{/user/findOne/(id=5)}"  data-title="Edit" data-target="#edit" class="sBtn" style="text-decoration: none"><i class="fa fa-user-plus fa-fw" style="margin-left: 103px;" aria-hidden="true"></i> <span>New conversation</span></a>
+            <a id="addcontact"  data-title="Edit" data-target="#edit" class="sBtn" style="text-decoration: none"><i class="fa fa-user-plus fa-fw" style="margin-left: 103px;" aria-hidden="true"></i> <span>New conversation</span></a>
             <!--<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>-->
         </div>
     </div>
@@ -379,7 +379,7 @@ $(window).on('keydown', function(e) {
 </div>
 
 <div class="myForm">
-    <form id="sendForm" name="sendForm" th:action="@{/user/send/}" method="post">
+    <form id="sendForm" th:object="${newMessage}" name="sendForm" th:action="@{'/user/sendNewMessage/'}" method="post">
 
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
@@ -389,20 +389,21 @@ $(window).on('keydown', function(e) {
                         <h4 class="modal-title custom_align" id="Heading">Send a message</h4>
                     </div>
                     <div class="modal-body">
-                        <input id="id_receiver" name="id_receiver" type="hidden" value=""/>
-                        <div class="form-group">
-                            <input id="send_date" name="send_date" value="" class="form-control" type="text" readonly="" />
-                        </div>
+                        <!--<input id="id_receiver" name="id_receiver" type="hidden" value=""/>-->
+
+                        <!--<div class="form-group">-->
+                            <!--<input id="send_date" name="send_date" value="" class="form-control" type="text" readonly="" />-->
+                        <!--</div>-->
+
+                        <select id="selectUser" name="selectUser" th:field="*{id_receiver}" class="form-control">
+                            <option th:each="userS : ${userList}" th:value="${userS.getId()}" th:text="${userS.getFull_name()}"> Mensuelle</option>
+                        </select>
+                        <br/>
                         <div class="form-group">
                             <textarea id="body" name="body" rows="2" class="form-control" required="" value="" placeholder="Type your message here..."></textarea>
                         </div>
-                        <select id="echelle"  name="echelle" class="form-control">
-                            <option value="mensuelle"> Mensuelle</option>
-                            <option value="trimestrielle">Trimestrielle</option>
-                            <option value="semestrielle" > Semestrielle</option>
-                            <option value="annuelle" > Annuelle</option>
-                            <option value="aucun"> Aucun</option>
-                        </select>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Send</button>
