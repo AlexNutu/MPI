@@ -660,6 +660,7 @@ public class HomeController extends BaseController {
         Comment comment = commentRepository.getById(com.getId());
         Long ideaId = comment.getIdea().getId();
         commentRepository.delete(comment);
+        ideaService.updateCommentsMinus(comment.getIdea());
 
         return "redirect:/user/viewIdea/" + ideaId;
     }
@@ -957,12 +958,27 @@ public class HomeController extends BaseController {
         model.addAttribute("followingUsers", followingUsers);
         model.addAttribute("displayedUsers", displayedUsers);
 
-        model.addAttribute("comment", new Comment());
-
         Idea idea = ideaService.getIdeaById(ideaId);
         model.addAttribute(idea);
-        List<Comment> comments = idea.getComments();
 
+        List<Tag> allTags = idea.getTags();
+        List<Tag> tags1 = new ArrayList<>();
+        List<Tag> tags2 = new ArrayList<>();
+        if (allTags.size() > 0) {
+            for (int i = 0; i < allTags.size() / 2 + 1; i++) {
+                tags1.add(allTags.get(i));
+            }
+            for (int i = allTags.size() / 2 + 1; i < allTags.size(); i++) {
+                tags2.add(allTags.get(i));
+            }
+        }
+        model.addAttribute("tags1", tags1);
+        model.addAttribute("tags2", tags2);
+
+
+        model.addAttribute("comment", new Comment());
+
+        List<Comment> comments = idea.getComments();
         Collections.sort(comments, new Comparator<Comment>() {
             DateFormat f = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 
@@ -1253,12 +1269,13 @@ public class HomeController extends BaseController {
 
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if (followingUsers.size() < 3) {
+            if (displayedUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
             }
         }
         model.addAttribute("followingUsers", followingUsers);
         model.addAttribute("displayedUsers", displayedUsers);
+        model.addAttribute("followingList", followingList);
 
         model.addAttribute("existStudent", existStudent);
         model.addAttribute("existDeveloper", existDeveloper);

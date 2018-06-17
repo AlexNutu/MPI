@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -216,6 +217,7 @@ public class UserController extends BaseController {
             Following following = new Following();
             following.setFollowingUser(followingUser);
             following.setUser(currentUser);
+            following.setDate_following(new Date().toString());
             followingRepository.save(following);
         }
 

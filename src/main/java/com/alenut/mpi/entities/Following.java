@@ -19,6 +19,9 @@ public class Following {
     @JoinColumn(name = "id_following_user")
     private User followingUser;
 
+    @Column(name = "date_following")
+    private String date_following;
+
     public Long getId() {
         return id;
     }
@@ -41,5 +44,13 @@ public class Following {
 
     public void setFollowingUser(User followingUser) {
         this.followingUser = followingUser;
+    }
+
+    public String getDate_following() {
+        return date_following;
+    }
+
+    public void setDate_following(String date_following) {
+        this.date_following = date_following;
     }
 }

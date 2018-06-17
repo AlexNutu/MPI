@@ -72,6 +72,10 @@ public class IdeaServiceImpl {
         ideaRepository.setNewComnumberFor(idea.getComnumber() + 1, idea.getId());
     }
 
+    public void updateCommentsMinus(Idea idea) {
+        ideaRepository.setNewComnumberFor(idea.getComnumber() - 1, idea.getId());
+    }
+
     public void updateSimilarities(Idea idea, int val) {
         Idea updatedWithSimNumberIdea = ideaRepository.getById(idea.getId());
         ideaRepository.setNewSimnumberFor(updatedWithSimNumberIdea.getSimnumber() + val, idea.getId());

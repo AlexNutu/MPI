@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../../css/ideas.css"/>
+    <link rel="stylesheet" href="../../css/similarities.css"/>
+    <link rel="stylesheet" href="../../css/myIdeas.css"/>
     <link rel="stylesheet" href="../../css/viewIdea.css"/>
     <link rel="stylesheet" href="../../css/messages.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -59,7 +60,7 @@
     <!--<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'/>-->
     <link rel="stylesheet" href="../../css/comments.css" />
 
-    <title>Idea</title>
+    <title>View Idea</title>
 </head>
 
 <script th:inline="javascript">
@@ -118,6 +119,12 @@
     );
 
     /*]]>*/
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
 
 <body style="overflow:auto;">
@@ -227,51 +234,25 @@
     </li>
 </ul>
 
-<script type="application/javascript">
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : 'your-app-id',
-            xfbml      : true,
-            version    : 'v2.3'
-        });
-    };
-
-    (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    $('#fb-share-button').click(function() {
-        FB.ui({
-                method: 'feed',
-                link: "The link you want to share",
-                picture: 'The picture url',
-                name: "The name who will be displayed on the post",
-                description: "The description who will be displayed"
-            }, function(response){
-                console.log(response);
-            }
-        );
-    });
-</script>
-
 
 <div th:object="${idea}" style="margin-top: 67px">
 
     <div class="container">
         <div class="row">
+
+
             <div class="col-lg-8">
 
-                <h1 th:text="${idea.getTitle()}" style="font-size: 30px; font-weight: bold;">Blog Post Template for
+                <h1 th:text="${idea.getTitle()}" style="font-size: 33px; font-weight: bold;">Blog Post Template for
                     Bootstrap</h1>
 
-                <button id="fb-share-button"> DA</button>
+                <p class="lead" style="font-size: 16px"><i class="fa fa-user"></i> by
+                    <a th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="'/user/viewProfile/' + ${idea.getUser().getId()}">Super User</a>
+                    <a th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" href="/user/profile">Super User</a>
+                    <a style="padding: 0px 3px" th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a>
+                </p>
 
-                <p class="lead" style="font-size: 14px"><i class="fa fa-user"></i> by <a
-                        th:text="${idea.getUser().getFull_name()}" href="">Super User</a></p>
+
                 <span style="font-size: 12px"> <i class="fa fa-calendar"></i> <span
                         th:text="'  Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM </span></span>
                 <div class="form-inline">
@@ -279,24 +260,68 @@
                             th:text="${idea.getCategory().getBody()}" style="font-size: 10px;"
                             class="badge badge-pill badge-info">Education</span>
                     </span>
-                    <span style="font-size: 12px">
-                        <i class="fa fa-tags"></i> Tags:
-                        <span th:each=" tag : ${idea.getTags()}">
-                            <span th:text="${tag.getBody()}" style="font-size: 10px;"
-                                  class="label label-info">Bootstrap</span>
-                        </span>
-                    </span>
+                    <!--<span style="font-size: 12px">-->
+                        <!--<i class="fa fa-tags"></i> Tags:-->
+                        <!--<span th:each=" tag : ${idea.getTags()}">-->
+                            <!--<span th:text="${tag.getBody()}" style="font-size: 10px;"-->
+                                  <!--class="label label-info">Bootstrap</span>-->
+                        <!--</span>-->
+                    <!--</span>-->
+                    <br/><br/>
+                    <div style="margin-bottom: -17px">
+                        <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
+                            <i>
+                                <button id="likeB" th:value="${idea.getId()}" th:classappend="${idea.getLiked()} == 1 ? btn-warning : btn-info " type="submit" class="float-left btn btn-xs text-white appreciations"
+                                        style="float: left">
+                                    <i th:classappend="${idea.getLiked()} == 1 ? fa-thumbs-o-down : fa-thumbs-o-up" class="fa"></i>
+                                    <span th:text="${idea.getLiked()} == 1 ? Dislike : Like"></span>
+                                </button>
+                            </i>
+                        </form>
+                        <i style="margin-left: 10px"><a class="float-left btn btn-primary btn-xs text-white appreciations"><i class="fa fa-wrench"></i> Edit</a></i>
+                        <i style="margin-left: 6px"><a class="float-left btn btn-danger btn-xs text-white appreciations"><i class="fa fa-trash"></i> Delete</a></i>
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="col-lg-6" style="margin-left: 876px; margin-top: -100px; margin-bottom: -300px">
+                    <div class="well">
+                        <h4><i class="glyphicon glyphicon-stats"></i> Stats:</h4>
+                        <ul>
+                            <li>Likes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="glyphicon glyphicon-thumbs-up"></span>):&nbsp;&nbsp; <b th:text="${idea.getLikenumber()}" style="color: #5bc0de"> 10 </b> </li>
+                            <li>Comments &nbsp;(<span class="fa fa-comments"></span>):&nbsp;&nbsp; <b th:text="${idea.getComnumber()}" style="color: #f0ad4e">4</b></li>
+                            <li>Similarities (<span class="fa fa-handshake-o"></span>):&nbsp;&nbsp; <b th:text="${idea.getSimnumber()}" style="color: #FF4136">5</b></li>
+                        </ul>
+                    </div>
+                    <!-- /well -->
+                    <div class="well">
+                        <h4><i class="fa fa-tags"></i> Tags:</h4>
+                        <div class="row" style="margin-left: 12px">
+                            <div class="col-lg-6">
+                                <ul class="list-unstyled">
+                                    <li><a sec:authorize="isAuthenticated()" data-toggle="tooltip" data-title="Click to search" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags1}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                    <li><a sec:authorize="isAnonymous()" data-toggle="tooltip" data-title="Click to search" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags1}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <ul class="list-unstyled">
+                                    <li><a sec:authorize="isAuthenticated()" data-toggle="tooltip" data-title="Click to search" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags2}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                    <li><a sec:authorize="isAnonymous()" data-toggle="tooltip" data-title="Click to search" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags2}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <hr/>
                 <img th:src="@{'../../img/' + ${idea.getImage_path()}}" class="img-responsive" style="width:650px; height:309px"  />
                 <hr/>
                 <h4><strong>Description</strong></h4>
                 <p th:text="${idea.getBody()}">Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
                     Lorem ipsum dolor Lorem ipsum dolor.</p>
+            </div>
+
 
                 <br/>
-            </div>
         </div>
     </div>
 
@@ -306,80 +331,56 @@
             <div class="tab" role="tabpanel">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist" style="margin-left: 15px;">
-                    <li role="presentation" class="active"><a href="#Section1" aria-controls="home" role="tab"
-                                                              data-toggle="tab"><i class="fa fa-handshake-o"></i>
+                    <li role="presentation" class="active">
+                        <a href="#Section1" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-handshake-o"></i>
                         Similarities</a></li>
                     <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab"><i
                             class="glyphicon glyphicon-comment"></i> Comments</a></li>
                 </ul>
+
                 <!-- Tab panes -->
                 <div class="tab-content tabs">
+
                     <div role="tabpanel" class="tab-pane fade in active" id="Section1">
-                        <h3 style="margin-left: -46px; text-decoration: underline; margin-top: 24px; font-size: 30px; margin-bottom: 55px;">
-                            Similarities <i class="fa fa-handshake-o"></i></h3>
-                        <div class="col-md-10">
+                        <h2 class="text-center margin_bottom10" style="text-decoration: underline">Similar Ideas <i class="fa fa-handshake-o"></i></h2>
+                        <div class="container">
+                            <div class="row blog-row">
 
-                            <div style="text-align: center; margin-bottom: 10px; margin-left: 145px">
-                                <div th:if="${#lists.isEmpty(ideaList)}" class="alert alert-info" role="alert">
-                                    <span>This Idea has 0 similarities!</span>
+                                <div style="text-align: center; margin-bottom: 10px; margin-left: 145px">
+                                    <div th:if="${#lists.isEmpty(ideaList)}" class="alert alert-info" role="alert">
+                                        <span>This Idea has 0 similarities!</span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div th:each="idea : ${ideaList}" class="row" style="margin-bottom: 50px">
-                                <div class="col-md-12 post">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h4 th:text="${idea.getTitle()}" style="color: #5bc0de; margin-left: -69rem; margin-bottom: 13px; font-size: 25px">
-                                                <strong><a class="post-title">Cool Share Button Effects Styles</a></strong>
-                                            </h4>
+                                <div th:each="idea : ${ideaList}" class="col-md-6 col-sm-6 col-xs-12 margin_bottom30">
+                                    <a href="javascript::;">
+                                        <img class="img-responsive center-block" th:src="@{'../../img/' + ${idea.getImage_path()}}" style="width: 555px; height: 238px"/>
+                                    </a>
+                                    <div class="blog-content bg-white">
+                                        <a th:href="'/user/viewIdea/' + ${idea.getId()}"><h3 th:text="${idea.getTitle()}" style="margin-bottom: 23px; margin-top: -10px">Blog Title Comes Here</h3></a>
+                                        <h5 style="" ><b>Similarity : </b><a th:text="${idea.getSemantic()} + '%'">64%</a></h5>
+                                        <p th:text="${idea.getBody()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec mauris sit amet mi posuere imperdiet. Sed congue velit placerat sapien gravida sagittis. Phasellus in convallis urna, sit amet sollicitudin augue. Nullam vel est a neque lobortis iaculis....<a href="javascript::;"  class="heading_color">  Continue Reading</a></p>
+                                        <!--<a href="javascript::;"  class="heading_color">  Continue Reading</a>-->
+                                        <hr/>
+                                        <div style="margin-top: -10px; margin-bottom: 23px">
+                                            <p style="float: left">
+                                                <span>Stats :
+                                                    (<i class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i>): <span th:text="${idea.getLikenumber()}" style="color:#5bc0de;">122</span>
+                                                    (<i class="fa fa-comment" aria-hidden="true"></i>): <span th:text="${idea.getComnumber()}" style="color:#f0ad4e;">122</span>
+                                                    (<i class="fa fa-handshake-o" aria-hidden="true"></i>): <span th:text="${idea.getSimnumber()}" style=" color:#FF4136;">32</span>
+                                                </span>
+                                            </p>
+                                            <span th:if="${idea.getUser().getId()} != ${currentUser.getId()}" style="float: right;" class="pull-right">By : <strong><a th:href="'/user/viewProfile/' + ${idea.getUser().getId()}" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
+                                            <span th:if="${idea.getUser().getId()} == ${currentUser.getId()}" style="float: right;" class="pull-right">By : <strong><a href="/user/profile" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
                                         </div>
                                     </div>
-
-                                    <div class="row post-content" style="margin-bottom: 15px">
-                                        <div class="col-md-3 item">
-                                            <a th:href="'/user/viewIdea/' + ${idea.getId()}">
-                                                <img style="width:213px; height: 145px" src="../../img/i14.jpeg"
-                                                     alt="" class="img-responsive"/>
-                                                <span class="img-overflow"></span>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-7" style="width: 74.333333%;">
-                                            <p style="font-size: 16px;" th:text="${idea.getBody()}">
-                                                Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam
-                                                tation option.
-                                            </p>
-                                            <button sec:authorize="isAuthenticated()" class="btn btn-warning" style="display: inline-block;">
-                                                Message
-                                            </button>
-                                            <p sec:authorize="isAuthenticated()" style="margin-left: 10px; display: inline-block;">
-                                                <a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>
-                                            </p>
-                                            <p sec:authorize="" style="margin-left: 10px; display: inline-block;">
-                                                <a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>
-                                            </p>
-
-                                            <br/>
-                                            <p th:text="'Similarity : ' + ${idea.getSemantic()} + ' %'"  style="display: inline-block; font-size: 19px; font-weight: bold"> </p>
-                                            <!--<p th:text="'Sintactic : ' + ${idea.getSintactic()} + ' %'" style="display: inline-block; margin-left: 148px; font-size: 19px; font-weight: bold">Sintactic % : </p>-->
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-left: -180px">
-                                        <div class="col-md-15 post-header-line">
-                                            <span class="glyphicon glyphicon-user"></span>by <a th:text="${idea.getUser().getFull_name()}" href="#">Bhaumik</a>
-                                            | <span class="glyphicon glyphicon-calendar"></span> <span th:text="${idea.getPosted_date()}"> Sept 16th, 2012</span>
-                                            | <span class="glyphicon glyphicon-comment"></span> <a th:text="${idea.getComments().size()} + ' Comments'" href="#"> 3 Comments </a>
-                                            | <button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size()} + ' Likes'"></span></button>
-                                            | <span style="font-size: 12px"><i class="glyphicon glyphicon-th-list"></i> Category:
-                                              <span th:text="${idea.getCategory().getBody()}" style="font-size: 12px;" class="badge badge-pill badge-info">Education</span> </span>
-                                            | <span class="glyphicon glyphicon-tags"> </span>Tags : <span th:each="tag : ${idea.getTags()}" th:text="${tag.getBody()}" class="label label-info">Snipp</span>
-                                        </div>
-                                    </div>
-
                                 </div>
+
                             </div>
                         </div>
+
                     </div>
+
                     <div role="tabpanel" class="tab-pane fade" id="Section2">
                         <h3 style=" margin-left: -46px; text-decoration: underline; font-size: 30px; margin-bottom: 55px;">
                             Comments <i class="glyphicon glyphicon-comment"></i>
@@ -390,8 +391,7 @@
 
                             <div class="comment-wrap" sec:authorize="isAuthenticated()">
                                 <div class="photo">
-                                    <div class="avatar" th:style="'background-image: url(' + @{'../../img/' + ${currentUser.getImage()}} + '); margin-right:10px; '" id="commentPhoto"
-                                         style=" ">
+                                    <div class="avatar" th:style="'background-image: url(' + @{'../../img/' + ${currentUser.getImage()}} + '); margin-right:10px; '" id="commentPhoto">
                                     </div>
                                 </div>
                                 <div class="comment-block commentInput">
@@ -430,6 +430,78 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
+                    <!--<div role="tabpanel" class="tab-pane fade in active" id="Section1">-->
+                        <!--<h3 style="margin-left: -46px; text-decoration: underline; margin-top: 24px; font-size: 30px; margin-bottom: 55px;">-->
+                            <!--Similarities <i class="fa fa-handshake-o"></i></h3>-->
+                        <!--<div class="col-md-10">-->
+
+                            <!--<div style="text-align: center; margin-bottom: 10px; margin-left: 145px">-->
+                                <!--<div th:if="${#lists.isEmpty(ideaList)}" class="alert alert-info" role="alert">-->
+                                    <!--<span>This Idea has 0 similarities!</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div th:each="idea : ${ideaList}" class="row" style="margin-bottom: 50px">-->
+                                <!--<div class="col-md-12 post">-->
+                                    <!--<div class="row">-->
+                                        <!--<div class="col-md-12">-->
+                                            <!--<h4 th:text="${idea.getTitle()}" style="color: #5bc0de; margin-left: -69rem; margin-bottom: 13px; font-size: 25px">-->
+                                                <!--<strong><a class="post-title">Cool Share Button Effects Styles</a></strong>-->
+                                            <!--</h4>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="row post-content" style="margin-bottom: 15px">-->
+                                        <!--<div class="col-md-3 item">-->
+                                            <!--<a th:href="'/user/viewIdea/' + ${idea.getId()}">-->
+                                                <!--<img style="width:213px; height: 145px" src="../../img/i14.jpeg"-->
+                                                     <!--alt="" class="img-responsive"/>-->
+                                                <!--<span class="img-overflow"></span>-->
+                                            <!--</a>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-md-7" style="width: 74.333333%;">-->
+                                            <!--<p style="font-size: 16px;" th:text="${idea.getBody()}">-->
+                                                <!--Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam-->
+                                                <!--tation option.-->
+                                            <!--</p>-->
+                                            <!--<button sec:authorize="isAuthenticated()" class="btn btn-warning" style="display: inline-block;">-->
+                                                <!--Message-->
+                                            <!--</button>-->
+                                            <!--<p sec:authorize="isAuthenticated()" style="margin-left: 10px; display: inline-block;">-->
+                                                <!--<a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>-->
+                                            <!--</p>-->
+                                            <!--<p sec:authorize="" style="margin-left: 10px; display: inline-block;">-->
+                                                <!--<a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>-->
+                                            <!--</p>-->
+
+                                            <!--<br/>-->
+                                            <!--<p th:text="'Similarity : ' + ${idea.getSemantic()} + ' %'"  style="display: inline-block; font-size: 19px; font-weight: bold"> </p>-->
+                                            <!--&lt;!&ndash;<p th:text="'Sintactic : ' + ${idea.getSintactic()} + ' %'" style="display: inline-block; margin-left: 148px; font-size: 19px; font-weight: bold">Sintactic % : </p>&ndash;&gt;-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="row" style="margin-left: -180px">-->
+                                        <!--<div class="col-md-15 post-header-line">-->
+                                            <!--<span class="glyphicon glyphicon-user"></span>by <a th:text="${idea.getUser().getFull_name()}" href="#">Bhaumik</a>-->
+                                            <!--| <span class="glyphicon glyphicon-calendar"></span> <span th:text="${idea.getPosted_date()}"> Sept 16th, 2012</span>-->
+                                            <!--| <span class="glyphicon glyphicon-comment"></span> <a th:text="${idea.getComments().size()} + ' Comments'" href="#"> 3 Comments </a>-->
+                                            <!--| <button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size()} + ' Likes'"></span></button>-->
+                                            <!--| <span style="font-size: 12px"><i class="glyphicon glyphicon-th-list"></i> Category:-->
+                                              <!--<span th:text="${idea.getCategory().getBody()}" style="font-size: 12px;" class="badge badge-pill badge-info">Education</span> </span>-->
+                                            <!--| <span class="glyphicon glyphicon-tags"> </span>Tags : <span th:each="tag : ${idea.getTags()}" th:text="${tag.getBody()}" class="label label-info">Snipp</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+
                 </div>
             </div>
         </div>

@@ -129,22 +129,6 @@
                 </ul>
             </li>
 
-            <li sec:authorize="isAuthenticated()" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i style="font-size: 16px" class="fa fa-rss" aria-hidden="true"></i> Following
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <!--<li th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>-->
-                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User1"></a></li>
-                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User2"></a></li>
-                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User3"></a></li>
-                    <li ><a th:href="${'/user/viewProfile/'}" th:text="User4"></a></li>
-                    <li > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
-                    <li role="separator" class="divider"></li>
-                    <li><a th:href="${'/user/viewAll/'}">View All</a></li>
-                </ul>
-            </li>
-
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
                     <span class="caret"></span>

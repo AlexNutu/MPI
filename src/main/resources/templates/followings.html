@@ -142,7 +142,7 @@
     </div>
 </nav>
 
-<ul class='social'>
+<ul class='social' style="margin-top: 170px">
     <li style="margin-left: -35px">
         <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
             <span>Add idea!</span>
@@ -180,155 +180,155 @@
                                 <th style="">Unfollow</th>
                                 <th style="">User details</th>
                                 <tbody>
-                                <div th:each="user : ${followingUsers}">
+                                <div th:each="following : ${followingList}">
 
-                                    <tr th:if="${user.getOccupation()} == 'Student'" data-status="student">
+                                    <tr th:if="${following.getFollowingUser().getOccupation()} == 'Student'" data-status="student">
                                         <td>
                                             <div class="ckbox">
-                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                                <a th:href="@{/user/findOne/(id=${following.getFollowingUser().getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="media">
-                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
-                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${following.getFollowingUser().getImage()}}" class="media-photo"/>
                                                 </a>
                                                 <div class="media-body">
-                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
-                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                    <span style="margin-top: 10px" th:text="${following.getDate_following()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
-                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
                                                             <span style="margin-right: 327px; font-size: 12px; margin-top: 10px" class="pull-right student">(Student)</span>
                                                         </h4>
                                                     </a>
-                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                    <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <tr th:if="${user.getOccupation()} == 'Developer'" data-status="developer">
+                                    <tr th:if="${following.getFollowingUser().getOccupation()} == 'Developer'" data-status="developer">
                                         <td>
                                             <div class="ckbox">
-                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                                <a th:href="@{/user/findOne/(id=${following.getFollowingUser().getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="media">
-                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
-                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${following.getFollowingUser().getImage()}}" class="media-photo"/>
                                                 </a>
                                                 <div class="media-body">
-                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
-                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                    <span style="margin-top: 10px" th:text="${following.getDate_following()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
-                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
                                                             <span style="margin-right: 315px; font-size: 12px; margin-top: 10px" class="pull-right developer">(Developer)</span>
                                                         </h4>
                                                     </a>
-                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                    <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <tr th:if="${user.getOccupation()} == 'Director'" data-status="director">
+                                    <tr th:if="${following.getFollowingUser().getOccupation()} == 'Director'" data-status="director">
                                         <td>
                                             <div class="ckbox">
-                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                                <a th:href="@{/user/findOne/(id=${following.getFollowingUser().getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="media">
-                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
-                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${following.getFollowingUser().getImage()}}" class="media-photo"/>
                                                 </a>
                                                 <div class="media-body">
-                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
-                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                    <span style="margin-top: 10px" th:text="${following.getDate_following()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
-                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
                                                             <span style="margin-right: 289px; font-size: 12px; margin-top: 10px" class="pull-right director">(Director)</span>
                                                         </h4>
                                                     </a>
-                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                    <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <tr th:if="${user.getOccupation()} == 'Team Leader'" data-status="teamLeader">
+                                    <tr th:if="${following.getFollowingUser().getOccupation()} == 'Team Leader'" data-status="teamLeader">
                                         <td>
                                             <div class="ckbox">
-                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                                <a th:href="@{/user/findOne/(id=${following.getFollowingUser().getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="media">
-                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
+                                                <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}" class="pull-left">
                                                     <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
                                                 </a>
                                                 <div class="media-body">
-                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
-                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                    <span style="margin-top: 10px" th:text="${following.getDate_following()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
-                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
                                                             <span style="margin-right: 289px; font-size: 12px; margin-top: 10px" class="pull-right teamLeader">(Team Leader)</span>
                                                         </h4>
                                                     </a>
-                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                    <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <tr th:if="${user.getOccupation()} == 'Freelancer'" data-status="freeLancer">
+                                    <tr th:if="${following.getFollowingUser().getOccupation()} == 'Freelancer'" data-status="freeLancer">
                                         <td>
                                             <div class="ckbox">
-                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                                <a th:href="@{/user/findOne/(id=${following.getFollowingUser().getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="media">
-                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
-                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${following.getFollowingUser().getImage()}}" class="media-photo"/>
                                                 </a>
                                                 <div class="media-body">
-                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
-                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                    <span style="margin-top: 10px" th:text="${following.getDate_following()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
-                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
                                                             <span style="margin-right: 302px; font-size: 12px; margin-top: 10px" class="pull-right freeLancer">(Freelancer)</span>
                                                         </h4>
                                                     </a>
-                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                    <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <tr th:if="${user.getOccupation()} == 'Private occupation'" data-status="private">
+                                    <tr th:if="${following.getFollowingUser().getOccupation()} == 'Private occupation'" data-status="private">
                                         <td>
                                             <div class="ckbox">
-                                                <a th:href="@{/user/findOne/(id=${user.getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
+                                                <a th:href="@{/user/findOne/(id=${following.getFollowingUser().getId()})}" data-toggle="tooltip" style="margin-top: 10px; margin-left: 15px" class="btn btn-danger btn-xs delBtn" id="checkbox1"><span class="glyphicon glyphicon-remove"></span></a>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="media">
-                                                <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" class="pull-left">
-                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}" class="pull-left">
+                                                    <img th:src="@{'../../img/' + ${following.getFollowingUser().getImage()}}" class="media-photo"/>
                                                 </a>
                                                 <div class="media-body">
-                                                    <span style="margin-top: 10px" th:text="${user.getReg_date()}" class="media-meta pull-right">Febrero 13, 2016</span>
-                                                    <a th:href="@{'/user/viewProfile/' + ${user.getId()}}">
+                                                    <span style="margin-top: 10px" th:text="${following.getDate_following()}" class="media-meta pull-right">Febrero 13, 2016</span>
+                                                    <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
-                                                            <span style="font-size: 17px;" th:text="${user.getFull_name()}"></span>
+                                                            <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
                                                             <span style="margin-right: 257px; font-size: 12px; margin-top: 10px;" class="pull-right private">(Private occupation)</span>
                                                         </h4>
                                                     </a>
-                                                    <p th:text="${user.getPhone_number()}" class="summary">0912-123-123 </p>
+                                                    <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
                                                 </div>
                                             </div>
                                         </td>
