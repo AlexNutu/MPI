@@ -85,6 +85,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByToken(String token) {
+        try {
+            return userRepository.getByToken(token);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public User getByUsername(String username) {
         try {
             return userRepository.getByUsername(username);
@@ -97,7 +107,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(User user) throws NoSuchAlgorithmException {
 
-        user.setPassword(MD5Encryption.computeMD5(user.getPassword()));
         try {
             usr = userRepository.save(user);
         } catch (Exception e) {

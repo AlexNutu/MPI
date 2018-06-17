@@ -24,6 +24,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User getById(Long id);
 
     @Transactional(readOnly = true)
+    User getByToken(String token);
+
+    @Transactional(readOnly = true)
     List<User> findAllByOrderByIdDesc();
 
     @Transactional(readOnly = false)

@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/**").authenticated()
-                .antMatchers("/home/**").anonymous()
+                .antMatchers("/home/**").permitAll()//aici era anonymous()
                 .antMatchers("/admin/**").authenticated()
                 .antMatchers("/").permitAll()
                 .antMatchers("/css/**").permitAll()
@@ -51,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Auth
                 .antMatchers("/update").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/success").permitAll()
+                .antMatchers("/createUser/**").permitAll()
+                .antMatchers("/thanks/**").permitAll()
 //                .antMatchers("/user/**").hasAuthority("ADMIN")
 //                .antMatchers("/employee/**").hasAuthority("ADMIN")
 //                .antMatchers("/tracker/**").hasAnyAuthority()

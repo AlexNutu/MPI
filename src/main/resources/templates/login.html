@@ -24,8 +24,8 @@
                 <h1 id="title"> My Project Idea </h1>
 
                 <!--th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">-->
-                <div class="error" th:if="${param.error}" style="margin-bottom:30px;">
-                    <span class="alert alert-danger"> Username or password is incorrect! </span>
+                <div class="error" th:if="${param.error}" style="margin-bottom:30px; width: 114%;">
+                    <span class="alert alert-danger"> Incorrect username or password!  (Or e-mail not confirmed!) </span>
                 </div>
 
                 <label style="margin-bottom: 10px" for="username">Email address or Username</label>

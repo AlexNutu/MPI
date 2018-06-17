@@ -22,6 +22,9 @@ public interface UserService {
     User getById(Long id);
 
     @Transactional(readOnly = true)
+    User getByToken(String token);
+
+    @Transactional(readOnly = true)
     void createUser(User user) throws NoSuchAlgorithmException;
 
     @Transactional(readOnly = true)

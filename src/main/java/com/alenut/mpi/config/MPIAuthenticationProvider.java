@@ -35,7 +35,7 @@ public class MPIAuthenticationProvider implements AuthenticationProvider {
         }
 
         try {
-            if (user != null && MD5Encryption.computeMD5(password).equals(user.getPassword())) {
+            if (user != null && MD5Encryption.computeMD5(password).equals(user.getPassword()) && user.getConfirmed() == 1) {
                 List<GrantedAuthority> grantedAuths = new ArrayList<>();
                 String role = "";
                 switch (user.getRole()) {

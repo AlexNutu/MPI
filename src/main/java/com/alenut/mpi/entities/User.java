@@ -62,6 +62,12 @@ public class User {
     @Transient
     private String newPassword;
 
+    @Column(name = "confirmed")
+    private int confirmed;
+
+    @Column(name = "token")
+    private String token;
+
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
 //    private List<Role> roles;
@@ -212,5 +218,21 @@ public class User {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public int getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(int confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

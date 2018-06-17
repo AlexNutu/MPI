@@ -3,8 +3,10 @@ package com.alenut.mpi.controllers;
 import com.alenut.mpi.auxiliary.MD5Encryption;
 import com.alenut.mpi.entities.*;
 import com.alenut.mpi.repository.FollowingRepository;
+import com.alenut.mpi.repository.UserRepository;
 import com.alenut.mpi.service.EmailServiceImpl;
 import com.alenut.mpi.service.UserService;
+import com.alenut.mpi.service.impl.AutoLoginService;
 import com.alenut.mpi.service.impl.CategoryServiceImpl;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import com.alenut.mpi.service.impl.PictureLoaderService;
@@ -47,57 +49,35 @@ public class UserController extends BaseController {
     @Autowired
     EmailServiceImpl emailService;
 
+    @Autowired
+    private AutoLoginService autoLoginService;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return "redirect:/user/home/?page=0";
     }
 
-
-    @RequestMapping(value = "/createUser", method = RequestMethod.GET)
-    public ModelAndView createUserView(HttpServletRequest request, Model model) {
-        User user = getCurrentUser();
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
-        model.addAttribute("messagesNumber", user.getMessages().size());
-        List<Category> categoryList = categoryService.getAllCategories();
-        model.addAttribute("categoryList", categoryList);
-        List<Following> followingList = followingRepository.getByUser(user);
-        List<User> followingUsers = new ArrayList<>();
-        List<User> displayedUsers = new ArrayList<>();
-        for (Following following : followingList) {
-            if(followingUsers.size() < 3){
-                displayedUsers.add(following.getFollowingUser());
-                followingUsers.add(following.getFollowingUser());
-            }else{
-                followingUsers.add(following.getFollowingUser());
-            }
-        }
-        model.addAttribute("followingUsers", followingUsers);
-        model.addAttribute("displayedUsers", displayedUsers);
-
-        ModelAndView modelAndView = new ModelAndView("createUser");
-        modelAndView.addObject("user", new User());
-
-        return modelAndView;
-    }
-
     @RequestMapping(value = "/thanks", method = RequestMethod.GET)
     public String thankYou(HttpServletRequest request, Model model) {
-        User user = getCurrentUser();
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(user).size());
-        model.addAttribute("messagesNumber", user.getMessages().size());
+
+        User currentUser = getCurrentUser();
+        model.addAttribute("username", currentUser.getUsername());
+        model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(currentUser).size());
+        model.addAttribute("messagesNumber", currentUser.getMessages().size());
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
-        List<Following> followingList = followingRepository.getByUser(user);
+        List<Following> followingList = followingRepository.getByUser(currentUser);
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -124,10 +104,10 @@ public class UserController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -162,10 +142,10 @@ public class UserController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -237,10 +217,10 @@ public class UserController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }
@@ -323,10 +303,10 @@ public class UserController extends BaseController {
         List<User> followingUsers = new ArrayList<>();
         List<User> displayedUsers = new ArrayList<>();
         for (Following following : followingList) {
-            if(followingUsers.size() < 3){
+            if (followingUsers.size() < 3) {
                 displayedUsers.add(following.getFollowingUser());
                 followingUsers.add(following.getFollowingUser());
-            }else{
+            } else {
                 followingUsers.add(following.getFollowingUser());
             }
         }

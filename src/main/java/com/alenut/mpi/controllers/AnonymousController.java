@@ -1,15 +1,19 @@
 package com.alenut.mpi.controllers;
 
+import com.alenut.mpi.auxiliary.MD5Encryption;
 import com.alenut.mpi.auxiliary.UserValidator;
 import com.alenut.mpi.entities.*;
 import com.alenut.mpi.repository.CategoryRepository;
+import com.alenut.mpi.repository.FollowingRepository;
 import com.alenut.mpi.repository.UserRepository;
+import com.alenut.mpi.service.EmailServiceImpl;
 import com.alenut.mpi.service.UserService;
 import com.alenut.mpi.service.impl.AutoLoginService;
 import com.alenut.mpi.service.impl.CategoryServiceImpl;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.MailException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,6 +54,12 @@ public class AnonymousController extends BaseController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailServiceImpl emailService;
+
+    @Autowired
+    private FollowingRepository followingRepository;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String displayAllIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
@@ -94,7 +105,7 @@ public class AnonymousController extends BaseController {
 
         List<Idea> matchingIdeas = new ArrayList<>();
         List<Matching> matchings = idea.getMatchings();
-        if(matchings.size() > 0){
+        if (matchings.size() > 0) {
             for (Matching matching : matchings) {
                 Idea idea1 = matching.getIdeaMatch();
                 idea1.setSemantic(matching.getSemantic());
@@ -122,7 +133,7 @@ public class AnonymousController extends BaseController {
         if (category != -1) {
             choseCategory = categoryRepository.getById(category);
             ideas = ideaService.getIdeasByUserAndCategory(page, viewedUser, choseCategory);
-        }else{
+        } else {
             ideas = ideaService.getIdeasByUser(page, viewedUser);
         }
 
@@ -183,33 +194,83 @@ public class AnonymousController extends BaseController {
     }
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
-    public ModelAndView createUser(@Valid User user, BindingResult result, Model model, HttpServletRequest request) {
-        String initialPassword = "";
+    public ModelAndView createUser(@Valid User user, RedirectAttributes redirectAttributes, BindingResult result, Model model, HttpServletRequest request) {
         model.addAttribute("hasError", "false");
-        ModelAndView modelAndView = new ModelAndView(new RedirectView("/user/thanks"));
+        model.addAttribute("needConfirmation", "false");
+        ModelAndView modelAndView = new ModelAndView("redirect:createUser");
 
         userValidator.validate(user, result);
         if (result.hasErrors()) {
             model.addAttribute("hasError", "true");
-            modelAndView.setViewName("createUser");
             modelAndView.addObject("user", user);
+//            modelAndView = new ModelAndView(new RedirectView("createUser"));
+            modelAndView.setViewName("createUser");
             return modelAndView;
         }
+
         try {
+            // generating the confirmation token
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setReg_date(new Date());
             user.setRole(1);
+            user.setConfirmed(0);
             user.setImage("user1.png");
-            initialPassword = user.getPassword(); // deoarece parola se schimba la salvarea in baza de date
             userService.createUser(user);
+
+            // sending the confirmation e-mail
+            try {
+                emailService.sendSimpleMessage(
+                        user.getEmail(),
+                        "Confirm Account",
+                        "Dear " + user.getFull_name() + ", \n\n You almost registered to My Project Idea! " + " \n\n " +
+                                "Please confirm your e-mail by accessing the following link: " + "\n\n" +
+                                " http://localhost:8090/home/confirm/" + token + "\n\n" +
+                                " Best Regards, \n MPI Service");
+            } catch (MailException mailException) {
+                model.addAttribute("invalidEmail", "true");
+            }
+            if (!model.containsAttribute("invalidEmail")) {
+                redirectAttributes.addFlashAttribute("needConfirmation", "true");
+                redirectAttributes.addFlashAttribute("invalidEmail", "false");
+            }
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
-        autoLoginService.autoLogin(user, initialPassword, request);
-
-        model.addAttribute("username", user.getUsername());
         return modelAndView;
     }
+
+
+    @RequestMapping(value = "/confirm/{token}", method = RequestMethod.GET)
+    public String confirmAccount(HttpServletRequest request, @PathVariable String token, Model model) {
+
+        User createdUser = userService.getByToken(token);
+        // daca este regasit un user cu acest token
+        if (createdUser != null) {
+            String notCrypedPass = createdUser.getPassword();
+            if(createdUser.getConfirmed() == 0){
+                // actualizam datele utilizatorului
+                try {
+                    createdUser.setPassword(MD5Encryption.computeMD5(createdUser.getPassword()));
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                createdUser.setConfirmed(1);
+                userRepository.save(createdUser);
+            }else{
+                return "redirect:/user/home/?page=0";
+            }
+
+            autoLoginService.autoLogin(createdUser, notCrypedPass, request);
+
+            return "redirect:/user/thanks";
+        }
+
+        return "error";
+    }
+
 
     @RequestMapping(value = "/popular", method = RequestMethod.GET)
     public String displayPopularIdeas(HttpServletRequest request, Model model, @RequestParam(defaultValue = "0") int page,
