@@ -29,6 +29,115 @@
     <title>My profile</title>
 
 </head>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    // wait for the DOM to be loaded
+    $(document).ready(
+
+        function followButton() {
+
+            $('.button-checkbox #followForm').on('submit', function(e) {
+                e.preventDefault(); // prevent native submit
+
+                $(this).ajaxSubmit({
+                    target: 'myResultsDiv'
+                });
+            });
+
+            $('.button-checkbox').each(function () {
+
+                // Settings
+                var $widget = $(this),
+                    $button = $widget.find('button'),
+                    $checkbox = $widget.find('input:checkbox'),
+                    color = $button.data('color'),
+                    settings = {
+                        on: {
+                            icon: 'glyphicon glyphicon-check'
+                        },
+                        off: {
+                            icon: 'glyphicon glyphicon-unchecked'
+                        }
+                    };
+
+                // Event Handlers
+                $button.on('click', function () {
+                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                    $checkbox.triggerHandler('change');
+                    updateDisplay();
+                });
+                $checkbox.on('change', function () {
+                    updateDisplay();
+                });
+
+                // Actions
+                function updateDisplay() {
+                    var isChecked = $checkbox.is(':checked');
+
+                    // Set the button's state
+                    $button.data('state', (isChecked) ? "on" : "off");
+
+                    // Set the button's icon
+                    $button.find('.state-icon')
+                        .removeClass()
+                        .addClass('state-icon ' + settings[$button.data('state')].icon);
+
+                    // Update the button's color
+                    if (isChecked) {
+                        $button
+                            .html('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> Alerted')
+                            .removeClass('btn-default')
+                            .addClass('btn-' + color + ' active');
+                        $('#followMessage').html(
+                            '<div style="margin-bottom: -50px" class="container">' +
+                            '<div class="row">' +
+                            '<div class="col-sm-6 col-md-6" style="margin-left: 120px">' +
+                            '<div class="alert alert-info">' +
+                            '<span class="glyphicon glyphicon-info-sign"></span> ' +
+                            ' <strong>Info Message</strong>' +
+                            '<hr class="message-inner-separator"/>' +
+                            '<p> You now receive mails when you got a new <strong> similarity </strong>for an idea!</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>'
+                        );
+                    }
+                    else {
+                        $button
+                            .html('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> &nbsp; Alert me &nbsp;')
+                            .removeClass('btn-' + color + ' active')
+                            .addClass('btn-default');
+                        $('#followMessage').html('');
+                    }
+                }
+
+                // Initialization
+                function init() {
+
+                    updateDisplay();
+
+                    // Inject the icon if applicable
+                    if ($button.find('.state-icon').length == 0) {
+                        $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+                    }
+                }
+                init();
+            });
+        }
+    );
+    /*]]>*/
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
 <body>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -147,7 +256,17 @@
                         <!--</div>-->
                     </div>
 
+                    <a style="margin-right: 14px; margin-top: -266px;" href="/user/accountSettings" class="btn btn-info viewIdeas"><i class="glyphicon glyphicon-wrench"></i> Edit profile </a>
                     <p th:if="${phone} != null" style="margin-top: -258px; margin-right: 14px; color: #ffffff; text-shadow: 2px 2px 4px #000000; font-weight: bold " class="phoneNumber"><i>Phone: </i><span th:text="${phone}">02130812931</span></p>
+
+                    <div class="container">
+                        <div class="button-checkbox">
+                            <form id="followForm" name="followForm" th:action="@{/user/alert/}" method="post" role="form">
+                                <button data-title="E-mail on new similarities" data-toggle="tooltip" style="margin-top: -93px; margin-left: -28px; outline:0;" th:text="${alerting} ? ${'Alerted'} : ${'Alert me'}" type="submit" class="btn" data-color="success">Alert me</button>
+                                <input type="checkbox" th:attr="checked=${ alerting ? 'checked' : null}" class="hidden" />
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="col-md-12 border-top border-bottom">
                         <ul class="nav nav-pills pull-left countlist" role="tablist">
@@ -196,8 +315,13 @@
                                 </div>
                             </li >
                         </ul>
-                        <a href="/user/accountSettings" class="btn btn-info followbtn"><i class="glyphicon glyphicon-wrench"></i> Edit Profile</a>
+
+                        <div id="followMessage" sec:authorize="isAuthenticated()">
+                            <!--The follow message is generated in javascript-->
+                        </div>
+                        <!--<a href="/user/accountSettings" class="btn btn-info followbtn"><i class="glyphicon glyphicon-wrench"></i> Edit Profile</a>-->
                         <!--<button class="btn btn-primary followbtn">Follow</button>-->
+
                     </div>
                     <div class="clearfix"></div>
                 </div>

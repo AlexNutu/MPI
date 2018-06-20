@@ -119,6 +119,10 @@ public class UserController extends BaseController {
         model.addAttribute("noOfLikes", userService.getNoOfLikes(ideaList));
         model.addAttribute("noOfComments", userService.getNoOfComments(ideaList));
 
+        // verify if the current user has column  alert = 0 or 1
+        model.addAttribute("alerting", true);
+        //model.addAttribute("alerting", false);
+
         return "myProfile";
     }
 
@@ -154,7 +158,6 @@ public class UserController extends BaseController {
 
         model.addAttribute("viewedUser", viewedUser);
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("currentUser", getCurrentUser());
         model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
         model.addAttribute("noOfMatchings", userService.getNoOfMatchings(ideaList));
         model.addAttribute("noOfLikes", userService.getNoOfLikes(ideaList));
@@ -202,6 +205,15 @@ public class UserController extends BaseController {
         }
 
         return "redirect:/user/viewProfile/" + idUser;
+    }
+
+    @PostMapping("/alert")
+    public String alertMe() {
+        User currentUser = getCurrentUser();
+
+        // update alert column = 1 in database for this user
+
+        return "redirect:/user/accountSettings/";
     }
 
     @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)

@@ -94,6 +94,10 @@ public class AnonymousController extends BaseController {
         model.addAttribute("currentCategory", category);
         model.addAttribute("categoryName", categoryName);
 
+        User curentUser = getCurrentUser();
+        if(curentUser != null){
+            return "redirect:/user/home";
+        }
         return "userHome";
     }
 

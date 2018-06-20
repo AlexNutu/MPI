@@ -68,6 +68,9 @@ public class User {
     @Column(name = "token")
     private String token;
 
+    @Column(name = "alert")
+    private int alert;
+
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
 //    private List<Role> roles;
@@ -234,5 +237,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getAlert() {
+        return alert;
+    }
+
+    public void setAlert(int alert) {
+        this.alert = alert;
     }
 }

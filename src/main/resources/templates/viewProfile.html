@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../../css/ideas.css" />
+    <link rel="stylesheet" href="../../css/myIdeas.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -298,6 +298,7 @@
                 <a style="margin-right: 14px" sec:authorize="isAuthenticated()" th:href="@{/user/userIdeas/(page=0,userId=${viewedUser.getId()})}" class="btn btn-warning viewIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas  </a>
                 <a style="margin-right: 14px" sec:authorize="isAnonymous()" th:href="@{/home/userIdeas/(page=0,userId=${viewedUser.getId()})}" class="btn btn-warning viewIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> View Ideas </a>
                 <p th:if="${phone} != null" style=" margin-right: 14px; color: #ffffff; text-shadow: 2px 2px 4px #000000; font-weight: bold " class="phoneNumber"><i>Phone: </i><span th:text="${phone}">02130812931</span></p>
+
                 <div sec:authorize="isAuthenticated()" class="container">
                         <div class="button-checkbox">
                             <form id="followForm" name="followForm" th:action="@{/user/follow/(idUser=${viewedUser.getId()})}" method="post" role="form">
