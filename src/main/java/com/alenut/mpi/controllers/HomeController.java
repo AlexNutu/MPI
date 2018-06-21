@@ -929,6 +929,7 @@ public class HomeController extends BaseController {
     public String viewIdea(HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {//(@RequestParam Idea idea) {
         User user = getCurrentUser();
         model.addAttribute("currentUser", user);
+        model.addAttribute("currentIdeaId", ideaId);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("userImage", "../../img/" + user.getImage());
         DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
@@ -960,6 +961,19 @@ public class HomeController extends BaseController {
 
         Idea idea = ideaService.getIdeaById(ideaId);
         model.addAttribute(idea);
+
+        boolean ok = false;
+        List<Appreciation> appreciations = idea.getAppreciations();
+        ok = false;
+        for (Appreciation appreciation : appreciations) {
+            if (appreciation.getUser().equals(user) && appreciation.getIdea().equals(idea)) {
+                idea.setLiked(1);
+                ok = true;
+            }
+        }
+        if (!ok) {
+            idea.setLiked(0);
+        }
 
         List<Tag> allTags = idea.getTags();
         List<Tag> tags1 = new ArrayList<>();
@@ -1001,7 +1015,7 @@ public class HomeController extends BaseController {
 
         // verificam daca matchings2 nu e de fapt matchings
         for (Matching matching2 : matchings2) {
-            boolean ok = true;
+            ok = true;
             for (Matching matching1 : matchings) {
                 if ((matching1.getIdea().equals(matching2.getIdeaMatch()) && matching1.getIdeaMatch().equals(matching2.getIdea()))) {
                     ok = false;

@@ -23,6 +23,10 @@ public class MatchService {
         List<Matching> matchings2 = matchRepository.getByIdeaMatch(idea);
 
         if (matchings1 != null) {
+            for (Matching matching : matchings1) {
+                Idea ideaToUpdate = matching.getIdeaMatch();
+                ideaService.updateSimilarities(ideaToUpdate, -1);
+            }
             matchRepository.delete(matchings1);
         }
         if (matchings2.size() > 0) {
@@ -32,5 +36,6 @@ public class MatchService {
             }
             matchRepository.delete(matchings2);
         }
+        ideaService.updateSimilarities(idea, (-1) * idea.getSimnumber());
     }
 }

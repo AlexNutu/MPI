@@ -195,9 +195,12 @@
     </li>
 </ul>
 
+
+
 <div class="container">
     <div class="row">
-        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 77px;">My Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
+        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 77px;">My Ideas <i class="fa fa-lightbulb-o" style="font-size:36px;"></i></h1>
+
         <hr class="hr-primary" style="  height: 4px;" />
         <ol th:if="${myCategoryList.size()} > 0" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
             <button href="#" style="background-color: #b2bdc6; border-color: #b2bdc6;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
@@ -209,7 +212,7 @@
                 You have <strong style="font-weight: bold "> 0 </strong> ideas posted!
             </div>
 
-            <a href="/user/postIdea" class="btn btn-info btn-lg" >
+            <a href="/user/postIdea" style="margin-left: -22px" class="btn btn-info btn-lg" >
                 <span class="glyphicon glyphicon-edit"></span>  Submit Idea
             </a>
         </div>

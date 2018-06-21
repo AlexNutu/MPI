@@ -13,7 +13,6 @@
     <!--<script src="../../js/bootstrap-dropdownhover.min.js"></script>-->
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <!--<script src="http://malsup.github.com/jquery.form.js"></script>-->
-    <!--<script src="../../js/comments.js"></script>-->
     <!--<script src="../../js/notification.js"></script>-->
     <!--<script src="../../js/scroll.js"></script>-->
     <!--<script src="../../js/userHome.js"></script>-->
@@ -26,8 +25,8 @@
 
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
     <script src="../../js/notification.js"></script>
+    <script src="../../js/viewIdea.js"></script>
     <script src="../../js/scroll.js"></script>
-    <script src="../../js/comments.js"></script>
     <script src="../../js/dashboard.js"></script>
     <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
     <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
@@ -35,8 +34,10 @@
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="../../js/mk-notifications.min.js"></script>
     <script src="../../js/followings.js"></script>
+    <script src="../../js/statsViewIdea.js"></script>
 
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/mk-notifications.min.css"/>
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
     <link href="../../css/notification.css" rel="stylesheet"/>
@@ -67,11 +68,12 @@
     /*<![CDATA[*/
 
     var imagePath = /*[[${userImage}]]*/ 'default';
+    var currentIdeaId = /*[[${currentIdeaId}]]*/ 'default';
 
     // wait for the DOM to be loaded
     $(document).ready(
 
-        function newComment() {
+        function viewIdeaActions() {
 
             // bind 'myForm' and provide a simple callback function
             $('#commentForm').ajaxForm(function() {
@@ -104,6 +106,34 @@
                 ).prependTo($('.commentList'));
 
                 $(".commentInput .commentBody").val(null);
+
+                //update number of comments
+                var noOfComments = parseInt($(".col-lg-6 .well .count2").text());
+                noOfComments += 1;
+                $(".col-lg-6 .well .count2").text(' ' + noOfComments + ' ');
+
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-check-square-o",
+                            background: "#4BB543"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Success</strong>",
+                    "Your comment was posted! ",
+                    options
+                );
             });
 
             $('.btnComment').prop('disabled', true);
@@ -115,6 +145,127 @@
                     $('.btnComment').prop('disabled', true);
                 }
             });
+
+
+            $('.myForm #sendForm').on('submit', function(e) {
+                e.preventDefault();
+                $(this).ajaxSubmit({
+                    target: 'myResultDiv'
+                });
+
+                var fullname = $('.myForm #send_date').val();
+
+                $('#exampleModal').modal('toggle');
+
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-envelope",
+                            background: "#5bc0de"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Info</strong>",
+                    "Your message was sent to the user " + fullname +"!",
+                    options
+                );
+
+                $('#body').val('');
+
+            });
+
+
+            $('.myCommDelete #comForm').on('submit', function(e) {
+                e.preventDefault();
+
+                $(this).ajaxSubmit({
+                    target: 'myResultDiv'
+                });
+
+                //remove comment from list
+                var idComm = $('.myCommDelete #id').val();
+                $(".com" + idComm).remove();
+                $('#comModal').modal('toggle');
+
+                //-1 for the comments number
+                var noOfComments = parseInt($(".col-lg-6 .well .count2").text());
+                noOfComments -= 1;
+                $(".col-lg-6 .well .count2").text(' ' + noOfComments + ' ');
+
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-check-square-o",
+                            background: "#FFA07A"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Success</strong>",
+                    "Your comment was deleted!",
+                    options
+                );
+
+                // var thisObject = $(this);
+                // // atributul value contine id-ul comment-ului pentru care se executa form-ul
+                // var commId = parseInt(thisObject.firstChild().value);
+                // alert(thisObject.firstChild());
+                // alert(commId);
+
+            });
+
+            $('.classLike #likeForm').on('submit', function(e) {
+                e.preventDefault(); // prevent native submit
+
+                $(this).ajaxSubmit({
+                    target: 'myResultsDiv'
+                });
+
+                var thisObject = $(this);
+                // atributul value contine id-ul ideii pentru care se executa form-ul
+
+                var copy = thisObject.html();
+                thisObject.html('<i style="float: left; font-size:1.5em" class="float-left fa fa-cog fa-spin fa-3x fa-fw"></i>');
+
+                var change = function(){
+                    if(copy.indexOf("<span>Like</span>") >= 0){
+                        var noOfLikes = parseInt($(".col-lg-6 .well .count1").text());
+                        noOfLikes += 1;
+                        $(".col-lg-6 .well .count1").text(' ' + noOfLikes + ' ');
+
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + currentIdeaId + '"' + ' type="submit" style="float: left" class="float-left btn btn-xs text-white btn-warning appreciations"> <i class="fa fa-thumbs-o-down"></i> <span>Dislike</span></button>');
+                    }else{
+                        var noOfLikes = parseInt($(".col-lg-6 .well .count1").text());
+                        noOfLikes -= 1;
+                        $(".col-lg-6 .well .count1").text(' ' + noOfLikes + ' ');
+
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + currentIdeaId + '"' + ' type="submit" style="float: left" class="float-left btn btn-xs text-white btn-info appreciations"> <i class="fa fa-thumbs-o-up"></i> <span>Like</span></button>');
+                    }
+                };
+                setTimeout(change, 700);
+
+            });
+
+
         }
     );
 
@@ -249,7 +400,8 @@
                 <p class="lead" style="font-size: 16px"><i class="fa fa-user"></i> by
                     <a th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="'/user/viewProfile/' + ${idea.getUser().getId()}">Super User</a>
                     <a th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" href="/user/profile">Super User</a>
-                    <a style="padding: 0px 3px" th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a>
+                    <a style="padding: 0px 3px" sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a>
+
                 </p>
 
 
@@ -268,18 +420,22 @@
                         <!--</span>-->
                     <!--</span>-->
                     <br/><br/>
-                    <div style="margin-bottom: -17px">
-                        <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
-                            <i>
-                                <button id="likeB" th:value="${idea.getId()}" th:classappend="${idea.getLiked()} == 1 ? btn-warning : btn-info " type="submit" class="float-left btn btn-xs text-white appreciations"
-                                        style="float: left">
-                                    <i th:classappend="${idea.getLiked()} == 1 ? fa-thumbs-o-down : fa-thumbs-o-up" class="fa"></i>
-                                    <span th:text="${idea.getLiked()} == 1 ? Dislike : Like"></span>
-                                </button>
-                            </i>
-                        </form>
-                        <i style="margin-left: 10px"><a class="float-left btn btn-primary btn-xs text-white appreciations"><i class="fa fa-wrench"></i> Edit</a></i>
-                        <i style="margin-left: 6px"><a class="float-left btn btn-danger btn-xs text-white appreciations"><i class="fa fa-trash"></i> Delete</a></i>
+                    <div class="actions">
+                        <div class="classLike">
+                            <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
+                                <i>
+                                    <button id="likeB" th:value="${idea.getId()}" th:classappend="${idea.getLiked()} == 1 ? btn-warning : btn-info " type="submit" class="float-left btn btn-xs text-white appreciations"
+                                            style="float: left">
+                                        <i th:classappend="${idea.getLiked()} == 1 ? fa-thumbs-o-down : fa-thumbs-o-up" class="fa"></i>
+                                        <span th:text="${idea.getLiked()} == 1 ? Dislike : Like"></span>
+                                    </button>
+                                </i>
+                            </form>
+                        </div>
+
+                        <i style="margin-left: 10px" sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}"><a class="float-left btn btn-primary btn-xs text-white appreciations" th:href="@{'/user/editIdea/' + ${idea.getId()}}"><i class="fa fa-wrench"></i> Edit</a></i>
+                        <i sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" style="margin-left: 6px"><a class="float-left btn btn-danger btn-xs text-white appreciations delBtn" th:href="@{/user/findOneIdea/(id=${idea.getId()})}"><i class="fa fa-trash"></i> Delete</a></i>
+
                     </div>
                 </div>
                 <hr/>
@@ -288,9 +444,9 @@
                     <div class="well">
                         <h4><i class="glyphicon glyphicon-stats"></i> Stats:</h4>
                         <ul>
-                            <li>Likes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="glyphicon glyphicon-thumbs-up"></span>):&nbsp;&nbsp; <b th:text="${idea.getLikenumber()}" style="color: #5bc0de"> 10 </b> </li>
-                            <li>Comments &nbsp;(<span class="fa fa-comments"></span>):&nbsp;&nbsp; <b th:text="${idea.getComnumber()}" style="color: #f0ad4e">4</b></li>
-                            <li>Similarities (<span class="fa fa-handshake-o"></span>):&nbsp;&nbsp; <b th:text="${idea.getSimnumber()}" style="color: #FF4136">5</b></li>
+                            <li>Likes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="glyphicon glyphicon-thumbs-up"></span>):&nbsp;&nbsp; <b class="count1" id="likeNr" th:text="${idea.getLikenumber()}" th:value="${idea.getLikenumber()}" style="color: #5bc0de">10</b></li>
+                            <li>Comments &nbsp;(<span class="fa fa-comments"></span>):&nbsp;&nbsp; <b class="count2" id="comNr" th:value="${idea.getComnumber()}" th:text="${idea.getComnumber()}" style="color: #f0ad4e">4</b></li>
+                            <li>Similarities (<span class="fa fa-handshake-o"></span>):&nbsp;&nbsp; <b class="count3" id="matchNr" th:text="${idea.getSimnumber()}" style="color: #FF4136">5</b></li>
                         </ul>
                     </div>
                     <!-- /well -->
@@ -346,7 +502,7 @@
                         <div class="container">
                             <div class="row blog-row">
 
-                                <div style="text-align: center; margin-bottom: 10px; margin-left: 145px">
+                                <div style="text-align: center; margin-bottom: 10px; margin-left: 25px">
                                     <div th:if="${#lists.isEmpty(ideaList)}" class="alert alert-info" role="alert">
                                         <span>This Idea has 0 similarities!</span>
                                     </div>
@@ -358,7 +514,7 @@
                                     </a>
                                     <div class="blog-content bg-white">
                                         <a th:href="'/user/viewIdea/' + ${idea.getId()}"><h3 th:text="${idea.getTitle()}" style="margin-bottom: 23px; margin-top: -10px">Blog Title Comes Here</h3></a>
-                                        <h5 style="" ><b>Similarity : </b><a th:text="${idea.getSemantic()} + '%'">64%</a></h5>
+                                        <h5 style="" ><b>Similarity : </b><a class="count4" id="simScore" th:text="${idea.getSemantic()}">64%</a><a>%</a></h5>
                                         <p th:text="${idea.getBody()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec mauris sit amet mi posuere imperdiet. Sed congue velit placerat sapien gravida sagittis. Phasellus in convallis urna, sit amet sollicitudin augue. Nullam vel est a neque lobortis iaculis....<a href="javascript::;"  class="heading_color">  Continue Reading</a></p>
                                         <!--<a href="javascript::;"  class="heading_color">  Continue Reading</a>-->
                                         <hr/>
@@ -382,9 +538,11 @@
                     </div>
 
                     <div role="tabpanel" class="tab-pane fade" id="Section2">
-                        <h3 style=" margin-left: -46px; text-decoration: underline; font-size: 30px; margin-bottom: 55px;">
-                            Comments <i class="glyphicon glyphicon-comment"></i>
-                        </h3>
+                        <!--<h3 style=" margin-left: -46px; text-decoration: underline; font-size: 30px; margin-bottom: 55px;">-->
+                            <!--Comments <i class="glyphicon glyphicon-comment"></i>-->
+                        <!--</h3>-->
+                        <h2 class="text-center margin_bottom10" style="text-decoration: underline; margin-bottom: 55px;">Comments <i class="glyphicon glyphicon-comment"></i></h2>
+
 
                         <div class="comments" style="max-width: 83.75rem; margin-left: 120px">
 
@@ -409,7 +567,7 @@
                             </div>
 
                             <div class="commentList">
-                                <div th:each="com : ${comments}" class="comment-wrap">
+                                <div th:each="com : ${comments}" th:classappend="'com' + ${com.getId()}" class="comment-wrap">
                                     <div class="photo">
                                         <img th:src= "@{'../../img/' + ${com.getUser().getImage()}}" class="avatar2"/>
                                     </div>
@@ -509,8 +667,33 @@
 </div>
 
 <div class="myFormDelete">
-    <form th:action="@{/user/deleteComment/}" method="post">
+    <form th:action="@{/user/deleteIdea/(page=0)}" method="post">
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Delete this idea</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id" name="id" type="hidden" value=""/>
+                        <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Idea?</div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
+
+<div class="myCommDelete">
+    <form id="comForm" name="comForm" th:action="@{/user/deleteComment/}" method="post">
+        <div class="modal fade" id="comModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -524,6 +707,36 @@
                     <div class="modal-footer ">
                         <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
+
+<div class="myForm">
+    <form id="sendForm" name="sendForm" th:action="@{/user/send/}" method="post">
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Send a message</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id_receiver" name="id_receiver" type="hidden" value=""/>
+                        <div class="form-group">
+                            <input id="send_date" name="send_date" value="" class="form-control" type="text" readonly="" />
+                        </div>
+                        <div class="form-group">
+                            <textarea id="body" name="body" rows="2" class="form-control" required="" value="" placeholder="Type your message here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Send</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
