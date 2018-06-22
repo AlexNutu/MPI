@@ -137,7 +137,7 @@ public class IdeaServiceImpl {
         return ideaRepository.findByUserOrderByIdDesc(user, new PageRequest(pageNumber, 5));
     }
 
-    public Page<Idea> getIdeasByUserAndCategory(int pageNumber, User user, Category category){
+    public Page<Idea> getIdeasByUserAndCategory(int pageNumber, User user, Category category) {
         return ideaRepository.findByUserAndCategoryOrderByIdDesc(user, category, new PageRequest(pageNumber, 5));
     }
 
@@ -160,7 +160,7 @@ public class IdeaServiceImpl {
         ideaRepository.save(idea);
     }
 
-    public void editIdea(Idea idea, Long ideaId){
+    public void editIdea(Idea idea, Long ideaId) {
         ideaRepository.editIdeaInfoById(idea.getTitle(), idea.getBody(), idea.getCategory(), ideaId);
     }
 
@@ -217,13 +217,14 @@ public class IdeaServiceImpl {
                 String scoreSemantic = responseSemantic.getBody().getObject().get("similarity").toString();
                 if (scoreSemantic.contains("-")) {
                     scoreSemantic = "0.0";
-                }
-                if (scoreSemantic.length() > 5) {
-                    scoreSemantic = scoreSemantic.substring(0, 6);
+                } else {
+                    if (scoreSemantic.length() > 5) {
+                        scoreSemantic = scoreSemantic.substring(0, 6);
+                    }
+                    scoreSemantic = scoreSemantic.substring(2, 4) + "." + scoreSemantic.substring(4, 5);
                 }
 
                 double doubleSemantic = Double.parseDouble(scoreSemantic);
-                doubleSemantic = doubleSemantic * 100;
 
                 if (doubleSemantic >= 40.0) {
                     Matching matching = new Matching();
@@ -242,6 +243,10 @@ public class IdeaServiceImpl {
 
                     matchRepository.save(matching);
                     matchRepository.save(matching2);
+                    if (matching.getIdeaMatch().getUser().getAlert() == 1 && !matching.getIdeaMatch().getUser().equals(idea.getUser())) {
+                        sendMatchingMail(matching.getIdeaMatch(), idea);
+                    }
+
                     // update the other ideas simnumber
                     updateSimilarities(matching.getIdeaMatch(), 1);
                     matchingsNr++;
@@ -250,6 +255,18 @@ public class IdeaServiceImpl {
         }
         // update simnumber for the new idea
         updateSimilarities(idea, matchingsNr);
+    }
+
+    public void sendMatchingMail(Idea myYdea, Idea similarIdea) {
+        emailService.sendSimpleMessage(
+                myYdea.getUser().getEmail(),
+                "New Similar Idea",
+                "Dear " + myYdea.getUser().getFull_name() + ", \n\n You have a new simillarity on the idea: \n\n     \"  " + myYdea.getTitle() + " \" \n" +
+                        "     ( http://localhost:8090/user/viewIdea/" + myYdea.getId() + " )\n\n" +
+                        " NEW similar idea: \n\n" +
+                        "      \"  " + similarIdea.getTitle() + " \" \n" +
+                        "     ( http://localhost:8090/user/viewIdea/" + similarIdea.getId() + " )\n\n" +
+                        " Best Regards, \n MPI Service");
     }
 
     public void addTags(Idea idea) throws Exception {

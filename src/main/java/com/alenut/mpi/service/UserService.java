@@ -52,6 +52,9 @@ public interface UserService {
     String saveImage(MultipartFile multipartFile, User user) throws IOException;
 
     @Transactional(readOnly = true)
+    void updateAlertForUser(Integer val, User user);
+
+    @Transactional(readOnly = true)
     void deleteUser(User user) throws IOException;
 
     @Transactional(readOnly = true)

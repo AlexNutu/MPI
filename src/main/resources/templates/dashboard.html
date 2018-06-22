@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" th:href="@{../../css/myIdeas.css}" />
+    <link rel="stylesheet" th:href="@{../../css/ideas.css}" />
     <link rel="stylesheet" th:href="@{../../css/messages.css}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -12,7 +12,6 @@
     <script src="../../js/notification.js"></script>
     <script src="../../js/scroll.js"></script>
     <script src="../../js/dashboard.js"></script>
-    <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
     <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -97,13 +96,42 @@
 
             });
 
+            //notification for giving rights
+            var rightName = /*[[${rightName}]]*/ 'default';
+            var rights = /*[[${rights}]]*/ 'default';
+            if(rights === "true"){
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-check-square-o",
+                            background: "#4BB543"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Success</strong>",
+                    rightName + " is now admin!",
+                    options
+                );
+            }
+
+
         }
     );
     /*]]>*/
 </script>
 
 
-<body style='overflow:auto; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;'>
+<body style=" background: url('../../img/h1.jpg'); overflow:auto; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -207,7 +235,7 @@
     </li>
 </ul>
 
-<h1 style="font-family: 'Crete Round', serif; text-align:center; text-decoration: underline; margin-top: 81px; font-size: 36px;">Users List</h1>
+<h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px; font-size: 36px;"><u>Users List</u> <i class="fa fa-users"></i></h1>
 <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
 

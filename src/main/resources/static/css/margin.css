@@ -1,0 +1,14 @@
+.normalMargin{
+}
+
+.minimalMargin{
+    margin-top: 240px;
+}
+
+.messageEmpty{
+    margin-top: 245px;
+}
+
+.messageNotEmpty{
+    margin-top: 70px;
+}

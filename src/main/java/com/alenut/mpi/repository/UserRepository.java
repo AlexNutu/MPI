@@ -34,6 +34,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "UPDATE User u SET u.role = :val WHERE u.id_user = :id", nativeQuery = true)
     void setNewRole(@Param("val") Integer val, @Param("id") Long id);
 
+    @Transactional(readOnly = false)
+    @Modifying
+    @Query(value = "UPDATE User u SET u.alert = :val WHERE u.id_user = :id", nativeQuery = true)
+    void setAlert(@Param("val") Integer val, @Param("id") Long id);
+
 //    @Transactional(readOnly = true)
 //    User findOne(Long id);
 

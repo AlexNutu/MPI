@@ -12,7 +12,7 @@
     <script src="../../js/notification.js"></script>
     <script src="../../js/scroll.js"></script>
     <script src="../../js/userHome.js"></script>
-    <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
+
     <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -248,6 +248,33 @@
                 setTimeout(change, 700);
 
             });
+
+            //notification for deleting idea
+            var deleted = /*[[${deleted}]]*/ 'default';
+            if(deleted === "true"){
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-check-square-o",
+                            background: "#FFA07A"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Success</strong>",
+                    "The idea was successfully deleted!",
+                    options
+                );
+            }
         }
     );
     /*]]>*/

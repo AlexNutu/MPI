@@ -23,7 +23,6 @@ public class Conversation {
     private User user2;
 
     @OneToMany(mappedBy = "conversation")
-    @OrderBy("send_date")
     private List<Message> messages;
 
     @Column(name = "created_date")

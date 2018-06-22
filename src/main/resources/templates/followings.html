@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" th:href="@{../../css/myIdeas.css}" />
+    <link rel="stylesheet" th:href="@{../../css/ideas.css}" />
     <link rel="stylesheet" th:href="@{../../css/messages.css}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -13,7 +13,6 @@
     <script src="../../js/scroll.js"></script>
     <script src="../../js/userHome.js"></script>
     <script src="../../js/dashboard.js"></script>
-    <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
     <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -44,7 +43,7 @@
 </head>
 <body style="overflow:auto;">
 
-<h1 style="font-family: 'Crete Round', serif; text-align:center; text-decoration: underline; margin-top: 81px; font-size: 36px;">Following Users</h1>
+<h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px; font-size: 36px;"><u>Following Users</u> <i class="fa fa-user-plus"></i></h1>
 <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -161,7 +160,7 @@
         </div>
 
         <section class="content" th:if="${followingUsers.size()} > 0" style="margin-top: 20px">
-            <div class="col-md-11 col-md-offset-0" style="margin-left: 50px; margin-bottom: -40px">
+            <div class="col-md-11 col-md-offset-0" style="margin-left: -12px; margin-bottom: 160px">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="pull-right">
@@ -198,7 +197,7 @@
                                                     <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
                                                             <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
-                                                            <span style="margin-right: 327px; font-size: 12px; margin-top: 10px" class="pull-right student">(Student)</span>
+                                                            <span style="margin-right: 325px; font-size: 12px; margin-top: 10px" class="pull-right student">(Student)</span>
                                                         </h4>
                                                     </a>
                                                     <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
@@ -224,7 +223,7 @@
                                                     <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
                                                             <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
-                                                            <span style="margin-right: 315px; font-size: 12px; margin-top: 10px" class="pull-right developer">(Developer)</span>
+                                                            <span style="margin-right: 307px; font-size: 12px; margin-top: 10px" class="pull-right developer">(Developer)</span>
                                                         </h4>
                                                     </a>
                                                     <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
@@ -300,7 +299,7 @@
                                                     <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
                                                             <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
-                                                            <span style="margin-right: 302px; font-size: 12px; margin-top: 10px" class="pull-right freeLancer">(Freelancer)</span>
+                                                            <span style="margin-right: 304px; font-size: 12px; margin-top: 10px" class="pull-right freeLancer">(Freelancer)</span>
                                                         </h4>
                                                     </a>
                                                     <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>

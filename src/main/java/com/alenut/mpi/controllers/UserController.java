@@ -120,8 +120,11 @@ public class UserController extends BaseController {
         model.addAttribute("noOfComments", userService.getNoOfComments(ideaList));
 
         // verify if the current user has column  alert = 0 or 1
-        model.addAttribute("alerting", true);
-        //model.addAttribute("alerting", false);
+        if(user.getAlert() == 1){
+            model.addAttribute("alerting", true);
+        }else{
+            model.addAttribute("alerting", false);
+        }
 
         return "myProfile";
     }
@@ -208,12 +211,16 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/alert")
-    public String alertMe() {
+    public String alertMe(@RequestParam(defaultValue = "0") long idUser) {
+
         User currentUser = getCurrentUser();
+        if(currentUser.getAlert() == 1){
+            userService.updateAlertForUser(0, currentUser);
+        }else{
+            userService.updateAlertForUser(1, currentUser);
+        }
 
-        // update alert column = 1 in database for this user
-
-        return "redirect:/user/accountSettings/";
+        return "redirect:/user/profile";
     }
 
     @RequestMapping(value = "/accountSettings", method = RequestMethod.GET)

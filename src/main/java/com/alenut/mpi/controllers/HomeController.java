@@ -147,6 +147,9 @@ public class HomeController extends BaseController {
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("currentCategory", category);
         model.addAttribute("messagesNumber", user.getMessages().size());
+        if (!model.containsAttribute("deleted")) {
+            model.addAttribute("deleted", false);
+        }
 
         return "userHome";
     }
@@ -524,7 +527,7 @@ public class HomeController extends BaseController {
     }
 
     @PostMapping("/deleteIdea")
-    public String deleteIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page) {
+    public String deleteIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page, RedirectAttributes redir) {
         // delete all info that corresponds to this idea
 
         Page<Idea> ideas = ideaService.getAllIdeas(page);
@@ -542,6 +545,10 @@ public class HomeController extends BaseController {
         tagService.deleteTagsByIdea(idea);
 
         ideaService.deleteIdea(idea);
+
+        //for notification
+        redir.addFlashAttribute("deleted", "true");
+
         // deleting the idea's image
         if (!idea.getImage_path().contains("idea7.jpg")) {
             try {
@@ -666,11 +673,13 @@ public class HomeController extends BaseController {
     }
 
     @PostMapping("/giveRights")
-    public String giveRights(User userRights) throws IOException {
+    public String giveRights(User userRights, RedirectAttributes redir) throws IOException {
 
         User user = userRepository.getById(userRights.getId());
         // update role column
         userRepository.setNewRole(0, user.getId());
+        redir.addFlashAttribute("rights", "true");
+        redir.addFlashAttribute("rightName", user.getFull_name());
 
         return "redirect:/user/dashboard/";
     }
@@ -1136,9 +1145,7 @@ public class HomeController extends BaseController {
                 return -1;
             return 1;
         });
-//        for(Conversation conversation : conversations){
-//            conversation.setLastMessage(conversation.getMessages().get(conversation.getMessages().size()-1).getBody());
-//        }
+
         model.addAttribute("conversations", conversations);
 
 
@@ -1243,6 +1250,11 @@ public class HomeController extends BaseController {
         List<Idea> myIdeas = ideaService.getIdeasByUser(currentUser);
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("messagesNumber", currentUser.getMessages().size());
+
+        if(!model.containsAttribute("rights")){
+            model.addAttribute("rights", false);
+            model.addAttribute("rightName", "nimeni");
+        }
 
         return "dashboard";
     }

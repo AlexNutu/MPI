@@ -12,7 +12,6 @@
     <script src="../../js/notification.js"></script>
     <script src="../../js/scroll.js"></script>
     <script src="../../js/userHome.js"></script>
-    <script src="https://bootsnipp.com/user/snippets/1BXv3#"></script>
     <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
     <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -403,7 +402,6 @@
                                 <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" data-toggle="tooltip" data-title="Edit idea" style="margin-right: 10px; float:right;display:inline-block;" th:href="@{'/user/editIdea/' + ${idea.getId()}}"><span style="font-size: 25px" class="fa fa-pencil-square-o"></span></a>
 
                                 <h4 th:text="${idea.getTitle()}" style="font-size: 21px; font-weight: bold; display:inline-block; margin-right:10px;"></h4>
-                                <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
                                 <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 
                                 <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">

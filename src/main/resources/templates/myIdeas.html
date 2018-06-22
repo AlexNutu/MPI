@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../../css/myIdeas.css" />
+    <link rel="stylesheet" href="../../css/ideasWithNoContent.css" />
     <link rel="stylesheet" href="../../css/messages.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -14,6 +14,7 @@
     <script src="../../js/userHome.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
 
+    <link href="../../css/margin.css" rel="stylesheet" />
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
@@ -126,8 +127,10 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/myIdeas}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:if="${myCategoryList.size()} > 0"><a th:href="@{/user/myIdeas}">All</a></li>
+                    <li th:if="${myCategoryList.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No category </li>
                     <li sec:authorize="isAuthenticated()" th:each="category : ${myCategoryList}"><a th:href="@{/user/myIdeas/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+
                     <li class="divider"></li>
                     <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
                     <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
@@ -199,7 +202,7 @@
 
 <div class="container">
     <div class="row">
-        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 77px;">My Ideas <i class="fa fa-lightbulb-o" style="font-size:36px;"></i></h1>
+        <h1 style="font-family: 'Crete Round', serif;  margin-bottom: -10px; text-align:center; margin-top: 77px;"><u>My Ideas</u> <i class="fa fa-lightbulb-o" style="font-size:36px;"></i></h1>
 
         <hr class="hr-primary" style="  height: 4px;" />
         <ol th:if="${myCategoryList.size()} > 0" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
@@ -208,13 +211,13 @@
         </ol>
         <div style="text-align: center; margin-bottom: 10px">
 
-            <div th:if="${myCategoryList.size()} == 0" style="text-align: center; margin-top: 59px; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-info alert-dismissible fade in" >
-                You have <strong style="font-weight: bold "> 0 </strong> ideas posted!
-            </div>
-
             <a href="/user/postIdea" style="margin-left: -22px" class="btn btn-info btn-lg" >
                 <span class="glyphicon glyphicon-edit"></span>  Submit Idea
             </a>
+
+            <div th:if="${myCategoryList.size()} == 0" style="text-align: center; margin-top: 120px; font-size: 20px; width: 75%; margin-left: 11%" class="alert alert-info alert-dismissible fade in" >
+                You have <strong style="font-weight: bold "> 0 </strong> ideas posted!
+            </div>
         </div>
 
     </div>
@@ -240,8 +243,10 @@
                         <div class="details" style="margin: -40px -180px 45px -90px;">
 
                             <a th:href="@{/user/findOneIdea/(id=${idea.getId()})}" class="btn btn-danger btn-xs delBtn" data-title="Delete" style="float:right" ><span class="glyphicon glyphicon-trash"></span></a>
+                            <a sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" data-toggle="tooltip" data-title="Edit idea" style="margin-right: 10px; float:right;display:inline-block;" th:href="@{'/user/editIdea/' + ${idea.getId()}}"><span style="font-size: 25px" class="fa fa-pencil-square-o"></span></a>
+
                             <h4 th:text="${idea.getTitle()}" style="font-size: 21px; font-weight: bold; display:inline-block; margin-right:10px;"></h4>
-                            <a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>
+                            <!--<a style="display:inline-block;" href="http://bootsnipp.com/" target="_blank"><span style="font-size: 19px" class="fa fa-share-alt"></span></a>-->
                             <p th:text="${idea.getBody()}"> Lorem Ipsum is simply dummy text of the printing and typesetting </p>
 
                             <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
@@ -330,7 +335,7 @@
 
 <br/>
 <br/>
-<footer>
+<footer th:classappend="${myCategoryList.size()} == 0 ? minimalMargin  : normalMargin">
     <div class="container container2">
         <div class="row">
 

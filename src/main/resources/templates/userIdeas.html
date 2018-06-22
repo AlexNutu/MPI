@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../../css/ideas.css" />
+    <link rel="stylesheet" href="../../css/ideasWithNoContent.css" />
     <link rel="stylesheet" href="../../css/messages.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
@@ -118,8 +118,10 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/userIdeas/(page=0, userId=${viewedUser.getId()})}">All</a></li>
-                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/userIdeas/(page=0, userId=${viewedUser.getId()})}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:if="${myCategoryList.size()} > 0"><a th:href="@{/user/userIdeas/(page=0, userId=${viewedUser.getId()})}">All</a></li>
+                    <li sec:authorize="isAnonymous()" th:if="${myCategoryList.size()} > 0"><a th:href="@{/home/userIdeas/(page=0, userId=${viewedUser.getId()})}">All</a></li>
+                    <li th:if="${myCategoryList.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No category </li>
+
                     <li sec:authorize="isAuthenticated()" th:each="category : ${myCategoryList}"><a th:href="@{/user/userIdeas/(page=0, userId=${viewedUser.getId()}, category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                     <li sec:authorize="isAnonymous()" th:each="category : ${myCategoryList}"><a th:href="@{/home/userIdeas/(page=0, userId=${viewedUser.getId()}, category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
                     <li class="divider"></li>
@@ -190,7 +192,7 @@
 
 <div class="container">
     <div class="row">
-        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 77px;">User Ideas<i class="material-icons" style="font-size:36px;">lightbulb_outline</i></h1>
+        <h1 style="font-family: 'Crete Round', serif;  margin-bottom: -10px; text-align:center; margin-top: 77px;"><u>User Ideas</u> <i class="fa fa-lightbulb-o" style="font-size:36px;"></i></h1>
         <hr class="hr-primary" style="  height: 4px;" />
         <ol th:if="${myCategoryList.size()} > 0" class="breadcrumb bread-primary" style="margin-top: -16px; padding: 2px 2px">
             <button href="#" style="background-color: #b2bdc6; border-color: #b2bdc6;" class="btn btn-primary"><i class="fa fa-newspaper-o"></i> Categories </button>
@@ -202,10 +204,6 @@
             <div th:if="${myCategoryList.size()} == 0" style="text-align: center; margin-top: 59px; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-info alert-dismissible fade in" >
                 This user has <strong style="font-weight: bold "> 0 </strong> ideas posted!
             </div>
-
-            <a sec:authorize="isAuthenticated()" href="/user/postIdea" class="btn btn-info btn-lg" >
-                <span class="glyphicon glyphicon-edit"></span>  Submit Idea
-            </a>
         </div>
 
     </div>
@@ -226,7 +224,7 @@
 
             </div>
 
-            <div id="ideasList" style="margin-top: -66px">
+            <div id="ideasList" style="margin-top: -106px">
 
                 <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: 25%">
                     <div class="col-sm-7">

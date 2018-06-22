@@ -142,7 +142,7 @@
         <!--<h1 style="margin-bottom: -10px; text-align:center; margin-top: 0;">Edit Profile</h1>-->
         <!--<hr class="hr-primary" style="  height: 4px;" />-->
 
-        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; text-align:center; margin-top: 81px;">Edit Profile</h1>
+        <h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px;"><u>Edit Profile</u> <i style="font-size: 32px" class="fa fa-address-card-o"></i></h1>
         <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
     </div>
@@ -212,7 +212,7 @@
                         <div class="form-group" style="margin-bottom: 2%; width: 100%">
                             <label class="col-md-3 control-label" for="inputEmail">Email</label>
                             <div class="col-lg-8">
-                                <input id="inputEmail" th:value="${user.getEmail()}" th:field="*{email}" name="inputEmail" type="email" placeholder="johndoe@example.com"
+                                <input id="inputEmail" th:value="${user.getEmail()}" th:field="*{email}" name="inputEmail" type="email" readonly="" placeholder="johndoe@example.com"
                                        class="form-control input-md" data-error="Email address is invalid." required="" />
                                 <div class="help-block with-errors"></div>
                             </div>
@@ -273,6 +273,74 @@
     </div>
 </div>
 <hr/>
+
+<footer style="margin-top: 40px;">
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+
+                    <li>
+                        <p></p>
+                    </li>
+
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>

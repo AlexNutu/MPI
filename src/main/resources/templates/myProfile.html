@@ -9,10 +9,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="../js/navbar.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="../js/bootstrap-dropdownhover.min.js"></script>
     <script src="../js/myProfile.js"></script>
-    <link href="../css/myProfile.css" rel="stylesheet"/>
+    <script src="../../js/notification.js"></script>
+    <script src="../../js/userHome.js"></script>
 
+    <link href="../css/messages.css" rel="stylesheet"/>
+    <link href="../css/myProfile.css" rel="stylesheet"/>
     <link href="../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../css/bootstrap-notifications.min.css" rel="stylesheet"/>
     <link href="../css/notification.css" rel="stylesheet"/>
@@ -39,7 +43,8 @@
 
         function followButton() {
 
-            $('.button-checkbox #followForm').on('submit', function(e) {
+            $('.container .button-checkbox #followForm').on('submit', function(e) {
+
                 e.preventDefault(); // prevent native submit
 
                 $(this).ajaxSubmit({
@@ -138,7 +143,7 @@
     });
 </script>
 
-<body>
+<body style="background: url('../../img/h1.jpg');">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -237,7 +242,7 @@
 
     <div class="container">
         <div class="row">
-            <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; text-align:center; margin-top: 81px;">My Profile</h1>
+            <h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px;"><u>My Profile</u> <i class="fa fa-user"></i></h1>
             <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
 
         </div>
@@ -261,8 +266,8 @@
 
                     <div class="container">
                         <div class="button-checkbox">
-                            <form id="followForm" name="followForm" th:action="@{/user/alert/}" method="post" role="form">
-                                <button data-title="E-mail on new similarities" data-toggle="tooltip" style="margin-top: -93px; margin-left: -28px; outline:0;" th:text="${alerting} ? ${'Alerted'} : ${'Alert me'}" type="submit" class="btn" data-color="success">Alert me</button>
+                            <form id="followForm" name="followForm" th:action="@{/user/alert/(idUser=${currentUser.getId()})}" method="post" role="form">
+                                <button style="margin-top: -93px; margin-left: -28px; outline:0;" th:text="${alerting} ? ${'Alerted'} : ${'Alert me'}" type="submit" class="btn" data-color="success">Alert me</button>
                                 <input type="checkbox" th:attr="checked=${ alerting ? 'checked' : null}" class="hidden" />
                             </form>
                         </div>
@@ -288,7 +293,7 @@
                                     <h3>
                                         <i class="icon fa fa-handshake-o"></i>
                                         <br/>
-                                        <small>Matchings</small>
+                                        <small>Similarities</small>
                                     </h3>
                                 </div>
                             </li>
@@ -328,6 +333,74 @@
             </div>
         </div>
     </div>
+
+<footer style="margin-top: 85px;">
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+
+                    <li>
+                        <p></p>
+                    </li>
+
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
 
 
 </body>
