@@ -51,6 +51,10 @@
         <!--onlogin="checkLoginState();">-->
 <!--</fb:login-button>-->
 
+<p th:if="${notConfirmed}">
+        NU E CONFIRMAT
+</p>
+
 <div ng-controller="loginController as login" class="container-fluid bg">
     <div class="row">
         <div class="col-md-4 col-sm-4 col-xs-12"></div>
@@ -60,8 +64,8 @@
                 <h1 id="title"> My Project Idea </h1>
 
                 <!--th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">-->
-                <div class="error" th:if="${param.error}" style="margin-bottom:30px; width: 114%;">
-                    <span class="alert alert-danger"> Incorrect username or password!  (Or e-mail not confirmed!) </span>
+                <div class="error" th:if="${param.error}" style="margin-bottom:20px; width: 700px;">
+                    <span class="alert alert-danger" style="padding: 18px; padding-left: 80px; padding-right: 75px"> Incorrect username or password!</span> <br/> <span style="color:#a94442; margin-left: 110px; font-size:12px; margin-top: -30px">(Or e-mail not confirmed) </span>
                 </div>
 
                 <label style="margin-bottom: 10px" for="username">Email address or Username</label>

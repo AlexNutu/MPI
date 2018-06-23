@@ -116,7 +116,6 @@ public class AnonymousController extends BaseController {
             for (Matching matching : matchings) {
                 Idea idea1 = matching.getIdeaMatch();
                 idea1.setSemantic(matching.getSemantic());
-//                idea1.setSintactic(matching.getSintactic());
                 if (idea1.getBody().length() > 209) {
                     idea1.setBody(idea1.getBody().substring(0, 208) + " ...");
                 }
@@ -126,6 +125,9 @@ public class AnonymousController extends BaseController {
 
         model.addAttribute(matchingIdeas);
 
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
         return "viewIdea";
     }
 
@@ -134,6 +136,7 @@ public class AnonymousController extends BaseController {
 
         User viewedUser = userRepository.getById(userId);
         model.addAttribute("viewedUser", viewedUser);
+        Page<Idea> ideasByUser = ideaService.getIdeasByUser(page, viewedUser);
         Category choseCategory = new Category();
 
         Page<Idea> ideas = null;
@@ -141,12 +144,13 @@ public class AnonymousController extends BaseController {
             choseCategory = categoryRepository.getById(category);
             ideas = ideaService.getIdeasByUserAndCategory(page, viewedUser, choseCategory);
         } else {
-            ideas = ideaService.getIdeasByUser(page, viewedUser);
+            ideas = ideasByUser;
         }
 
         model.addAttribute("ideasList", ideas);
         model.addAttribute("currentPage", page);
-        List<Category> userCategoryList = categoryService.getUniqueCategoriesByUser(ideas);
+        //pentru obtinerea categoriilor
+        List<Category> userCategoryList = categoryService.getUniqueCategoriesByUser(ideasByUser);
         model.addAttribute("myCategoryList", userCategoryList);
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
@@ -178,7 +182,6 @@ public class AnonymousController extends BaseController {
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("image", user.getImage());
-
 
         model.addAttribute("viewedUser", user);
         model.addAttribute("noOfIdeas", userService.getNoOfIdeas(ideaList));
@@ -219,6 +222,10 @@ public class AnonymousController extends BaseController {
             // generating the confirmation token
             String token = UUID.randomUUID().toString();
             user.setToken(token);
+
+            user.setFull_name(user.getFull_name().trim().replaceAll(" +", " "));
+            user.setUsername(user.getUsername().trim().replaceAll(" +", " "));
+
             user.setReg_date(new Date());
             user.setRole(1);
             user.setConfirmed(0);

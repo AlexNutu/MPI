@@ -2,6 +2,7 @@ package com.alenut.mpi.config;
 
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,15 @@ public class MPIAuthenticationProvider implements AuthenticationProvider {
             user = userService.getByUsername(emailOrUsername);
         }
 
-        if (user != null && BCrypt.checkpw(password, user.getPassword()) && user.getConfirmed() == 1) {
+        Boolean passCheck = false;
+        try {
+            passCheck = BCrypt.checkpw(password, user.getPassword());
+        } catch (Exception e) {
+            passCheck = false;
+        }
+
+
+        if (user != null && passCheck && user.getConfirmed() == 1) {
             List<GrantedAuthority> grantedAuths = new ArrayList<>();
             String role = "";
             switch (user.getRole()) {

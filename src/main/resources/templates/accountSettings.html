@@ -192,9 +192,9 @@
                         <div class="form-group" style="margin-bottom: 2%; width: 100%">
                             <label class="col-md-3 control-label" for="inputName">Full Name</label>
                             <div class="col-lg-8">
-                                <input id="inputName" th:value="${user.getFull_name()}" th:field="*{full_name}" name="inputName" type="text" placeholder="John Doe" class="form-control"
+                                <input id="inputName" th:value="${user.getFull_name()}" th:field="*{full_name}" maxlength="30" data-minlength="2" name="inputName" type="text" placeholder="John Doe" class="form-control"
                                        required=""/>
-                                <div class="help-block with-errors"></div>
+                                <div class="help-block with-errors"> At least 2 characters</div>
                             </div>
                         </div>
 
@@ -202,9 +202,9 @@
                         <div class="form-group" style="margin-bottom: 2%; width: 100%">
                             <label class="col-md-3 control-label" for="inputUsername">Username</label>
                             <div class="col-lg-8">
-                                <input id="inputUsername" th:value="${user.getUsername()}" th:field="*{username}" name="inputUsername" type="text" placeholder="johndoe" class="form-control input-md"
+                                <input id="inputUsername" th:value="${user.getUsername()}"  th:field="*{username}" maxlength="20" data-minlength="3" name="inputUsername" type="text" placeholder="johndoe" class="form-control input-md"
                                        required=""/>
-                                <div class="help-block with-errors"></div>
+                                <div class="help-block with-errors"> At least 3 characters</div>
                             </div>
                         </div>
 

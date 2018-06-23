@@ -269,6 +269,9 @@ public class UserController extends BaseController {
         ModelAndView modelAndView = new ModelAndView("redirect:accountSettings");
         modelAndView.addObject("user", user);
 
+        user.setFull_name(user.getFull_name().trim().replaceAll(" +", " "));
+        user.setUsername(user.getUsername().trim().replaceAll(" +", " "));
+
         Boolean parola = false, error = false;
         // validate the old password
         if (!user.getPassword().equals("")) {
@@ -352,6 +355,9 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/editUser/{userId}", method = RequestMethod.POST)
     public ModelAndView editUser(@Valid User user, @PathVariable Long userId, BindingResult result, Model model, RedirectAttributes redir, HttpServletRequest request) throws NoSuchAlgorithmException, IOException {
+
+        user.setFull_name(user.getFull_name().trim().replaceAll(" +", " "));
+        user.setUsername(user.getUsername().trim().replaceAll(" +", " "));
 
         ModelAndView modelAndView = new ModelAndView("redirect:{userId}");
         User editUser = userService.getById(userId);

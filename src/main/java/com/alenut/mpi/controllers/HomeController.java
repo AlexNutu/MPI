@@ -871,6 +871,10 @@ public class HomeController extends BaseController {
 
     @RequestMapping(value = "/postIdea", method = RequestMethod.POST)
     public ModelAndView postIdea(@Valid Idea idea, BindingResult result, Model model, RedirectAttributes redir, @RequestParam("file") MultipartFile image) throws Exception {
+
+        idea.setTitle(idea.getTitle().trim().replaceAll(" +", " "));
+        idea.setBody(idea.getBody().trim().replaceAll(" +", " "));
+
         List<Category> categoryList = categoryService.getAllCategories();
         model.addAttribute("categoryList", categoryList);
 

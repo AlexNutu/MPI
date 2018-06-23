@@ -25,7 +25,7 @@ public class LoginController extends BaseController {
     public String redirectToLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return "redirect:/home/?page=0";
-    }//redirect:login
+    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getLoginForm(HttpServletRequest request, Model model) {

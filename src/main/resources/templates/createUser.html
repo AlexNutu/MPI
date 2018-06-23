@@ -155,9 +155,9 @@
             <div class="form-group" style="margin-bottom: 2%; width: 100%">
                 <label class="col-md-4 control-label" for="inputName">Full Name</label>
                 <div class="col-md-4">
-                    <input id="inputName" th:field="*{full_name}" name="inputName" type="text" placeholder="John Doe" class="form-control input-md"
+                    <input id="inputName" data-minlength="2" th:field="*{full_name}" name="inputName" maxlength="30" type="text" placeholder="John Doe" class="form-control input-md"
                            required=""/>
-                    <div class="help-block with-errors"></div>
+                    <div class="help-block with-errors"> At least 2 characters</div>
                 </div>
             </div>
 
@@ -165,9 +165,9 @@
             <div class="form-group" style="margin-bottom: 2%; width: 100%">
                 <label class="col-md-4 control-label" for="inputUsername">Username</label>
                 <div class="col-md-4">
-                    <input id="inputUsername" th:field="*{username}" name="inputUsername" type="text" placeholder="johndoe" class="form-control input-md"
+                    <input id="inputUsername" data-minlength="3" th:field="*{username}" name="inputUsername" maxlength="20" type="text" placeholder="johndoe" class="form-control input-md"
                            required=""/>
-                    <div class="help-block with-errors"></div>
+                    <div class="help-block with-errors"> At least 3 characters</div>
                 </div>
             </div>
 

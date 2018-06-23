@@ -391,8 +391,9 @@
                     Bootstrap</h1>
 
                 <p class="lead" style="font-size: 16px"><i class="fa fa-user"></i> by
-                    <a th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="'/user/viewProfile/' + ${idea.getUser().getId()}">Super User</a>
-                    <a th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" href="/user/profile">Super User</a>
+                    <a th:text="${idea.getUser().getFull_name()}" th:href="'/home/viewProfile/' + ${idea.getUser().getId()}">Super User</a>
+                    <a sec:authorize="isAuthenticated()" th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="'/user/viewProfile/' + ${idea.getUser().getId()}">Super User</a>
+                    <a sec:authorize="isAuthenticated()" th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" href="/user/profile">Super User</a>
                     <a style="padding: 0px 3px" sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a>
 
                 </p>
@@ -491,7 +492,7 @@
                 <div class="tab-content tabs">
 
                     <div role="tabpanel" class="tab-pane fade in active" id="Section1">
-                        <h2 class="text-center margin_bottom10" style="text-decoration: underline">Similar Ideas <i class="fa fa-handshake-o"></i></h2>
+                        <h2 class="text-center margin_bottom10"><u>Similar Ideas</u> <i class="fa fa-handshake-o"></i></h2>
                         <div class="container">
                             <div class="row blog-row">
 
@@ -506,7 +507,8 @@
                                         <img class="img-responsive center-block" th:src="@{'../../img/' + ${idea.getImage_path()}}" style="width: 555px; height: 238px"/>
                                     </a>
                                     <div class="blog-content bg-white" style="height: 230px; position: relative">
-                                        <a th:href="'/user/viewIdea/' + ${idea.getId()}"><h3 th:text="${idea.getTitle()}" style="margin-bottom: 23px; margin-top: -10px">Blog Title Comes Here</h3></a>
+                                        <a th:href="'/home/viewIdea/' + ${idea.getId()}"><h3 th:text="${idea.getTitle()}" style="margin-bottom: 23px; margin-top: -10px">Blog Title Comes Here</h3></a>
+                                        <a sec:authorize="isAuthenticated()" th:href="'/user/viewIdea/' + ${idea.getId()}"><h3 th:text="${idea.getTitle()}" style="margin-bottom: 23px; margin-top: -10px">Blog Title Comes Here</h3></a>
                                         <h5 style="" ><b>Similarity : </b><a class="count4" id="simScore" th:text="${idea.getSemantic()}">64%</a><a>%</a></h5>
                                         <p th:text="${idea.getBody()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec mauris sit amet mi posuere imperdiet. Sed congue velit placerat sapien gravida sagittis. Phasellus in convallis urna, sit amet sollicitudin augue. Nullam vel est a neque lobortis iaculis....<a href="javascript::;"  class="heading_color">  Continue Reading</a></p>
                                         <!--<a href="javascript::;"  class="heading_color">  Continue Reading</a>-->
@@ -519,8 +521,9 @@
                                                 </span>
                                         </div>
                                         <div style="position: absolute; bottom: 8%; right: 25px;">
-                                            <span th:if="${idea.getUser().getId()} != ${currentUser.getId()}" style="left: 100%" class="pull-right">By : <strong><a th:href="'/user/viewProfile/' + ${idea.getUser().getId()}" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
-                                            <span th:if="${idea.getUser().getId()} == ${currentUser.getId()}" style="left: 100%" class="pull-right">By : <strong><a href="/user/profile" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
+                                            <span style="left: 100%" class="pull-right">By : <strong><a th:href="'/home/viewProfile/' + ${idea.getUser().getId()}" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
+                                            <span sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" style="left: 100%" class="pull-right">By : <strong><a th:href="'/user/viewProfile/' + ${idea.getUser().getId()}" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
+                                            <span sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" style="left: 100%" class="pull-right">By : <strong><a href="/user/profile" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
                                         </div>
 
 
@@ -536,7 +539,7 @@
                         <!--<h3 style=" margin-left: -46px; text-decoration: underline; font-size: 30px; margin-bottom: 55px;">-->
                             <!--Comments <i class="glyphicon glyphicon-comment"></i>-->
                         <!--</h3>-->
-                        <h2 class="text-center margin_bottom10" style="text-decoration: underline; margin-bottom: 55px;">Comments <i class="glyphicon glyphicon-comment"></i></h2>
+                        <h2 class="text-center margin_bottom10" style="margin-bottom: 55px;"><u>Comments</u> <i class="glyphicon glyphicon-comment"></i></h2>
 
 
                         <div class="comments" style="max-width: 83.75rem; margin-left: 120px">
@@ -557,7 +560,7 @@
 
                             <div style="text-align: center; margin-bottom: 10px;">
                                 <div sec:authorize="isAnonymous()" class="alert alert-info" role="alert">
-                                    <span>Please <a href="/user/createUser"> Sign Up </a> in order to post comments!</span>
+                                    <span>Please <a href="/user/createUser"> <strong>Log in</strong> </a> in order to post comments!</span>
                                 </div>
                             </div>
 

@@ -161,7 +161,7 @@
             <div class="form-group"  style="margin-bottom: 2%; width: 100%">
                 <label class="col-md-4 control-label" for="inputTitle">Title</label>
                 <div class="col-md-4">
-                    <input onkeyup='swap_val(this.value);' id="inputTitle" th:field="*{title}" minlength="5" name="inputTitle" type="text" placeholder="Idea's Title" class="form-control input-md" required=""/>
+                    <input onkeyup='swap_val(this.value);' id="inputTitle" maxlength="60" th:field="*{title}" minlength="5" name="inputTitle" type="text" placeholder="Idea's Title" class="form-control input-md" required=""/>
                     <div class="help-block with-errors">Minimum 5 characters</div>
                 </div>
             </div>
