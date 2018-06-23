@@ -1,6 +1,5 @@
 package com.alenut.mpi.config;
 
-import com.alenut.mpi.auxiliary.MD5Encryption;
 import com.alenut.mpi.entities.User;
 import com.alenut.mpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +9,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class MPIAuthenticationProvider implements AuthenticationProvider {
-    
+
     @Autowired
     private UserService userService;
 
@@ -28,35 +27,32 @@ public class MPIAuthenticationProvider implements AuthenticationProvider {
 
         String password = authentication.getCredentials().toString();
         User user = null;
-        if(userService.getByEmail(emailOrUsername) != null){
-             user = userService.getByEmail(emailOrUsername);
-        }else{
-             user = userService.getByUsername(emailOrUsername);
+        if (userService.getByEmail(emailOrUsername) != null) {
+            user = userService.getByEmail(emailOrUsername);
+        } else {
+            user = userService.getByUsername(emailOrUsername);
         }
 
-        try {
-            if (user != null && MD5Encryption.computeMD5(password).equals(user.getPassword()) && user.getConfirmed() == 1) {
-                List<GrantedAuthority> grantedAuths = new ArrayList<>();
-                String role = "";
-                switch (user.getRole()) {
-                    case 1: {
-                        role = "USER";
-                        break;
-                    }
-                    case 0: {
-                        role = "ADMIN";
-                        break;
-                    }
+        if (user != null && BCrypt.checkpw(password, user.getPassword()) && user.getConfirmed() == 1) {
+            List<GrantedAuthority> grantedAuths = new ArrayList<>();
+            String role = "";
+            switch (user.getRole()) {
+                case 1: {
+                    role = "USER";
+                    break;
                 }
-                grantedAuths.add(new SimpleGrantedAuthority(role));
-                return new UsernamePasswordAuthenticationToken(emailOrUsername, password, grantedAuths);
-            } else {
-                return null;
+                case 0: {
+                    role = "ADMIN";
+                    break;
+                }
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            grantedAuths.add(new SimpleGrantedAuthority(role));
+            return new UsernamePasswordAuthenticationToken(emailOrUsername, password, grantedAuths);
+        } else {
+            return null;
         }
-        return null;
+
+//        return null;
     }
 
     @Override

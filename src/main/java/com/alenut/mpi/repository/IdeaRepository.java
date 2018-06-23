@@ -71,12 +71,12 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
 
     List<Idea> getIdeasByCategory(Category category);
 
-    Page<Idea> findByTitleLikeOrderByIdDesc(String title, Pageable p);
+    Page<Idea> findByTitleLikeOrBodyLikeOrderByIdDesc(String text, String sameText, Pageable p);
 
-    Page<Idea> findByTitleLikeOrderByLikenumberDesc(String title, Pageable p);
+    Page<Idea> findByTitleLikeOrBodyLikeOrderByLikenumberDesc(String text, String sameText, Pageable p);
 
-    Page<Idea> findByTitleLikeOrderByComnumberDesc(String title, Pageable p);
+    Page<Idea> findByTitleLikeOrBodyOrderByComnumberDesc(String text, String sameText, Pageable p);
 
-    Page<Idea> findByTitleLikeOrderBySimnumberDesc(String title, Pageable p);
+    Page<Idea> findByTitleLikeOrBodyOrderBySimnumberDesc(String text, String sameText, Pageable p);
 
 }

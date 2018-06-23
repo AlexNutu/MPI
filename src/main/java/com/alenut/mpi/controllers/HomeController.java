@@ -98,7 +98,7 @@ public class HomeController extends BaseController {
             categoryName = categoryChose.getBody();
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLike(page, "%" + q + "%");
+                ideas = ideaService.getByTitleLikeOrBodyLike(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeas(page);
             }
@@ -172,7 +172,7 @@ public class HomeController extends BaseController {
 
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLikePopular(page, "%" + q + "%");
+                ideas = ideaService.getByTitleOrBodyLikePopular(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeasPopular(page);
             }
@@ -244,7 +244,7 @@ public class HomeController extends BaseController {
 
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLikeSimilarities(page, "%" + q + "%");
+                ideas = ideaService.getByTitleOrBodyLikeSimilarities(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeasSimilarities(page);
             }
@@ -316,7 +316,7 @@ public class HomeController extends BaseController {
 
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLikeComments(page, "%" + q + "%");
+                ideas = ideaService.getByTitlOrBodyeLikeComments(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeasComments(page);
             }

@@ -1,7 +1,9 @@
 package com.alenut.mpi.controllers;
 
-import com.alenut.mpi.auxiliary.MD5Encryption;
-import com.alenut.mpi.entities.*;
+import com.alenut.mpi.entities.Category;
+import com.alenut.mpi.entities.Following;
+import com.alenut.mpi.entities.Idea;
+import com.alenut.mpi.entities.User;
 import com.alenut.mpi.repository.FollowingRepository;
 import com.alenut.mpi.repository.UserRepository;
 import com.alenut.mpi.service.EmailServiceImpl;
@@ -11,6 +13,7 @@ import com.alenut.mpi.service.impl.CategoryServiceImpl;
 import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import com.alenut.mpi.service.impl.PictureLoaderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -120,9 +123,9 @@ public class UserController extends BaseController {
         model.addAttribute("noOfComments", userService.getNoOfComments(ideaList));
 
         // verify if the current user has column  alert = 0 or 1
-        if(user.getAlert() == 1){
+        if (user.getAlert() == 1) {
             model.addAttribute("alerting", true);
-        }else{
+        } else {
             model.addAttribute("alerting", false);
         }
 
@@ -214,9 +217,9 @@ public class UserController extends BaseController {
     public String alertMe(@RequestParam(defaultValue = "0") long idUser) {
 
         User currentUser = getCurrentUser();
-        if(currentUser.getAlert() == 1){
+        if (currentUser.getAlert() == 1) {
             userService.updateAlertForUser(0, currentUser);
-        }else{
+        } else {
             userService.updateAlertForUser(1, currentUser);
         }
 
@@ -270,8 +273,10 @@ public class UserController extends BaseController {
         // validate the old password
         if (!user.getPassword().equals("")) {
             if (!user.getNewPassword().equals("")) {
-                if (currentUser.getPassword().equals(MD5Encryption.computeMD5(user.getPassword()))) {
-                    user.setPassword(MD5Encryption.computeMD5(user.getNewPassword()));
+
+                if (BCrypt.checkpw(user.getPassword(), currentUser.getPassword())) {
+
+                    user.setPassword(BCrypt.hashpw(user.getNewPassword(), BCrypt.gensalt()));
 
                     if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
                         pictureLoaderService.deletePictureFromDisk(currentUser.getImage());

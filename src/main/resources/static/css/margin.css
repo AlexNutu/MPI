@@ -12,3 +12,11 @@
 .messageNotEmpty{
     margin-top: 70px;
 }
+
+.homeEmpty{
+    margin-top: 160px;
+}
+
+.homeNormal{
+    margin-top: 0px;
+}

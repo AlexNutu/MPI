@@ -1,8 +1,10 @@
 package com.alenut.mpi.controllers;
 
-import com.alenut.mpi.auxiliary.MD5Encryption;
 import com.alenut.mpi.auxiliary.UserValidator;
-import com.alenut.mpi.entities.*;
+import com.alenut.mpi.entities.Category;
+import com.alenut.mpi.entities.Idea;
+import com.alenut.mpi.entities.Matching;
+import com.alenut.mpi.entities.User;
 import com.alenut.mpi.repository.CategoryRepository;
 import com.alenut.mpi.repository.FollowingRepository;
 import com.alenut.mpi.repository.UserRepository;
@@ -14,15 +16,16 @@ import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.mail.MailException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -76,7 +79,7 @@ public class AnonymousController extends BaseController {
             categoryName = categoryChose.getBody();
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLike(page, "%" + q + "%");
+                ideas = ideaService.getByTitleLikeOrBodyLike(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeas(page);
             }
@@ -95,7 +98,7 @@ public class AnonymousController extends BaseController {
         model.addAttribute("categoryName", categoryName);
 
         User curentUser = getCurrentUser();
-        if(curentUser != null){
+        if (curentUser != null) {
             return "redirect:/user/home";
         }
         return "userHome";
@@ -250,20 +253,19 @@ public class AnonymousController extends BaseController {
     @RequestMapping(value = "/confirm/{token}", method = RequestMethod.GET)
     public String confirmAccount(HttpServletRequest request, @PathVariable String token, Model model) {
 
+
         User createdUser = userService.getByToken(token);
         // daca este regasit un user cu acest token
         if (createdUser != null) {
             String notCrypedPass = createdUser.getPassword();
-            if(createdUser.getConfirmed() == 0){
+            if (createdUser.getConfirmed() == 0) {
+
                 // actualizam datele utilizatorului
-                try {
-                    createdUser.setPassword(MD5Encryption.computeMD5(createdUser.getPassword()));
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
+                createdUser.setPassword(BCrypt.hashpw(createdUser.getPassword(), BCrypt.gensalt()));
                 createdUser.setConfirmed(1);
                 userRepository.save(createdUser);
-            }else{
+
+            } else {
                 return "redirect:/user/home/?page=0";
             }
 
@@ -272,7 +274,12 @@ public class AnonymousController extends BaseController {
             return "redirect:/user/thanks";
         }
 
-        return "error";
+        User currentUser = getCurrentUser();
+        if (currentUser == null) {
+            return "redirect:/home/?page=0";
+        } else {
+            return "redirect:/user/home/?page=0";
+        }
     }
 
 
@@ -291,7 +298,7 @@ public class AnonymousController extends BaseController {
 
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLikePopular(page, "%" + q + "%");
+                ideas = ideaService.getByTitleOrBodyLikePopular(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeasPopular(page);
             }
@@ -327,7 +334,7 @@ public class AnonymousController extends BaseController {
 
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLikeSimilarities(page, "%" + q + "%");
+                ideas = ideaService.getByTitleOrBodyLikeSimilarities(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeasSimilarities(page);
             }
@@ -363,7 +370,7 @@ public class AnonymousController extends BaseController {
 
         } else { //daca s-a ales o categorie atunci filtrarea de search dispare
             if (!q.trim().toLowerCase().equals("")) {
-                ideas = ideaService.getByTitleLikeComments(page, "%" + q + "%");
+                ideas = ideaService.getByTitlOrBodyeLikeComments(page, "%" + q + "%");
             } else {
                 ideas = ideaService.getAllIdeasComments(page);
             }
@@ -418,6 +425,10 @@ public class AnonymousController extends BaseController {
 
     @RequestMapping(value = "/about", method = RequestMethod.GET)
     public String about(HttpServletRequest request, Model model) {
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
         return "about";
     }
 

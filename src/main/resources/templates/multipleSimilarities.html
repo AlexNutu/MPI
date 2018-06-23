@@ -19,6 +19,7 @@
     <script src="../../js/newTabsHome.js"></script>
 
 
+    <link href="../../css/margin.css" rel="stylesheet"/>
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="../../css/newTabsHome.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
@@ -290,23 +291,13 @@
 
 <h2 th:if="${categoryName} != ''" th:text="'Category / ' + ${categoryName} " style="color:white; text-shadow: 2px 2px 4px #000000; font-size: 18px; position: absolute; margin-top: -50px;margin-left: 300px; margin-bottom: 60px; font-weight: bold"></h2>
 
-<div th:if="${ideasList.totalPages} == 0" class="container" style="margin-bottom: 50px; width:920px; margin-top: 80px">
-    <div class="row">
-        <div class="oaerror info">
-            <strong>Notice!</strong> - 0 Ideas found with this filter
-        </div>
-    </div>
-</div>
-
 <div class="" style="">
     <div class="first1">
         <div class="container bootstrap snippet" style="margin-top: -35px">
             <section id="team" class="white-bg padding-top-bottom">
                 <div class="container bootstrap snippet">
 
-                    <div th:if="${ideasList.totalPages} > 0">
-
-                        <!--<button id="testB">da</button>-->
+                    <div>
 
                         <div class="container" style="margin-bottom: 130px; line-height: 0">
                             <div class="row">
@@ -376,13 +367,15 @@
                                     </div>
                                 </section>
 
-                                <h1 th:if="${qTitle} != ''" th:text=" ${ideasList.getTotalElements()} + ' Ideas found for &quot;' + ${qTitle} + '&quot;' " style="font-style: italic; margin-left:347px; margin-top: 45px; margin-bottom: 40px"></h1>
+                                <h1 th:if="${qTitle} != '' and ${ideasList.totalPages} > 0" th:text=" ${ideasList.getTotalElements()} + ' Ideas found for &quot;' + ${qTitle} + '&quot;' " style="font-style: italic; margin-left:347px; margin-top: 45px; margin-bottom: 40px"></h1>
 
                             </div>
                         </div>
-
-
                     </div>
+
+
+
+
 
                     <div th:if="${ideasList.totalPages} > 0" th:each="idea : ${ideasList.getContent()}" class="row member-content" style="margin-bottom: 60px; margin-left: 25%;">
 
@@ -438,7 +431,7 @@
         </div>
 
         <div class="clearfix"></div>
-        <ul th:if="${ideasList.totalPages} > 0" class="pagination" style="margin-left:660px; margin-bottom: 100px">
+        <ul th:if="${ideasList.totalPages} > 0" class="pagination" style="margin-left:700px; margin-bottom: 100px">
             <li th:if="${currentPage} == 0" class="disabled"><a onclick="return false;"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 
             <li sec:authorize="isAuthenticated()" th:if="${currentPage} != 0 and ${qTitle} != '' and ${categoryName} == ''"><a th:href=" @{/user/multipleSimilarities/(page=${currentPage-1}, q=${qTitle})}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
@@ -538,7 +531,7 @@
 
 <br/>
 <br/>
-<footer style="margin-top: 0px;">
+<footer th:classappend="${ideasList.totalPages} == 0 ? 'homeEmpty' : 'homeNormal'">
     <div class="container container2">
         <div class="row">
 

@@ -1,10 +1,10 @@
 package com.alenut.mpi.service.impl;
 
-import com.alenut.mpi.auxiliary.MD5Encryption;
 import com.alenut.mpi.entities.*;
 import com.alenut.mpi.repository.*;
 import com.alenut.mpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,21 +48,18 @@ public class UserServiceImpl implements UserService {
 
     public User getUser(String email, String password) {
 
-        try {
-            User user = userRepository.getByEmail(email);/**/
-            if (user == null) {
-                return null;
+        User user = userRepository.getByEmail(email);/**/
+        if (user == null) {
+            return null;
+        } else {
+
+            if (BCrypt.checkpw(password, user.getPassword())) {
+                return user;
             } else {
-                if (user.getPassword().equals(MD5Encryption.computeMD5(password))) {
-                    return user;
-                } else {
-                    throw new IllegalArgumentException();
-                }
+                throw new IllegalArgumentException();
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
         }
-        return null;
+//        return null;
     }
 
     public User getByEmail(String email) {
@@ -182,7 +179,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(User user) throws IOException {
         // delete user's image
-        if (!user.getImage().equals("av1.png") &&  !user.getImage().equals("user1.png")) {
+        if (!user.getImage().equals("av1.png") && !user.getImage().equals("user1.png")) {
             try {
                 pictureLoaderService.deletePictureFromDisk(user.getImage());
             } catch (IOException e) {

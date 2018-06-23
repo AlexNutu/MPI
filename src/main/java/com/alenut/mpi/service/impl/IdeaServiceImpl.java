@@ -97,20 +97,20 @@ public class IdeaServiceImpl {
         return ideaRepository.findAllByOrderByComnumberDesc(new PageRequest(pageNumber, 5));
     }
 
-    public Page<Idea> getByTitleLike(int pageNumber, String title) {
-        return ideaRepository.findByTitleLikeOrderByIdDesc(title, new PageRequest(pageNumber, 5));
+    public Page<Idea> getByTitleLikeOrBodyLike(int pageNumber, String text) {
+        return ideaRepository.findByTitleLikeOrBodyLikeOrderByIdDesc(text, text, new PageRequest(pageNumber, 5));
     }
 
-    public Page<Idea> getByTitleLikePopular(int pageNumber, String title) {
-        return ideaRepository.findByTitleLikeOrderByLikenumberDesc(title, new PageRequest(pageNumber, 5));
+    public Page<Idea> getByTitleOrBodyLikePopular(int pageNumber, String title) {
+        return ideaRepository.findByTitleLikeOrBodyLikeOrderByLikenumberDesc(title, title, new PageRequest(pageNumber, 5));
     }
 
-    public Page<Idea> getByTitleLikeSimilarities(int pageNumber, String title) {
-        return ideaRepository.findByTitleLikeOrderBySimnumberDesc(title, new PageRequest(pageNumber, 5));
+    public Page<Idea> getByTitleOrBodyLikeSimilarities(int pageNumber, String title) {
+        return ideaRepository.findByTitleLikeOrBodyOrderByComnumberDesc(title, title , new PageRequest(pageNumber, 5));
     }
 
-    public Page<Idea> getByTitleLikeComments(int pageNumber, String title) {
-        return ideaRepository.findByTitleLikeOrderByComnumberDesc(title, new PageRequest(pageNumber, 5));
+    public Page<Idea> getByTitlOrBodyeLikeComments(int pageNumber, String title) {
+        return ideaRepository.findByTitleLikeOrBodyOrderBySimnumberDesc(title, title , new PageRequest(pageNumber, 5));
     }
 
     public Page<Idea> getByCategoryPopular(int pageNumber, Category category) {
