@@ -13,7 +13,9 @@
     <script src="../../js/scroll.js"></script>
     <script src="../../js/userHome.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="../../js/mk-notifications.min.js"></script>
 
+    <link rel="stylesheet" href="../../css/mk-notifications.min.css"/>
     <link href="../../css/margin.css" rel="stylesheet" />
     <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
@@ -87,6 +89,35 @@
                 setTimeout(change, 700);
 
             });
+
+
+            //notification for deleting idea
+            var deleted = /*[[${deleted}]]*/ 'default';
+            if (deleted === "true") {
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-check-square-o",
+                            background: "#FFA07A"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Success</strong>",
+                    "Your idea was successfully deleted!",
+                    options
+                );
+            }
+
         }
     );
     /*]]>*/

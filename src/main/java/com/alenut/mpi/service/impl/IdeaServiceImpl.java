@@ -215,13 +215,15 @@ public class IdeaServiceImpl {
                         .asJson();
 
                 String scoreSemantic = responseSemantic.getBody().getObject().get("similarity").toString();
-                if (scoreSemantic.contains("-")) {
+                if (scoreSemantic.contains("-") || scoreSemantic.equals("0") || scoreSemantic.equals("0.0")) {
                     scoreSemantic = "0.0";
                 } else {
                     if (scoreSemantic.length() > 5) {
                         scoreSemantic = scoreSemantic.substring(0, 6);
                     }
-                    scoreSemantic = scoreSemantic.substring(2, 4) + "." + scoreSemantic.substring(4, 5);
+                    if(scoreSemantic.length() > 4){
+                        scoreSemantic = scoreSemantic.substring(2, 4) + "." + scoreSemantic.substring(4, 5);
+                    }
                 }
 
                 double doubleSemantic = Double.parseDouble(scoreSemantic);

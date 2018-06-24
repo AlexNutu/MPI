@@ -569,7 +569,7 @@ public class HomeController extends BaseController {
     }
 
     @PostMapping("/deleteMyIdea")
-    public String deleteMyIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page) {
+    public String deleteMyIdea(Idea ideaDelete, @RequestParam(defaultValue = "0") int page, RedirectAttributes redir) {
         // delete all info that corresponds to this idea
 
         // ne trebuie pentru a sti daca ramanem sau nu pe pagina asta dupa ce facem stergerea
@@ -588,6 +588,10 @@ public class HomeController extends BaseController {
         tagService.deleteTagsByIdea(idea);
 
         ideaService.deleteIdea(idea);
+
+        //for notification
+        redir.addFlashAttribute("deleted", "true");
+
         // deleting the idea's image
         if (!idea.getImage_path().contains("idea7.jpg")) {
             try {
@@ -753,6 +757,10 @@ public class HomeController extends BaseController {
         }
         model.addAttribute("filteredCategoryList", filteredCategoryList);
         model.addAttribute("currentCategoryId", category);
+
+        if (!model.containsAttribute("deleted")) {
+            model.addAttribute("deleted", false);
+        }
 
         return "myIdeas";
     }
