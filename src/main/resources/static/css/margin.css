@@ -5,6 +5,10 @@
     margin-top: 240px;
 }
 
+.minimalMyIdeas{
+    margin-top: 168px;
+}
+
 .messageEmpty{
     margin-top: 245px;
 }
@@ -19,4 +23,20 @@
 
 .homeNormal{
     margin-top: 0px;
+}
+
+.forgotEmpty{
+    margin-top: 117px;
+}
+
+.forgotNotEmpty{
+    margin-top: 55px;
+}
+
+.changeEmpty{
+    margin-top: 232px;
+}
+
+.changeNotEmpty{
+    margin-top: 140px;
 }

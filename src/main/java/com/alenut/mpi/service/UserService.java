@@ -25,6 +25,15 @@ public interface UserService {
     User getByToken(String token);
 
     @Transactional(readOnly = true)
+    User getByForgotToken(String token);
+
+    @Transactional(readOnly = true)
+    void updateForgotToken(User user, String token);
+
+    @Transactional(readOnly = true)
+    void updatePassword(User user, String password);
+
+    @Transactional(readOnly = true)
     void createUser(User user) throws NoSuchAlgorithmException;
 
     @Transactional(readOnly = true)

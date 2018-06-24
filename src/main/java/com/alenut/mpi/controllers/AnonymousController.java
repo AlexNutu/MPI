@@ -439,4 +439,90 @@ public class AnonymousController extends BaseController {
         return "about";
     }
 
+    @RequestMapping(value = "/forgot", method = RequestMethod.GET)
+    public String forgotPassword(HttpServletRequest request, Model model) {
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        if (!model.containsAttribute("needForgot")) {
+            model.addAttribute("needForgot", false);
+        }
+        if (!model.containsAttribute("incorrectMail")) {
+            model.addAttribute("incorrectMail", false);
+        }
+
+        return "forgot";
+    }
+
+    @RequestMapping(value = "/forgot", method = RequestMethod.POST)
+    public String forgotPasswordPost(HttpServletRequest request, RedirectAttributes redir, @RequestParam(defaultValue = "0") String inputEmail, Model model) {
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+
+        // verify if exists user with this mail in app
+        User user = userService.getByEmail(inputEmail);
+        if (user == null) {
+            redir.addFlashAttribute("incorrectMail", true);
+        } else {
+            redir.addFlashAttribute("needForgot", true);
+
+            String token = UUID.randomUUID().toString();
+            userService.updateForgotToken(user, token);
+
+            //send the mail for changing the password
+            try {
+                emailService.sendSimpleMessage(
+                        user.getEmail(),
+                        "Change Password",
+                        "Dear " + user.getFull_name() + ", \n\n\n " +
+                                "Please access the following link in order to change your password: " + "\n\n" +
+                                " http://localhost:8090/home/change/" + token + "\n\n" +
+                                " Best Regards, \n MPI Service");
+            } catch (MailException mailException) {
+                // model.addAttribute("invalidEmail", "true");
+            }
+        }
+
+
+        return "redirect:/home/forgot";
+    }
+
+    @RequestMapping(value = "/change/{forgotToken}", method = RequestMethod.GET)
+    public String changePass(HttpServletRequest request, @PathVariable String forgotToken, Model model) {
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("forgotToken", forgotToken);
+
+        if (!model.containsAttribute("wasChanged")) {
+            model.addAttribute("wasChanged", false);
+        }
+
+        User user = userRepository.getByForgotToken(forgotToken);
+        if (user != null) {
+            model.addAttribute("correctToken", true);
+        } else {
+            model.addAttribute("correctToken", false);
+        }
+
+        return "change";
+    }
+
+    @RequestMapping(value = "/change/{forgotToken}", method = RequestMethod.POST)
+    public String changePassPost(HttpServletRequest request, @PathVariable String forgotToken, RedirectAttributes redir, @RequestParam(defaultValue = "0") String password1, @RequestParam(defaultValue = "0") String password2, Model model) {
+
+        List<Category> categoryList = categoryService.getAllCategories();
+        model.addAttribute("categoryList", categoryList);
+        redir.addFlashAttribute("wasChanged", true);
+
+        User user = userService.getByForgotToken(forgotToken);
+        if (!BCrypt.checkpw(password1, user.getPassword())) {
+            userService.updatePassword(user, BCrypt.hashpw(password1, BCrypt.gensalt()));
+        }
+
+        return "redirect:/home/change/" +forgotToken;
+    }
+
 }

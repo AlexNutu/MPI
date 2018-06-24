@@ -71,6 +71,9 @@ public class User {
     @Column(name = "alert")
     private int alert;
 
+    @Column(name = "forgot_token")
+    private String forgotToken;
+
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
 //    private List<Role> roles;
@@ -245,5 +248,13 @@ public class User {
 
     public void setAlert(int alert) {
         this.alert = alert;
+    }
+
+    public String getForgotToken() {
+        return forgotToken;
+    }
+
+    public void setForgotToken(String forgotToken) {
+        this.forgotToken = forgotToken;
     }
 }

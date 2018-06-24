@@ -92,6 +92,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByForgotToken(String token) {
+        try {
+            return userRepository.getByForgotToken(token);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void updateForgotToken(User user, String token) {
+        try {
+            userRepository.setForgotToken(token, user.getId());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updatePassword(User user, String password) {
+        try {
+            userRepository.setPassword(password, user.getId());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
     public User getByUsername(String username) {
         try {
             return userRepository.getByUsername(username);

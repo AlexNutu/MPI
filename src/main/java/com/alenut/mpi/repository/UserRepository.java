@@ -27,6 +27,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User getByToken(String token);
 
     @Transactional(readOnly = true)
+    User getByForgotToken(String token);
+
+    @Transactional(readOnly = false)
+    @Modifying
+    @Query(value = "UPDATE User u SET u.forgot_token = :token WHERE u.id_user = :id", nativeQuery = true)
+    void setForgotToken(@Param("token") String token, @Param("id") Long id);
+
+    @Transactional(readOnly = false)
+    @Modifying
+    @Query(value = "UPDATE User u SET u.password = :pass WHERE u.id_user = :id", nativeQuery = true)
+    void setPassword(@Param("pass") String pass, @Param("id") Long id);
+
+    @Transactional(readOnly = true)
     List<User> findAllByOrderByIdDesc();
 
     @Transactional(readOnly = false)
