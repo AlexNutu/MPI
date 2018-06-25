@@ -258,6 +258,9 @@ public class UserController extends BaseController {
         if (!model.containsAttribute("displayError")) {
             model.addAttribute("displayError", "false");
         }
+        if (!model.containsAttribute("largeImage")) {
+            model.addAttribute("largeImage", "false");
+        }
 
         return modelAndView;
     }
@@ -269,41 +272,61 @@ public class UserController extends BaseController {
         ModelAndView modelAndView = new ModelAndView("redirect:accountSettings");
         modelAndView.addObject("user", user);
 
-        user.setFull_name(user.getFull_name().trim().replaceAll(" +", " "));
-        user.setUsername(user.getUsername().trim().replaceAll(" +", " "));
+        if (!currentUser.getImage().equals(user.getImage()) || !currentUser.getFull_name().equals(user.getFull_name()) ||
+                !currentUser.getUsername().equals(user.getUsername()) || !currentUser.getPhone_number().equals(user.getPhone_number())
+                || !currentUser.getOccupation().equals(user.getOccupation()) || !user.getPassword().equals("")) {
 
-        Boolean parola = false, error = false;
-        // validate the old password
-        if (!user.getPassword().equals("")) {
-            if (!user.getNewPassword().equals("")) {
+            user.setFull_name(user.getFull_name().trim().replaceAll(" +", " "));
+            user.setUsername(user.getUsername().trim().replaceAll(" +", " "));
 
-                if (BCrypt.checkpw(user.getPassword(), currentUser.getPassword())) {
+            Boolean parola = false, error = false;
+            // validate the old password
+            if (!user.getPassword().equals("")) {
+                if (!user.getNewPassword().equals("")) {
 
-                    user.setPassword(BCrypt.hashpw(user.getNewPassword(), BCrypt.gensalt()));
+                    if (BCrypt.checkpw(user.getPassword(), currentUser.getPassword())) {
 
-                    if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
+                        user.setPassword(BCrypt.hashpw(user.getNewPassword(), BCrypt.gensalt()));
+                        Boolean imageSuccess = true;
+                        if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
+                            if (image.getSize() <= 3000000) {
+                                pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
+                                String imagePath = userService.saveImage(image, user);
+                                user.setImage(imagePath);
+                            } else {
+                                imageSuccess = false;
+                                redir.addFlashAttribute("largeImage", "true");
+                            }
+                        }
+                        if (imageSuccess) {
+                            redir.addFlashAttribute("displaySuccess", "true");
+                            userService.editUser(user, currentUser.getId());
+                        }
+                        parola = true;
+                    } else {
+                        redir.addFlashAttribute("displayError", "true");
+                        error = true;
+                    }
+                }
+            }
+            if (!parola && !error) {
+                Boolean imageSuccess = true;
+                if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
+                    if (image.getSize() <= 3000000) {
                         pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
                         String imagePath = userService.saveImage(image, user);
                         user.setImage(imagePath);
+                    } else {
+                        imageSuccess = false;
+                        redir.addFlashAttribute("largeImage", "true");
                     }
+                }
+                if (imageSuccess) {
                     redir.addFlashAttribute("displaySuccess", "true");
+                    user.setPassword(currentUser.getPassword());
                     userService.editUser(user, currentUser.getId());
-                    parola = true;
-                } else {
-                    redir.addFlashAttribute("displayError", "true");
-                    error = true;
                 }
             }
-        }
-        if (!parola && !error) {
-            if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
-                pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
-                String imagePath = userService.saveImage(image, user);
-                user.setImage(imagePath);
-            }
-            redir.addFlashAttribute("displaySuccess", "true");
-            user.setPassword(currentUser.getPassword());
-            userService.editUser(user, currentUser.getId());
         }
 
         return modelAndView;
@@ -355,18 +378,21 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/editUser/{userId}", method = RequestMethod.POST)
     public ModelAndView editUser(@Valid User user, @PathVariable Long userId, BindingResult result, Model model, RedirectAttributes redir, HttpServletRequest request) throws NoSuchAlgorithmException, IOException {
-
-        user.setFull_name(user.getFull_name().trim().replaceAll(" +", " "));
-        user.setUsername(user.getUsername().trim().replaceAll(" +", " "));
-
-        ModelAndView modelAndView = new ModelAndView("redirect:{userId}");
         User editUser = userService.getById(userId);
-        user.setPassword(editUser.getPassword());
-        modelAndView.addObject("user", user);
+        ModelAndView modelAndView = new ModelAndView("redirect:{userId}");
 
-        redir.addFlashAttribute("displaySuccess", "true");
-        user.setPassword(editUser.getPassword());
-        userService.editUser2(user, userId);
+        if (!editUser.getFull_name().equals(user.getFull_name()) || !editUser.getUsername().equals(user.getUsername())
+                || !editUser.getPhone_number().equals(user.getPhone_number()) || !editUser.getOccupation().equals(user.getOccupation())) {
+
+            user.setFull_name(user.getFull_name().trim().replaceAll(" +", " "));
+            user.setUsername(user.getUsername().trim().replaceAll(" +", " "));
+            user.setPassword(editUser.getPassword());
+            modelAndView.addObject("user", user);
+
+            redir.addFlashAttribute("displaySuccess", "true");
+            user.setPassword(editUser.getPassword());
+            userService.editUser2(user, userId);
+        }
 
         return modelAndView;
     }

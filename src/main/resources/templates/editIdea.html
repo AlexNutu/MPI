@@ -15,7 +15,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     <script src="../../js/bootstrap-dropdownhover.min.js"></script>
     <script src="../../js/postIdea.js"></script>
+    <script src="../../js/jquery.loadingModal.js"></script>
 
+    <link rel="stylesheet" href="../../css/jquery.loadingModal.css"/>
+    <link href="../../css/sideAddButton.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
     <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
@@ -31,6 +34,37 @@
     <title> Edit Idea </title>
 </head>
 <body>
+
+<script type="text/javascript">
+
+    $(document).ready(
+
+        function loadingScreen() {
+
+            $('.ideaForm #postIdeaForm').on('submit', function (e) {
+
+                //daca butonul de submit nu este disabled atunci apare modala de loading
+                var attrSubmitBtn = $('.form-group #save').attr('disabled');
+                if(!$('.ideaForm #save').hasClass("disabled")){
+                    verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+                    element = $('body');
+                    offset = element.offset();
+                    offsetTop = offset;
+                    $('html, body').animate({scrollTop: offsetTop}, 1000, 'swing');
+                    $('body').loadingModal({
+                        position: 'auto',
+                        text: 'Finding similar ideas...',
+                        color: '#fff',
+                        opacity: '0.7',
+                        backgroundColor: 'rgb(0,0,0)',
+                        animation: 'doubleBounce'
+                    });
+                }
+            });
+        }
+    );
+
+</script>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -126,6 +160,14 @@
     </div>
 </nav>
 
+<ul class='social' style="margin-top: 265px;">
+    <li style="margin-left: -35px">
+        <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
+            <span>Add idea!</span>
+        </a>
+    </li>
+</ul>
+
 <div class="container" style="margin-top: 80px">
     <div class="row">
         <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 0;">Edit Idea <i style="font-size: 28px" class="glyphicon glyphicon-edit"></i></h1>
@@ -147,92 +189,99 @@
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Oops!</strong> Please correct the idea's description!
 </div>
+<div th:if="${largeImage}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%; margin-top: -9px" class="alert alert-danger alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <i class="glyphicon glyphicon-exclamation-sign"></i>
+    Warning! Your image is<strong> greater </strong> than 3MB!
+</div>
 
-<form class="form-horizontal" th:action="@{'/user/editIdea/' + ${idea.getId()}}" th:object="${idea}" enctype="multipart/form-data" method="POST" data-toggle="validator" role="form" style="margin-top: 2%;">
-    <fieldset>
+<div class="ideaForm">
+    <form id="postIdeaForm" name="postIdeaForm" class="form-horizontal" th:action="@{'/user/editIdea/' + ${idea.getId()}}" th:object="${idea}" enctype="multipart/form-data" method="POST" data-toggle="validator" role="form" style="margin-top: 2%;">
+        <fieldset>
 
-        <div style="text-align: center; margin-left: 5%;">
+            <div style="text-align: center; margin-left: 5%;">
 
 
-            <!-- Text input title-->
-            <div class="form-group"  style="margin-bottom: 2%; width: 100%">
-                <label class="col-md-4 control-label" for="inputTitle">Title</label>
-                <div class="col-md-4">
-                    <input onkeyup='swap_val(this.value);' th:value="${idea.getTitle()}" id="inputTitle" th:field="*{title}" minlength="5" name="inputTitle" type="text" placeholder="Idea's Title" class="form-control input-md" required=""/>
-                    <div class="help-block with-errors">Minimum 5 characters</div>
+                <!-- Text input title-->
+                <div class="form-group"  style="margin-bottom: 2%; width: 100%">
+                    <label class="col-md-4 control-label" for="inputTitle">Title</label>
+                    <div class="col-md-4">
+                        <input onkeyup='swap_val(this.value);' th:value="${idea.getTitle()}" id="inputTitle" th:field="*{title}" minlength="5" name="inputTitle" type="text" placeholder="Idea's Title" class="form-control input-md" required=""/>
+                        <div class="help-block with-errors">Minimum 5 characters</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Text input description-->
-            <div class="form-group" style="margin-bottom: 2%; width: 100%">
-                <label class="col-md-4 control-label" for="inputDescription">Description</label>
-                <div class="col-md-4">
-                    <textarea id="inputDescription" rows="5" th:value="${idea.getBody()}" th:field="*{body}" minlength="20" name="inputDescription" required="" placeholder="Idea's Description" class="form-control input-md">
-                    </textarea>
-                    <div class="help-block with-errors">Minimum 20 characters</div>
+                <!-- Text input description-->
+                <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                    <label class="col-md-4 control-label" for="inputDescription">Description</label>
+                    <div class="col-md-4">
+                        <textarea id="inputDescription" rows="5" th:value="${idea.getBody()}" th:field="*{body}" minlength="20" name="inputDescription" required="" placeholder="Idea's Description" class="form-control input-md">
+                        </textarea>
+                        <div class="help-block with-errors">Minimum 20 characters</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Select input-->
-            <div class="form-group" style="width: 100%; margin-bottom: 3%;">
-                <label for="selectCategory" class="col-md-4 control-label">Category</label>
-                <div class="col-md-4">
-                    <select class="form-control input-md" th:field="*{category.id}" id="selectCategory" required="">
-                        <option value=""></option>
-                        <option th:each="category: ${categoryList}" th:value="${category.getId()}" th:text="${category.getBody()}"></option>
-                    </select>
-                    <div class="help-block with-errors">Category is important to find your matchings!</div>
+                <!-- Select input-->
+                <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                    <label for="selectCategory" class="col-md-4 control-label">Category</label>
+                    <div class="col-md-4">
+                        <select class="form-control input-md" th:field="*{category.id}" id="selectCategory" required="">
+                            <option value=""></option>
+                            <option th:each="category: ${categoryList}" th:value="${category.getId()}" th:text="${category.getBody()}"></option>
+                        </select>
+                        <div class="help-block with-errors">Category is important to find your matchings!</div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Search idea input-->
-            <div class="form-group" style="width: 100%; margin-bottom: 3%;">
-                <label class="col-md-4 control-label">Search Photos On the Internet</label>
-                <div class="col-md-4">
-                    <div1 name="ideaSearch" id="ideaSearch" ></div1>
-                    <script>
-                        (function() {
-                            var cx = '000177612292244595468:f9dm84wvcsg';
-                            var gcse = document.createElement('script');
-                            gcse.type = 'text/javascript';
-                            gcse.async = true;
-                            gcse.enableAutoComplete = true;
-                            gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
-                            var s = document.getElementsByTagName('script')[0];
-                            s.placeholder = 'da';
-                            s.parentNode.insertBefore(gcse, s);
-                        })();
-                    </script>
-                    <gcse:search enableHistory="true" disableWebSearch="true" enableAutoComplete="true" linkTarget="_blank" autoCompleteMaxCompletions="5" autoCompleteMatchType='any'></gcse:search>
+                <!-- Search idea input-->
+                <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                    <label class="col-md-4 control-label">Search Photos On the Internet</label>
+                    <div class="col-md-4">
+                        <div1 name="ideaSearch" id="ideaSearch" ></div1>
+                        <script>
+                            (function() {
+                                var cx = '000177612292244595468:f9dm84wvcsg';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.enableAutoComplete = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.placeholder = 'da';
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:search enableHistory="true" disableWebSearch="true" enableAutoComplete="true" linkTarget="_blank" autoCompleteMaxCompletions="5" autoCompleteMatchType='any'></gcse:search>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group" style="width: 100%; margin-bottom: 3%;">
-                <label for="selectImage" class="col-md-4 control-label">Image (Optional)</label>
-                <div class="col-md-4">
-                    <input type="file" data-filesize="5000" accept="image/png, image/jpeg, image/jpg, image/gif" name="file" id="selectImage" class="file" />
-                    <div class="input-group col-xs-12">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
-                        <input type="text" th:value="${idea.getImage_path()}" th:field="*{image_path}" style="background-color: white" class="form-control input-md" readonly="true" placeholder="Upload Image"/>
-                        <span class="input-group-btn">
-                                 <button class="browse btn btn-default input-md" style="background-color: #eee" type="button"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Browse</button>
-                            </span>
+                <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                    <label for="selectImage" class="col-md-4 control-label">Image (Optional)</label>
+                    <div class="col-md-4">
+                        <input type="file" data-filesize="5000" accept="image/png, image/jpeg, image/jpg, image/gif" name="file" id="selectImage" class="file" />
+                        <div class="input-group col-xs-12">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                            <input type="text" th:value="${idea.getImage_path()}" th:field="*{image_path}" style="background-color: white" class="form-control input-md" readonly="true" placeholder="Upload Image"/>
+                            <span class="input-group-btn">
+                                     <button class="browse btn btn-default input-md" style="background-color: #eee" type="button"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Browse</button>
+                                </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Button (Double) -->
-        <div class="form-group col-md-4" style="width: 100%; margin-bottom:41px">
-            <label class="col-md-4 control-label" for="save"></label>
-            <div class="col-md-8" style="margin-left: 80px; text-align: center; float: none !important;">
-                <button id="save" name="save" type="submit" class="btn btn-success">Submit</button>
-                <a id="cancel" href="/user/home" type="button" name="cancel" class="btn btn-danger">Cancel</a>
+            <!-- Button (Double) -->
+            <div class="form-group col-md-4" style="width: 100%; margin-bottom:41px">
+                <label class="col-md-4 control-label" for="save"></label>
+                <div class="col-md-8" style="margin-left: 80px; text-align: center; float: none !important;">
+                    <button id="save" name="save" type="submit" class="btn btn-success">Submit</button>
+                    <a id="cancel" href="/user/home" type="button" name="cancel" class="btn btn-danger">Cancel</a>
+                </div>
             </div>
-        </div>
 
-    </fieldset>
-</form>
+        </fieldset>
+    </form>
+</div>
 
 
 

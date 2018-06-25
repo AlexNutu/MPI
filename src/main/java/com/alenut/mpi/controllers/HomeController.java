@@ -873,6 +873,9 @@ public class HomeController extends BaseController {
         if (!model.containsAttribute("format")) {
             model.addAttribute("format", "false");
         }
+        if (!model.containsAttribute("largeImage")) {
+            model.addAttribute("largeImage", "false");
+        }
 
         return modelAndView;
     }
@@ -902,11 +905,11 @@ public class HomeController extends BaseController {
                 model.addAttribute("format", "true");
             }
             modelAndView.setViewName("postIdea");
-        } else {
-            modelAndView.setViewName("redirect:postIdea");
+        } else if (image.getSize() <= 3000000) {
 
             ideaService.insert(idea, user);
             // Add matchings with this idea
+
             ideaService.addMatchings(idea);
             // Add tags/keywords for this idea
             ideaService.addTags(idea);
@@ -917,16 +920,19 @@ public class HomeController extends BaseController {
             String imagePath = "";
             if (!idea.getImage_path().equals("")) {
                 imagePath = ideaService.saveIdeaImage(image, idea);
-                //idea.setImage_path(imagePath);
             } else {
                 imagePath = "idea7.jpg";
-                //idea.setImage_path("idea7.jpg");
             }
+            //updating idea's path after inserting the image
             ideaService.updateImagePath(imagePath, idea);
-
-            redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());
 
+            modelAndView.setViewName("redirect:postIdea");
+            redir.addFlashAttribute("displaySuccess", "true");
+
+        } else {
+            model.addAttribute("largeImage", "true");
+            modelAndView.setViewName("postIdea");
         }
 
         List<Following> followingList = followingRepository.getByUser(user);
@@ -945,6 +951,20 @@ public class HomeController extends BaseController {
 
         return modelAndView;
     }
+
+//    @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
+//    public ModelAndView uploadImage(@RequestParam("image") MultipartFile image) throws Exception {
+//
+//        Idea idea = ideaService.getIdeaById(146L);
+//        String imagePath = "";
+//        imagePath = ideaService.saveIdeaImage(image, idea);
+//        ideaService.updateImagePath(imagePath, idea);
+//        ModelAndView modelAndView = new ModelAndView("redirect:viewIdea/" + idea.getId());
+////        ModelAndView modelAndView = new ModelAndView("redirect:home/");
+//        return  modelAndView;
+////        return "redirect: /viewIdea/" + idea.getId();
+//    }
+
 
     @RequestMapping(value = "/viewIdea/{ideaId}", method = RequestMethod.GET)
     public String viewIdea(HttpServletRequest httpServletRequest, @PathVariable Long ideaId, Model model) {//(@RequestParam Idea idea) {
@@ -1263,7 +1283,7 @@ public class HomeController extends BaseController {
         model.addAttribute("myIdeasNumber", myIdeas.size());
         model.addAttribute("messagesNumber", currentUser.getMessages().size());
 
-        if(!model.containsAttribute("rights")){
+        if (!model.containsAttribute("rights")) {
             model.addAttribute("rights", false);
             model.addAttribute("rightName", "nimeni");
         }
@@ -1465,6 +1485,10 @@ public class HomeController extends BaseController {
             model.addAttribute("format", "false");
         }
 
+        if (!model.containsAttribute("largeImage")) {
+            model.addAttribute("largeImage", "false");
+        }
+
         return modelAndView;
     }
 
@@ -1491,7 +1515,7 @@ public class HomeController extends BaseController {
                 model.addAttribute("format", "true");
             }
             modelAndView.setViewName("editIdea");
-        } else {
+        } else if (image.getSize() <= 3000000) {
             modelAndView.setViewName("redirect:/user/editIdea/" + ideaId);
 
             if (!idea.getBody().equals(currentIdea.getBody()) || !idea.getCategory().equals(currentIdea.getCategory())) {
@@ -1513,6 +1537,7 @@ public class HomeController extends BaseController {
                 // image uploading on file disk
                 String imagePath = "";
                 if (!idea.getImage_path().equals("")) {
+                    pictureLoaderService.deletePictureFromDisk(currentIdea.getImage_path());
                     imagePath = ideaService.saveIdeaImage(image, idea);
                     //idea.setImage_path(imagePath);
                 } else {
@@ -1524,6 +1549,9 @@ public class HomeController extends BaseController {
 
             redir.addFlashAttribute("displaySuccess", "true");
             redir.addFlashAttribute("idCreatedIdea", idea.getId());
+        } else {
+            model.addAttribute("largeImage", "true");
+            modelAndView.setViewName("editIdea");
         }
 
         List<Following> followingList = followingRepository.getByUser(user);

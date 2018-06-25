@@ -43,24 +43,25 @@
 
         function loadingScreen() {
 
-
             $('.ideaForm #postIdeaForm').on('submit', function (e) {
 
-                verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
-                element = $('body');
-                offset = element.offset();
-                offsetTop = 0;
-                $('html, body').animate({scrollTop: offsetTop}, 1000, 'swing');
-
-
-                $('body').loadingModal({
-                    position: 'auto',
-                    text: 'Finding similar ideas...',
-                    color: '#fff',
-                    opacity: '0.7',
-                    backgroundColor: 'rgb(0,0,0)',
-                    animation: 'doubleBounce'
-                });
+                //daca butonul de submit nu este disabled atunci apare modala de loading
+                var attrSubmitBtn = $('.form-group #save').attr('disabled');
+                if(!$('.ideaForm #save').hasClass("disabled")){
+                    verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+                    element = $('body');
+                    offset = element.offset();
+                    offsetTop = offset;
+                    $('html, body').animate({scrollTop: offsetTop}, 1000, 'swing');
+                    $('body').loadingModal({
+                        position: 'auto',
+                        text: 'Finding similar ideas...',
+                        color: '#fff',
+                        opacity: '0.7',
+                        backgroundColor: 'rgb(0,0,0)',
+                        animation: 'doubleBounce'
+                    });
+                }
             });
         }
     );
@@ -185,6 +186,13 @@
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>Oops!</strong> Please correct the idea's description!
 </div>
+<div th:if="${largeImage}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%; margin-top: -9px" class="alert alert-danger alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <i class="glyphicon glyphicon-exclamation-sign"></i>
+    Warning! Your image is<strong> greater </strong> than 3MB!
+</div>
+
+
 
 <div class="ideaForm">
     <form id="postIdeaForm" name="postIdeaForm" class="form-horizontal" th:action="@{/user/postIdea}" th:object="${idea}" enctype="multipart/form-data" method="POST" data-toggle="validator" role="form" style="margin-top: 2%;">
