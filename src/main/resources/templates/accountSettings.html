@@ -93,7 +93,7 @@
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
-                    <i class="fa fa-user-circle-o" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${currentUser.getUsername()}" th:remove="tag"></span>
+                    <i class="fa fa-user" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${currentUser.getUsername()}" th:remove="tag"></span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" role="menu">
@@ -255,11 +255,12 @@
                             <div class="form-inline row" style="width: 100%">
                                 <div class="form-group col-md-4" style="padding-left: 30px; margin-left: 0">
                                     <input th:field="*{password}" type="password" data-minlength="6" style="width: 100%" class="form-control" id="inputPassword" placeholder="Old Password"/>
-                                    <div class="help-block">Minimum of 6 characters</div>
+                                    <div class="help-block">Your actual password</div>
                                 </div>
                                 <div class="form-group col-md-4" style="padding-left: 30px; margin-left: 0">
-                                    <input th:field="*{newPassword}" type="password" data-minlength="6" class="form-control" style="width: 100%" id="inputPasswordConfirm" placeholder="New Password" />
-                                    <div class="help-block">Minimum of 6 characters</div>
+                                    <input th:field="*{newPassword}" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" data-minlength="6" class="form-control" style="width: 100%" id="inputPasswordConfirm" placeholder="New Password" />
+                                    <div class="help-block">At least 6 characters</div>
+                                    <div class="help-block" style="margin-left: -2px">(lowercase, uppercase, number)</div>
                                 </div>
                             </div>
                         </div>

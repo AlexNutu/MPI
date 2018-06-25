@@ -107,6 +107,8 @@
 }
 .table-filter .media-photo {
     width: 35px;
+    border-radius: 50%;
+    height: 36px;
 }
 /*.table-filter .media-body {*/
     /*display: block;*/

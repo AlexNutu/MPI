@@ -191,7 +191,7 @@
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
-                    <i class="fa fa-user-circle-o" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <i class="fa fa-user" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" role="menu">
@@ -267,7 +267,7 @@
                             <tbody>
                             <tr th:if="${currentUser.getId()} != ${user.getId()}" th:each="user : ${usersList}">
                                 <td>
-                                    <img th:src="@{'../../img/' + ${user.getImage()}}" alt="User image"/>
+                                    <img th:src="@{'../../img/' + ${user.getImage()}}" alt="User image" style="height: 50px; width: 50px; border-radius: 50%;"/>
                                     <a th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}" class="user-link">Alex Nutu</a>
                                     <span class="user-subhead" th:text="${user.getOccupation()}"> Student </span>
                                 </td>

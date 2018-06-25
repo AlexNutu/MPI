@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(User user) throws IOException {
         // delete user's image
-        if (!user.getImage().equals("av1.png") && !user.getImage().equals("user1.png")) {
+        if (!user.getImage().contains("av1.png") && !user.getImage().contains("user1.png")) {
             try {
                 pictureLoaderService.deletePictureFromDisk(user.getImage());
             } catch (IOException e) {

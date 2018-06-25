@@ -1537,7 +1537,9 @@ public class HomeController extends BaseController {
                 // image uploading on file disk
                 String imagePath = "";
                 if (!idea.getImage_path().equals("")) {
-                    pictureLoaderService.deletePictureFromDisk(currentIdea.getImage_path());
+                    if(!currentIdea.getImage_path().contains("idea7.jpg")){
+                        pictureLoaderService.deletePictureFromDisk(currentIdea.getImage_path());
+                    }
                     imagePath = ideaService.saveIdeaImage(image, idea);
                     //idea.setImage_path(imagePath);
                 } else {

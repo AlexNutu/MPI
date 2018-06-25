@@ -290,7 +290,9 @@ public class UserController extends BaseController {
                         Boolean imageSuccess = true;
                         if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
                             if (image.getSize() <= 3000000) {
-                                pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
+                                if(!currentUser.getImage().contains("user1.png")){
+                                    pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
+                                }
                                 String imagePath = userService.saveImage(image, user);
                                 user.setImage(imagePath);
                             } else {
@@ -313,7 +315,9 @@ public class UserController extends BaseController {
                 Boolean imageSuccess = true;
                 if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
                     if (image.getSize() <= 3000000) {
-                        pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
+                        if(!currentUser.getImage().contains("user1.png")){
+                            pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
+                        }
                         String imagePath = userService.saveImage(image, user);
                         user.setImage(imagePath);
                     } else {
