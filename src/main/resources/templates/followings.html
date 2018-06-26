@@ -64,7 +64,11 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li th:each="user : ${displayedUsers}"><a th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
                     <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
                     <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
                     <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
@@ -197,7 +201,7 @@
                                                     <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
                                                             <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
-                                                            <span style="margin-right: 325px; font-size: 12px; margin-top: 10px" class="pull-right student">(Student)</span>
+                                                            <span style="margin-right: 315px; font-size: 12px; margin-top: 10px" class="pull-right student">(Student)</span>
                                                         </h4>
                                                     </a>
                                                     <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
@@ -223,7 +227,7 @@
                                                     <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}">
                                                         <h4 class="title">
                                                             <span style="font-size: 17px;" th:text="${following.getFollowingUser().getFull_name()}"></span>
-                                                            <span style="margin-right: 307px; font-size: 12px; margin-top: 10px" class="pull-right developer">(Developer)</span>
+                                                            <span style="margin-right: 305px; font-size: 12px; margin-top: 10px" class="pull-right developer">(Developer)</span>
                                                         </h4>
                                                     </a>
                                                     <p th:text="${following.getFollowingUser().getPhone_number()}" class="summary">0912-123-123 </p>
@@ -267,7 +271,7 @@
                                         <td>
                                             <div class="media">
                                                 <a th:href="@{'/user/viewProfile/' + ${following.getFollowingUser().getId()}}" class="pull-left">
-                                                    <img th:src="@{'../../img/' + ${user.getImage()}}" class="media-photo"/>
+                                                    <img th:src="@{'../../img/' + ${following.getFollowingUser().getImage()}}" class="media-photo"/>
                                                 </a>
                                                 <div class="media-body">
                                                     <span style="margin-top: 10px" th:text="${following.getDate_following()}" class="media-meta pull-right">Febrero 13, 2016</span>

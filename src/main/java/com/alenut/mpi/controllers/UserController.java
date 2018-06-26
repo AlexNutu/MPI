@@ -161,6 +161,10 @@ public class UserController extends BaseController {
         }
         model.addAttribute("followingUsers", followingUsers);
         model.addAttribute("displayedUsers", displayedUsers);
+        if (displayedUsers.contains(viewedUser)) {
+            displayedUsers.remove(viewedUser);
+            displayedUsers.add(viewedUser);
+        }
 
         model.addAttribute("viewedUser", viewedUser);
         model.addAttribute("currentUser", currentUser);
@@ -290,7 +294,7 @@ public class UserController extends BaseController {
                         Boolean imageSuccess = true;
                         if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
                             if (image.getSize() <= 3000000) {
-                                if(!currentUser.getImage().contains("user1.png")){
+                                if (!currentUser.getImage().contains("user1.png")) {
                                     pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
                                 }
                                 String imagePath = userService.saveImage(image, user);
@@ -315,7 +319,7 @@ public class UserController extends BaseController {
                 Boolean imageSuccess = true;
                 if (!user.getImage().equals(currentUser.getImage())) { // daca a fost schimbata imaginea atunci o adaugam in proiect
                     if (image.getSize() <= 3000000) {
-                        if(!currentUser.getImage().contains("user1.png")){
+                        if (!currentUser.getImage().contains("user1.png")) {
                             pictureLoaderService.deletePictureFromDisk(currentUser.getImage());
                         }
                         String imagePath = userService.saveImage(image, user);

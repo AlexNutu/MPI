@@ -290,7 +290,11 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li th:each="user : ${displayedUsers}"><a th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
                     <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
                     <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
                     <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
@@ -513,7 +517,7 @@
                                         <h5 style="" ><b>Similarity : </b><a class="count4" id="simScore" th:text="${idea.getSemantic()}">64%</a><a>%</a></h5>
                                         <p th:text="${idea.getBody()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec mauris sit amet mi posuere imperdiet. Sed congue velit placerat sapien gravida sagittis. Phasellus in convallis urna, sit amet sollicitudin augue. Nullam vel est a neque lobortis iaculis....<a href="javascript::;"  class="heading_color">  Continue Reading</a></p>
                                         <!--<a href="javascript::;"  class="heading_color">  Continue Reading</a>-->
-                                        <hr style="bottom: 33px;color: #f00;width: 90%; position: absolute"/>
+                                        <hr style="bottom: 25px;color: #f00;width: 90%; position: absolute"/>
                                         <div style="position: absolute; bottom: 8%;">
                                                 <span >Stats :
                                                     (<i class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i>): <span th:text="${idea.getLikenumber()}" style="color:#5bc0de;">122</span>

@@ -63,7 +63,11 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li th:each="user : ${displayedUsers}"><a th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
                     <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
                     <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
                     <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
@@ -373,7 +377,20 @@
                         </div>
                     </div>
 
-
+                    <div th:if="${ideasList.totalPages} == 0 and ${qTitle} == ''" class="container" style="margin-bottom: 50px; width:920px; margin-top: 150px">
+                        <div class="row">
+                            <div class="oaerror info">
+                                <strong>Notice!</strong> - 0 Ideas found with this filter
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${ideasList.totalPages} == 0 and ${qTitle} != ''" class="container" style="margin-bottom: 50px; width:920px; margin-top: 150px">
+                        <div class="row">
+                            <div class="oaerror info">
+                                <strong>Notice!</strong> - 0 Ideas found with the filter " <span th:text="${qTitle}"></span> "
+                            </div>
+                        </div>
+                    </div>
 
 
 

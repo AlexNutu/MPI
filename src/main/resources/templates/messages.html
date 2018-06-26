@@ -70,8 +70,9 @@
                 ).appendTo($('.messages ul'));
                     //.setTimeout();
 
-
-                $('.message-input input').val(null);
+            $('.contact.active .preview').html('<p class="preview" style="margin-top: 0px">' + message +'</p>');
+            $(".messages").animate({ scrollTop: $('.messages').prop("scrollHeight") }, -100);
+            $('.message-input input').val(null);
 
             // var node = document.createElement("LI");
             // node.className = "sent";
@@ -113,7 +114,11 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li th:each="user : ${displayedUsers}"><a th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
                     <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
                     <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
                     <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
@@ -262,7 +267,10 @@ $('.submit').click(function() {
 });
 
 $(window).on('keydown', function(e) {
+
     if (e.which == 13) {
+        // $(".messages").animate(
+        //     { scrollTop: $('.messages').prop("scrollHeight")}, 0);
         newMessage();
         return false;
     }
@@ -368,7 +376,7 @@ $(window).on('keydown', function(e) {
             <div th:if="${convMessages.size()} == 0" > You have no messages yet </div>
         </div>
 
-        <div class="message-input" th:if="${conversations.size()} > 0" style="bottom: -3px">
+        <div class="message-input" th:if="${conversations.size()} > 0" style="bottom: -3px;">
             <div class="wrap">
                 <form id="messageSend" th:action="@{'/user/messages/' + ${convOpen.getId()}}" th:object="${sentMessage}" method="post" data-toggle="validator" role="form">
                     <input id="messageInput" name="messageInput" th:field="*{body}" type="text" required="" placeholder="Write your message..." />

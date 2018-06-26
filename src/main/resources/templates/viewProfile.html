@@ -84,6 +84,9 @@
             });
 
             var fullname = /*[[${viewedUser.getFull_name()}]]*/ 'default';
+            var listLength = /*[[${displayedUsers.size()}]]*/ 'default';
+            var viewedUserFullname = /*[[${viewedUser.getFull_name()}]]*/ 'default';
+            var viewedUserId = /*[[${viewedUser.getId()}]]*/ 'default';
 
 
             $('.button-checkbox #followForm').on('submit', function(e) {
@@ -92,6 +95,19 @@
                 $(this).ajaxSubmit({
                     target: 'myResultsDiv'
                 });
+                if(listLength < 3){
+
+                    var $widget = $('.button-checkbox');
+                    var $checkbox = $widget.find('input:checkbox');
+                    var wasChecked = $checkbox.is(':checked');
+                    // daca nu e checked atunci adaugam elementul
+                    // alert(wasChecked);
+                    if(wasChecked){
+                        $('<li style="margin-top: 2px"> ' + '<a style="color: black" href="/user/viewProfile/' + viewedUserId + '">' + viewedUserFullname + '</a> ' +'</li>').appendTo($('.dropdown-menu .followList'));
+                    }else {
+                        $('.dropdown-menu .followList li:last-child').remove();
+                    }
+                }
             });
 
             $('.button-checkbox').each(function () {
@@ -199,7 +215,12 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li th:each="user : ${displayedUsers}"><a th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
+                    <!--<li th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>-->
                     <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
                     <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
                     <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
