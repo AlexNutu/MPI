@@ -161,6 +161,11 @@ public class UserController extends BaseController {
         }
         model.addAttribute("followingUsers", followingUsers);
         model.addAttribute("displayedUsers", displayedUsers);
+        if(displayedUsers != null){
+            model.addAttribute("displayedUsersSize", displayedUsers.size());
+        }else{
+            model.addAttribute("displayedUsersSize", 0);
+        }
         if (displayedUsers.contains(viewedUser)) {
             displayedUsers.remove(viewedUser);
             displayedUsers.add(viewedUser);
