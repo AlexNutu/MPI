@@ -467,15 +467,13 @@
                     </div>
                 </div>
 
-                <img th:src="@{'../../img/' + ${idea.getImage_path()}}" class="img-responsive" style="width:650px; height:309px"  />
+                <img th:src="@{'../../img/' + ${idea.getImage_path()}}" class="img-responsive" style="width:650px; height:340px"  />
                 <hr/>
                 <h4><strong>Description</strong></h4>
-                <p th:text="${idea.getBody()}">Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
-                    Lorem ipsum dolor Lorem ipsum dolor.</p>
+                <p th:text="${idea.getBody()}">Lorem ips um dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
+                    Lore m ipsum dolor Lorem ipsum dolor.</p>
             </div>
-
-
-                <br/>
+            <br/>
         </div>
     </div>
 
@@ -569,7 +567,7 @@
                                 </div>
                             </div>
 
-                            <div class="commentList">
+                            <div class="commentList" style="margin-bottom: -56px;">
                                 <div th:each="com : ${comments}" th:classappend="'com' + ${com.getId()}" class="comment-wrap">
                                     <div class="photo">
                                         <img th:src= "@{'../../img/' + ${com.getUser().getImage()}}" class="avatar2"/>

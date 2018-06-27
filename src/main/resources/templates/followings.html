@@ -70,8 +70,8 @@
                         </ul>
                     </li>
                     <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
+                    <li role="separator" class="divider"></li>
                     <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
-                    <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
                     <li th:if="${followingUsers.size()} > 0"><a th:href="${'/user/followings/'}"><i class="glyphicon glyphicon-th-list"></i> View Separately</a></li>
                 </ul>
             </li>
@@ -374,7 +374,7 @@
     </form>
 </div>
 
-<footer style="margin-top: 183px;">
+<footer style="margin-top: 313px;">
     <div class="container container2">
         <div class="row">
 

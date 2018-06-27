@@ -234,7 +234,11 @@ public class UserController extends BaseController {
     public ModelAndView accountSettings(HttpServletRequest request, Model model) {
         User currentUser = getCurrentUser();
         model.addAttribute("myIdeasNumber", ideaService.getIdeasByUser(currentUser).size());
-        model.addAttribute("messagesNumber", currentUser.getMessages().size());
+        if (currentUser.getMessages() != null) {
+            model.addAttribute("messagesNumber", currentUser.getMessages().size());
+        } else {
+            model.addAttribute("messagesNumber", 0);
+        }
         model.addAttribute("username", currentUser.getUsername());
         model.addAttribute("image", currentUser.getImage());
         List<Category> categoryList = categoryService.getAllCategories();
