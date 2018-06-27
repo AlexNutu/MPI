@@ -642,6 +642,8 @@ public class HomeController extends BaseController {
         // delete all info that corresponds to this user
         userService.deleteUserConversations(user);
         userService.deleteUserFollowings(user);
+        userService.deleteUserAppreciations(user);
+        userService.deleteUserComments(user);
         userService.deleteUser(user);
 
         return "redirect:/user/dashboard/";
@@ -1537,7 +1539,7 @@ public class HomeController extends BaseController {
                 // image uploading on file disk
                 String imagePath = "";
                 if (!idea.getImage_path().equals("")) {
-                    if(!currentIdea.getImage_path().contains("idea7.jpg")){
+                    if (!currentIdea.getImage_path().contains("idea7.jpg")) {
                         pictureLoaderService.deletePictureFromDisk(currentIdea.getImage_path());
                     }
                     imagePath = ideaService.saveIdeaImage(image, idea);

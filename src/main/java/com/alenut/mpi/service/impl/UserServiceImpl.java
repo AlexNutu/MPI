@@ -244,5 +244,17 @@ public class UserServiceImpl implements UserService {
         followingRepository.delete(followingList2);
     }
 
+    @Override
+    public void deleteUserAppreciations(User user) throws IOException {
+        List<Appreciation> appreciations = appreciationRepository.getByUser(user);
+        appreciationRepository.delete(appreciations);
+    }
+
+    @Override
+    public void deleteUserComments(User user) throws IOException {
+        List<Comment> comments = commentRepository.getByUser(user);
+        commentRepository.delete(comments);
+    }
+
 
 }

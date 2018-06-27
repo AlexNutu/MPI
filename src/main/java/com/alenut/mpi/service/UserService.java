@@ -72,4 +72,10 @@ public interface UserService {
     @Transactional(readOnly = true)
     void deleteUserFollowings(User user) throws IOException;
 
+    @Transactional(readOnly = true)
+    void deleteUserAppreciations(User user) throws IOException;
+
+    @Transactional(readOnly = true)
+    void deleteUserComments(User user) throws IOException;
+
 }

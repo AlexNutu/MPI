@@ -27,6 +27,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
     <title>My messages</title>
+
+
+    <!--<script src="../../js/liveMessaging.js"></script>-->
+    <!--<script src="/webjars/jquery/jquery.min.js"></script>-->
+    <!--<script src="/webjars/sockjs-client/sockjs.min.js"></script>-->
+    <!--<script src="/webjars/stomp-websocket/stomp.min.js"></script>-->
+
 </head>
 
 <script type="text/javascript">
@@ -366,9 +373,9 @@ $(window).on('keydown', function(e) {
             </div>
 
         </div>
-        <div class="messages" name="messages">
-            <ul th:if="${convMessages.size()} > 0" id="messageList" name="messageList">
-                <li th:each="message : ${convMessages}" th:classappend="${message.getSender().getId()} == ${user.getId()}?'sent':'replies'">
+        <div class="messages" id="messages">
+            <ul th:if="${convMessages.size()} > 0" id="messageList" class="messageList">
+                <li th:each="message : ${convMessages}" class="messageTemplate" th:classappend="${message.getSender().getId()} == ${user.getId()}?'sent':'replies'">
                     <img th:src="@{'../../img/' + ${message.getSender().getImage()}}" style="height: 20px" alt="" />
                     <p th:text="${message.getBody()}">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
                 </li>
