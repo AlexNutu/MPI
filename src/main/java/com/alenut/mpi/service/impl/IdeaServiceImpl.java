@@ -234,7 +234,7 @@ public class IdeaServiceImpl {
 
                 double doubleSemantic = Double.parseDouble(scoreSemantic);
 
-                if (doubleSemantic >= 40.0) {
+                if (doubleSemantic >= 30.0) {
                     Matching matching = new Matching();
                     Matching matching2 = new Matching();
                     matching.setIdea(idea);
