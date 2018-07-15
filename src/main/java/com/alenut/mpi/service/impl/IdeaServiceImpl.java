@@ -106,11 +106,11 @@ public class IdeaServiceImpl {
     }
 
     public Page<Idea> getByTitleOrBodyLikeSimilarities(int pageNumber, String title) {
-        return ideaRepository.findByTitleLikeOrBodyOrderByComnumberDesc(title, title , new PageRequest(pageNumber, 5));
+        return ideaRepository.findByTitleLikeOrBodyOrderByComnumberDesc(title, title, new PageRequest(pageNumber, 5));
     }
 
     public Page<Idea> getByTitlOrBodyeLikeComments(int pageNumber, String title) {
-        return ideaRepository.findByTitleLikeOrBodyOrderBySimnumberDesc(title, title , new PageRequest(pageNumber, 5));
+        return ideaRepository.findByTitleLikeOrBodyOrderBySimnumberDesc(title, title, new PageRequest(pageNumber, 5));
     }
 
     public Page<Idea> getByCategoryPopular(int pageNumber, Category category) {
@@ -221,7 +221,7 @@ public class IdeaServiceImpl {
                     if (scoreSemantic.length() > 5) {
                         scoreSemantic = scoreSemantic.substring(0, 6);
                     }
-                    if(scoreSemantic.length() > 4){
+                    if (scoreSemantic.length() > 4) {
                         scoreSemantic = scoreSemantic.substring(2, 4) + "." + scoreSemantic.substring(4, 5);
                     }
                 }
