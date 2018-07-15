@@ -9,27 +9,28 @@ public class Comment {
     @Id
     @Column(name = "id_comment")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_comment;
+    private Long id;
 
     @Column(name = "body")
     private String body;
 
     @Column(name = "posted_date")
-    private Date posted_date;
+    private String posted_date;
 
-//    @Column(name = "id_idea")
-//    private Long id_idea;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "id_idea")
     private Idea idea;
 
-    public Long getId_comment() {
-        return id_comment;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_comment(Long id_comment) {
-        this.id_comment = id_comment;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBody() {
@@ -40,12 +41,20 @@ public class Comment {
         this.body = body;
     }
 
-    public Date getPosted_date() {
+    public String getPosted_date() {
         return posted_date;
     }
 
-    public void setPosted_date(Date posted_date) {
+    public void setPosted_date(String posted_date) {
         this.posted_date = posted_date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Idea getIdea() {

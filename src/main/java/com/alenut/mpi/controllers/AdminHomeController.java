@@ -1,7 +1,7 @@
 package com.alenut.mpi.controllers;
 
 import com.alenut.mpi.entities.Idea;
-import com.alenut.mpi.service.impl.IdeaService;
+import com.alenut.mpi.service.impl.IdeaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 public class AdminHomeController extends BaseController {
 
     @Autowired
-    private IdeaService ideaService;
+    private IdeaServiceImpl ideaService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String displayAllRequestsFromAllUsersExceptMine(HttpSession session, Model model) {
@@ -44,10 +44,4 @@ public class AdminHomeController extends BaseController {
         return "adminHome";
     }
 
-    @PostMapping(value = "/postIdea")
-    public String publishIdea(@RequestBody Idea idea) {
-        idea.setUser(getCurrentUser());
-        ideaService.insert(idea);
-        return "Idea was pusblished";
-    }
 }

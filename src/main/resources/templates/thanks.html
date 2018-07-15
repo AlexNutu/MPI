@@ -2,14 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="../css/ideas.css" />
+    <link rel="stylesheet" href="../../css/myIdeas.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../js/navbar.js"></script>
+    <script src="../../js/bootstrap-dropdownhover.min.js"></script>
 
+    <link href="../../css/sideAddButton.css" rel="stylesheet" />
+    <link href="../../css/thanks.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../css/messages.css"/>
+    <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../../css/notification.css" rel="stylesheet"/>
+    <link href="../../css/animate.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="shortcut icon" href="../img/icon.png"/>
+    <link rel="shortcut icon" href="../../img/icon.png"/>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
@@ -18,33 +26,53 @@
 </head>
 
 <body>
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <!--<a class="navbar-brand" href="#">My Project Idea</a>-->
-            <a href="#" class="navbar-brand">My Project Idea </a>
+            <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
         </div>
         <ul class="nav navbar-nav">
-            <li sec:authorize="isAuthenticated()"><a href="/user/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
             <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i class="glyphicon glyphicon-bell"></i> My Ideas <span class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
 
-            <li sec:authorize="isAuthenticated()"><a href="/user/messages"><i class="glyphicon glyphicon-envelope"></i> Messages <span class="badge" style="color: orange"> 10 </span></a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
 
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
-                    <span class="caret"></span></a>
+            <li sec:authorize="isAuthenticated()" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i style="font-size: 16px" class="fa fa-rss" aria-hidden="true"></i> Following
+                    <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Education</a></li>
-                    <li><a href="#">Social Media</a></li>
-                    <li><a href="#">Finance</a></li>
-                    <li><a href="#">Gaming</a></li>
-                    <li><a href="#">Music</a></li>
-                    <li><a href="#">Sport</a></li>
-                    <li><a href="#">Vehicles</a></li>
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
+                    <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
+                    <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
+                    <li th:if="${followingUsers.size()} > 0"><a th:href="${'/user/followings/'}"><i class="glyphicon glyphicon-th-list"></i> View Separately</a></li>
                 </ul>
             </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li class="divider"></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                </ul>
+
+            </li>
+
+            <li sec:authorize="isAuthenticated()" th:if="${currentUser.getRole() == 0}" ><a href="/user/dashboard"><i class="fa fa-users"></i> Dashboard </a></li>
 
             <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
             <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
@@ -54,18 +82,13 @@
         <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
             <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
         </ul>
-        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
-            <li><a href="/user/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
-        </ul>
-
 
         <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
 
-
         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                    <span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
+                    <i class="fa fa-user" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu" role="menu">
@@ -77,9 +100,19 @@
             </li>
         </ul>
 
-        <form class="navbar-form navbar-left" action="/">
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
             <div class="input-group" style="width: auto">
-                <input type="text" class="form-control" placeholder="Search for an idea" name="search"/>
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form sec:authorize="isAnonymous()" th:action="@{/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
                 <div class="input-group-btn">
                     <button class="btn btn-default" type="submit">
                         <i class="glyphicon glyphicon-search"></i>
@@ -91,17 +124,55 @@
     </div>
 </nav>
 
-<div class="jumbotron text-xs-center" style="text-align: center">
-    <h1 class="display-3">Thank You!</h1>
-    <p class="lead"><strong>Post your ideas</strong> and see the matchings you got with other people!</p>
-    <hr/>
-    <br/><br/>
+<ul class='social' style="margin-top: 260px">
+    <li style="margin-left: -35px">
+        <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
+            <span>Add idea!</span>
+        </a>
+    </li>
+</ul>
+
+<br/>
+<div class="jumbotron text-xs-center" style="margin-top: 73px;text-align: center; height: 446px">
+    <h1 class="display-3" style="margin-top: -40px;">Thank You!</h1>
+    <p class="lead">Post <strong>ideas</strong> and connect with people that think <strong>similar</strong> to you!</p>
+    <br/>
+    <br/>
+    <div class="container" style="text-align: center; margin-left: 267px">
+        <div class="process">
+            <div class="process-row">
+                <div class="process-step">
+                    <button type="button" disabled="disabled" class="btn btn-info btn-circle btn-xl"><i class="glyphicon glyphicon-pencil"></i></button>
+                    <p>Post Idea</p>
+                </div>
+                <div class="process-step" style="left:100px">
+                    <button type="button" disabled="disabled" class="btn btn-warning btn-circle btn-xl"><i class="glyphicon glyphicon-eye-open"></i></button>
+                    <p>Find similar Ideas</p>
+                </div>
+                <div class="process-step">
+                    <button type="button" disabled="disabled" class="btn btn-success btn-circle btn-xl"><i class="fa fa-handshake-o" aria-hidden="true"></i></button>
+                    <p>Collaborate with their Creators</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
     <p class="lead">
-        <a class="btn btn-primary btn-sm" href="/user/home" role="button">Continue to homepage</a>
+        <a style="margin-left:-35px;font-size: 14px" class="btn btn-primary btn-sm" href="/user/home" role="button">Continue to Homepage</a>
     </p>
+
+    <p class="lead">
+        <a style="margin-left:-33px;font-size: 14px" class="btn btn-success btn-sm" href="/user/postIdea" role="button">Submit Idea</a>
+    </p>
+    <hr/>
+
 </div>
 
-<footer style="margin-top:112px !important; margin-bottom:-17px; !important; right: 0; bottom: 0; left: 0;">
+
+<footer style="margin-top:126.5px !important; margin-bottom:-17px; !important; right: 0; bottom: 0; left: 0;">
     <div class="container container2">
         <div class="row">
 

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:gcse="">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="../../css/postIdea.css" />
+    <link rel="stylesheet" href="../../css/ideas.css"/>
+    <link rel="stylesheet" href="../../css/viewIdea.css"/>
+    <link rel="stylesheet" href="../../css/messages.css"/>
+    <link rel="stylesheet" href="../../css/signup.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+    <script src="../../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../../js/postIdea.js"></script>
+    <script src="../../js/jquery.loadingModal.js"></script>
+
+    <link rel="stylesheet" href="../../css/jquery.loadingModal.css"/>
+    <link href="../../css/sideAddButton.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../../css/notification.css" rel="stylesheet"/>
+    <link href="../../css/animate.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" href="../../img/icon.png"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+    <title> Edit Idea </title>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    $(document).ready(
+
+        function loadingScreen() {
+
+            $('.ideaForm #postIdeaForm').on('submit', function (e) {
+
+                //daca butonul de submit nu este disabled atunci apare modala de loading
+                var attrSubmitBtn = $('.form-group #save').attr('disabled');
+                if(!$('.ideaForm #save').hasClass("disabled")){
+                    verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+                    element = $('body');
+                    offset = element.offset();
+                    offsetTop = offset;
+                    $('html, body').animate({scrollTop: offsetTop}, 1000, 'swing');
+                    $('body').loadingModal({
+                        position: 'auto',
+                        text: 'Finding similar ideas...',
+                        color: '#fff',
+                        opacity: '0.7',
+                        backgroundColor: 'rgb(0,0,0)',
+                        animation: 'doubleBounce'
+                    });
+                }
+            });
+        }
+    );
+
+</script>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()"><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i style="font-size: 16px" class="fa fa-rss" aria-hidden="true"></i> Following
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
+                    <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
+                    <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
+                    <li th:if="${followingUsers.size()} > 0"><a th:href="${'/user/followings/'}"><i class="glyphicon glyphicon-th-list"></i> View Separately</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li class="divider"></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                </ul>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" th:if="${currentUser.getRole() == 0}" ><a href="/user/dashboard"><i class="fa fa-users"></i> Dashboard </a></li>
+
+            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+
+        </ul>
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
+        </ul>
+
+
+        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
+
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
+                    <i class="fa fa-user" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                    <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
+                    <li class="divider"></li>
+                    <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form sec:authorize="isAnonymous()" th:action="@{/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</nav>
+
+<ul class='social' style="margin-top: 265px;">
+    <li style="margin-left: -35px">
+        <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
+            <span>Add idea!</span>
+        </a>
+    </li>
+</ul>
+
+<div class="container" style="margin-top: 80px">
+    <div class="row">
+        <h1 style="font-family: 'Crete Round', serif; text-decoration: underline; margin-bottom: -10px; text-align:center; margin-top: 0;">Edit Idea <i style="font-size: 28px" class="glyphicon glyphicon-edit"></i></h1>
+        <hr class="hr-primary" style="  height: 4px;" />
+    </div>
+</div>
+
+<div class="alert alert-info">Did you know? The application automatically generates <strong>keywords </strong> based on the idea's description!</div>
+
+<div th:if="${displaySuccess}" style="margin-top: -9px; text-align: center; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-success alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Your <a th:href="@{'/user/viewIdea/' + ${idCreatedIdea}}" class="alert-link">idea</a> was edited!
+</div>
+<div th:if="${duplicate}" style="text-align: center; margin-top: -9px; font-size: 20px; width: 60%; margin-left: 20%" class="alert alert-warning alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Warning!</strong> You already posted this idea!
+</div>
+<div th:if="${format}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%; margin-top: -9px" class="alert alert-danger alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Oops!</strong> Please correct the idea's description!
+</div>
+<div th:if="${largeImage}" style="text-align: center; font-size: 20px; width: 60%; margin-left: 20%; margin-top: -9px" class="alert alert-danger alert-dismissible fade in" >
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <i class="glyphicon glyphicon-exclamation-sign"></i>
+    Warning! Your image is<strong> greater </strong> than 3MB!
+</div>
+
+<div class="ideaForm">
+    <form id="postIdeaForm" name="postIdeaForm" class="form-horizontal" th:action="@{'/user/editIdea/' + ${idea.getId()}}" th:object="${idea}" enctype="multipart/form-data" method="POST" data-toggle="validator" role="form" style="margin-top: 2%;">
+        <fieldset>
+
+            <div style="text-align: center; margin-left: 5%;">
+
+
+                <!-- Text input title-->
+                <div class="form-group"  style="margin-bottom: 2%; width: 100%">
+                    <label class="col-md-4 control-label" for="inputTitle">Title</label>
+                    <div class="col-md-4">
+                        <input onkeyup='swap_val(this.value);' th:value="${idea.getTitle()}" id="inputTitle" th:field="*{title}" minlength="5" name="inputTitle" type="text" placeholder="Idea's Title" class="form-control input-md" required=""/>
+                        <div class="help-block with-errors">Minimum 5 characters</div>
+                    </div>
+                </div>
+
+                <!-- Text input description-->
+                <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                    <label class="col-md-4 control-label" for="inputDescription">Description</label>
+                    <div class="col-md-4">
+                        <textarea id="inputDescription" rows="5" th:value="${idea.getBody()}" th:field="*{body}" minlength="20" name="inputDescription" required="" placeholder="Idea's Description" class="form-control input-md">
+                        </textarea>
+                        <div class="help-block with-errors">Minimum 20 characters</div>
+                    </div>
+                </div>
+
+                <!-- Select input-->
+                <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                    <label for="selectCategory" class="col-md-4 control-label">Category</label>
+                    <div class="col-md-4">
+                        <select class="form-control input-md" th:field="*{category.id}" id="selectCategory" required="">
+                            <option value=""></option>
+                            <option th:each="category: ${categoryList}" th:value="${category.getId()}" th:text="${category.getBody()}"></option>
+                        </select>
+                        <div class="help-block with-errors">Category is important to find your matchings!</div>
+                    </div>
+                </div>
+
+                <!-- Search idea input-->
+                <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                    <label class="col-md-4 control-label">Search Photos On the Internet</label>
+                    <div class="col-md-4">
+                        <div1 name="ideaSearch" id="ideaSearch" ></div1>
+                        <script>
+                            (function() {
+                                var cx = '000177612292244595468:f9dm84wvcsg';
+                                var gcse = document.createElement('script');
+                                gcse.type = 'text/javascript';
+                                gcse.async = true;
+                                gcse.enableAutoComplete = true;
+                                gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+                                var s = document.getElementsByTagName('script')[0];
+                                s.placeholder = 'da';
+                                s.parentNode.insertBefore(gcse, s);
+                            })();
+                        </script>
+                        <gcse:search enableHistory="true" disableWebSearch="true" enableAutoComplete="true" linkTarget="_blank" autoCompleteMaxCompletions="5" autoCompleteMatchType='any'></gcse:search>
+                    </div>
+                </div>
+
+                <div class="form-group" style="width: 100%; margin-bottom: 3%;">
+                    <label for="selectImage" class="col-md-4 control-label">Image (Optional)</label>
+                    <div class="col-md-4">
+                        <input type="file" data-filesize="5000" accept="image/png, image/jpeg, image/jpg, image/gif" name="file" id="selectImage" class="file" />
+                        <div class="input-group col-xs-12">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                            <input type="text" th:value="${idea.getImage_path()}" th:field="*{image_path}" style="background-color: white" class="form-control input-md" readonly="true" placeholder="Upload Image"/>
+                            <span class="input-group-btn">
+                                     <button class="browse btn btn-default input-md" style="background-color: #eee" type="button"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Browse</button>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button (Double) -->
+            <div class="form-group col-md-4" style="width: 100%; margin-bottom:41px">
+                <label class="col-md-4 control-label" for="save"></label>
+                <div class="col-md-8" style="margin-left: 80px; text-align: center; float: none !important;">
+                    <button id="save" name="save" type="submit" class="btn btn-success">Submit</button>
+                    <a id="cancel" href="/user/home" type="button" name="cancel" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+
+
+
+<footer style="margin-top: 60px; margin-bottom: 0px">
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+
+                    <li>
+                        <p></p>
+                    </li>
+
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -10,7 +10,7 @@ public class Idea {
     @Id
     @Column(name = "id_idea")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_idea;
+    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -18,31 +18,78 @@ public class Idea {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "likes_number")
-    private Integer likes_number;
-
     @Column(name = "posted_date")
-    private Date posted_date;
+    private String posted_date;
 
-//    @Column(name = "id_user")
-//    private Long id_user;
+    @Column(name = "image_path")
+    private String image_path;
+
+    @OneToOne
+    @JoinColumn(name = "id_category")
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
 
     @OneToMany(mappedBy = "idea")
+    @OrderBy("posted_date DESC")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "idea")
+    private List<Appreciation> appreciations;
+
+    @OneToMany(mappedBy = "idea")
+    private List<Tag> tags;
+
+    @OneToMany(mappedBy = "idea")
+    private List<Matching> matchings;
+
+    @OneToMany(mappedBy = "ideaMatch")
+    private List<Matching> matchings2; // when id_idea is id_matching_idea
+
+    @Column(name = "likenumber")
+    private Integer likenumber;
+
+    @Column(name = "comnumber")
+    private Integer comnumber;
+
+    @Column(name = "simnumber")
+    private Integer simnumber;
+
+    @Column(name = "semantic")
+    private String semantic;
+
+    @Column(name = "sintactic")
+    private String sintactic;
+
+    @Transient
+    private long liked;
 
     public Idea() {
     }
 
-    public Long getId_idea() {
-        return id_idea;
+    public Idea(Idea idea2){
+        this.title = idea2.title;
+        this.body = idea2.body;
+        this.posted_date = idea2.posted_date;
+        this.image_path = idea2.image_path;
+        this.category = idea2.category;
+        this.user = idea2.user;
+        this.comments = idea2.comments;
+        this.appreciations = idea2.appreciations;
+        this.tags = idea2.tags;
+        this.matchings = idea2.matchings;
+        this.semantic = idea2.semantic;
+        this.sintactic = idea2.sintactic;
     }
 
-    public void setId_idea(Long id_idea) {
-        this.id_idea = id_idea;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -61,22 +108,29 @@ public class Idea {
         this.body = body;
     }
 
-    public Integer getLikes_number() {
-        return likes_number;
-    }
-
-    public void setLikes_number(Integer likes_number) {
-        this.likes_number = likes_number;
-    }
-
-    public Date getPosted_date() {
+    public String getPosted_date() {
         return posted_date;
     }
 
-    public void setPosted_date(Date posted_date) {
+    public void setPosted_date(String posted_date) {
         this.posted_date = posted_date;
     }
 
+    public String getImage_path() {
+        return image_path;
+    }
+
+    public void setImage_path(String image_path) {
+        this.image_path = image_path;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public User getUser() {
         return user;
@@ -92,5 +146,85 @@ public class Idea {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Appreciation> getAppreciations() {
+        return appreciations;
+    }
+
+    public void setAppreciations(List<Appreciation> appreciations) {
+        this.appreciations = appreciations;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Matching> getMatchings() {
+        return matchings;
+    }
+
+    public void setMatchings(List<Matching> matchings) {
+        this.matchings = matchings;
+    }
+
+    public List<Matching> getMatchings2() {
+        return matchings2;
+    }
+
+    public void setMatchings2(List<Matching> matchings2) {
+        this.matchings2 = matchings2;
+    }
+
+    public String getSemantic() {
+        return semantic;
+    }
+
+    public void setSemantic(String semantic) {
+        this.semantic = semantic;
+    }
+
+    public String getSintactic() {
+        return sintactic;
+    }
+
+    public void setSintactic(String sintactic) {
+        this.sintactic = sintactic;
+    }
+
+    public long getLiked() {
+        return liked;
+    }
+
+    public void setLiked(long liked) {
+        this.liked = liked;
+    }
+
+    public Integer getLikenumber() {
+        return likenumber;
+    }
+
+    public void setLikenumber(Integer likenumber) {
+        this.likenumber = likenumber;
+    }
+
+    public Integer getComnumber() {
+        return comnumber;
+    }
+
+    public void setComnumber(Integer comnumber) {
+        this.comnumber = comnumber;
+    }
+
+    public Integer getSimnumber() {
+        return simnumber;
+    }
+
+    public void setSimnumber(Integer simnumber) {
+        this.simnumber = simnumber;
     }
 }

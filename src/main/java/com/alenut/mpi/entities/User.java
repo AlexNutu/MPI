@@ -12,7 +12,7 @@ public class User {
     @Id
     @Column(name = "id_user")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_user;
+    private Long id;
 
     @Column(name = "full_name")
     private String full_name;
@@ -32,21 +32,47 @@ public class User {
     @Column(name = "phone_number")
     private String phone_number;
 
-    @Column(name = "occupation")
-    private String occupation;
-
     @Column(name = "role")
     private int role;
 
     @Column(name = "reg_date")
     private Date reg_date;
 
+    @Column(name = "occupation")
+    private String occupation;
+
+    @Column(name = "image_path")
+    private String image;
+
     @OneToMany(mappedBy = "user")
     private List<Idea> ideas;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "sender")
     private List<Message> messages;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    private List<Appreciation> appreciations;
+
+    @OneToMany(mappedBy = "user")
+    private List<Conversation> conversations;
+
+    @Transient
+    private String newPassword;
+
+    @Column(name = "confirmed")
+    private int confirmed;
+
+    @Column(name = "token")
+    private String token;
+
+    @Column(name = "alert")
+    private int alert;
+
+    @Column(name = "forgot_token")
+    private String forgotToken;
 
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //        @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -55,25 +81,29 @@ public class User {
     public User() {
     }
 
-    public User(String full_name, String username, String email, String password, String phone_number, String occupation, int role, Date reg_date, List<Idea> ideas, List<Message> messages) {
+    public User(String full_name, String username, String email, String password, String phone_number, int role, Date reg_date, String occupation, String image, List<Idea> ideas, List<Comment> comments, List<Appreciation> appreciations, List<Conversation> conversations, String newPassword) {
         this.full_name = full_name;
         this.username = username;
         this.email = email;
         this.password = password;
         this.phone_number = phone_number;
-        this.occupation = occupation;
         this.role = role;
         this.reg_date = reg_date;
+        this.occupation = occupation;
+        this.image = image;
         this.ideas = ideas;
-        this.messages = messages;
+        this.comments = comments;
+        this.appreciations = appreciations;
+        this.conversations = conversations;
+        this.newPassword = newPassword;
     }
 
-    public Long getId_user() {
-        return id_user;
+    public Long getId() {
+        return id;
     }
 
-    public void setId_user(Long id_user) {
-        this.id_user = id_user;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFull_name() {
@@ -116,14 +146,6 @@ public class User {
         this.phone_number = phone_number;
     }
 
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
     public int getRole() {
         return role;
     }
@@ -140,6 +162,22 @@ public class User {
         this.reg_date = reg_date;
     }
 
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public List<Idea> getIdeas() {
         return ideas;
     }
@@ -148,11 +186,75 @@ public class User {
         this.ideas = ideas;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Appreciation> getAppreciations() {
+        return appreciations;
+    }
+
+    public void setAppreciations(List<Appreciation> appreciations) {
+        this.appreciations = appreciations;
+    }
+
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
     public List<Message> getMessages() {
         return messages;
     }
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public int getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(int confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public int getAlert() {
+        return alert;
+    }
+
+    public void setAlert(int alert) {
+        this.alert = alert;
+    }
+
+    public String getForgotToken() {
+        return forgotToken;
+    }
+
+    public void setForgotToken(String forgotToken) {
+        this.forgotToken = forgotToken;
     }
 }

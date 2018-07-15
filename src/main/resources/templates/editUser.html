@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" th:href="@{../../css/ideas.css}" />
+    <link rel="stylesheet" th:href="@{../../css/messages.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../../js/notification.js"></script>
+    <script src="../../js/scroll.js"></script>
+    <script src="../../js/userHome.js"></script>
+    <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="../../js/mk-notifications.min.js"></script>
+    <script src="../../js/newTabsHome.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet"/>
+    <link href="../../css/sideAddButton.css" rel="stylesheet" />
+    <link href="../../css/newTabsHome.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Black+Han+Sans|Do+Hyeon|Lobster|Playfair+Display" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../../css/notification.css" rel="stylesheet"/>
+    <link href="../../css/animate.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/mk-notifications.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous"/>
+
+    <link rel="shortcut icon" href="../../img/icon.png"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link  href="http://fonts.googleapis.com/css?family=Cabin:400,500,600,bold" rel="stylesheet" type="text/css"/>
+    <link  href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <title>Edit User</title>
+</head>
+
+<style type="text/css">
+    
+</style>
+
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li sec:authorize="isAuthenticated()"><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()" ><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i style="font-size: 16px" class="fa fa-rss" aria-hidden="true"></i> Following
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
+                    <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
+                    <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
+                    <li th:if="${followingUsers.size()} > 0"><a th:href="${'/user/followings/'}"><i class="glyphicon glyphicon-th-list"></i> View Separately</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li class="divider"></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                </ul>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" th:if="${currentUser.getRole() == 0}" ><a href="/user/dashboard"><i class="fa fa-users"></i> Dashboard </a></li>
+
+            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+
+        </ul>
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
+        </ul>
+
+
+        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right" href="/login"><span class="glyphicon glyphicon-log-in"></span>  Login</a>
+
+
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" role="button" aria-expanded="false">
+                    <i class="fa fa-user" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                    <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a></li>
+                    <li class="divider"></li>
+                    <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form sec:authorize="isAnonymous()" th:action="@{/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</nav>
+
+<ul class='social'>
+    <li style="margin-left: -35px">
+        <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
+            <span>Add idea!</span>
+        </a>
+    </li>
+</ul>
+
+<div class="container">
+    <div class="row">
+        <!--<h1 style="margin-bottom: -10px; text-align:center; margin-top: 0;">Edit Profile</h1>-->
+        <!--<hr class="hr-primary" style="  height: 4px;" />-->
+
+        <h1 style="font-family: 'Crete Round', serif; text-align:center; margin-top: 81px;"><u>Edit Profile</u> <i style="font-size: 32px" class="fa fa-address-card-o"></i></h1>
+        <hr class="hr-primary" style="height: 4px; margin-top: 5px" />
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-3">
+            <div class="text-center">
+                <img style="width: 150px; height: 150px; margin-bottom: 10px" th:src="@{'~/img/' + ${image}}" class="avatar img-circle" alt="avatar"/>
+                <input type="file" accept="image/png, image/jpeg, image/jpg, image/gif" name="file" id="selectImage" class="file" />
+                <div class="input-group col-xs-12">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-picture"></i></span>
+                    <input type="text" th:field="*{image}" style="background-color: white" class="form-control input-md" readonly="true" placeholder="Upload Image"/>
+                    <span class="input-group-btn">
+                                 <button disabled="" class="browse btn btn-default input-md" style="background-color: #eee" type="button"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Browse</button>
+                            </span>
+                </div>
+            </div>
+        </div>
+        <form th:action="@{'/user/editUser/' + ${userId}}" th:object="${user}" enctype="multipart/form-data" method="POST" data-toggle="validator" role="form" class="form-horizontal">
+            <fieldset>
+
+                <!-- edit form column -->
+                <div class="col-md-9 personal-info">
+
+                    <div th:if="${displaySuccess}" style="text-align: center; font-size: 15px; width: 102%; margin-left: 0%" class="alert alert-success alert-dismissible fade in" >
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <i class="glyphicon glyphicon-ok"></i>
+                        User's <strong>personal info</strong> was updated successfully!
+                    </div>
+
+
+                    <h3 th:text="'Personal info: ' + ${user.getFull_name()}"> </h3><br/>
+
+                    <!-- Text input name-->
+                    <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                        <label class="col-md-3 control-label" for="inputName">Full Name</label>
+                        <div class="col-lg-8">
+                            <input id="inputName" th:value="${user.getFull_name()}" th:field="*{full_name}" maxlength="30" data-minlength="2" name="inputName" type="text" placeholder="John Doe" class="form-control"
+                                   required=""/>
+                            <div class="help-block with-errors"> At least 2 characters</div>
+                        </div>
+                    </div>
+
+                    <!-- Text input username-->
+                    <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                        <label class="col-md-3 control-label" for="inputUsername">Username</label>
+                        <div class="col-lg-8">
+                            <input id="inputUsername" th:value="${user.getUsername()}" th:field="*{username}" maxlength="20" data-minlength="3" name="inputUsername" type="text" placeholder="johndoe" class="form-control input-md"
+                                   required=""/>
+                            <div class="help-block with-errors"> At least 3 characters</div>
+                        </div>
+                    </div>
+
+                    <!-- Text input email-->
+                    <div class="form-group" style="margin-bottom: 2%; width: 100%">
+                        <label class="col-md-3 control-label" for="inputEmail">Email</label>
+                        <div class="col-lg-8">
+                            <input readonly="" id="inputEmail" th:value="${user.getEmail()}" th:field="*{email}" name="inputEmail" type="email" placeholder="johndoe@example.com"
+                                   class="form-control input-md" data-error="Email address is invalid." required="" />
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+
+                    <!-- Text input phone-->
+                    <div class="form-group" style="margin-bottom: 2.5%; width: 100%">
+                        <label class="col-md-3 control-label" for="phone">Phone</label>
+                        <div class="col-lg-8">
+                            <input id="phone" th:value="${user.getPhone_number()}" th:field="*{phone_number}" name="phone" type="text" pattern="\d{4}[\-]\d{3}[\-]\d{3}" maxlength="12" data-error="Sorry, phone is invalid" placeholder="0777-555-123"
+                                   class="form-control input-md bfh-phone" />
+                        </div>
+                    </div>
+
+                    <!-- Select input-->
+                    <div class="form-group" style="width: 100%; margin-bottom: 2.5%;">
+                        <label for="selectOccupation" class="col-md-3 control-label">Occupation</label>
+                        <div class="col-lg-8">
+                            <select class="form-control input-md" id="selectOccupation" th:field="*{occupation}" required="">
+                                <option value=""></option>
+                                <option th:selected="${user.getOccupation().equals('Student')}" value="Student">Student</option>
+                                <option th:selected="${user.getOccupation().equals('Developer')}" value="Developer">Developer</option>
+                                <option th:selected="${user.getOccupation().equals('Team Lead')}" value="Team Lead">Team Lead</option>
+                                <option th:selected="${user.getOccupation().equals('Director')}" value="Director">Director</option>
+                                <option th:selected="${user.getOccupation().equals('Freelancer')}" value="Freelancer">Freelancer</option>
+                            </select>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+
+                    <!-- Password input-->
+                    <div class="form-group" style="width: 100%; margin-bottom: 2%">
+                        <label class="col-md-3 control-label" for="inputPassword">Password</label>
+                        <div class="form-inline row" style="width: 100%">
+                            <div class="form-group col-md-4" style="padding-left: 30px; margin-left: 0">
+                                <input readonly="" th:field="*{password}" type="password" data-minlength="6" style="width: 100%" class="form-control" id="inputPassword" placeholder="Old Password"/>
+                                <div class="help-block">Minimum of 6 characters</div>
+                            </div>
+                            <div class="form-group col-md-4" style="padding-left: 30px; margin-left: 0">
+                                <input readonly="" th:field="*{newPassword}" type="password" data-minlength="6" class="form-control" style="width: 100%" id="inputPasswordConfirm" placeholder="New Password" />
+                                <div class="help-block">Minimum of 6 characters</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label"></label>
+                        <div class="col-md-8">
+                            <button id="save" name="save" type="submit" class="btn btn-success">Save Changes</button>
+                            <a id="cancel" href="/user/dashboard" type="button" name="cancel" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>
+<hr/>
+
+<footer style="margin-top: 40px;">
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+
+                    <li>
+                        <p></p>
+                    </li>
+
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+
+
+</body>
+</html>

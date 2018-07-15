@@ -1,0 +1,42 @@
+.normalMargin{
+}
+
+.minimalMargin{
+    margin-top: 240px;
+}
+
+.minimalMyIdeas{
+    margin-top: 236px;
+}
+
+.messageEmpty{
+    margin-top: 308px;
+}
+
+.messageNotEmpty{
+    margin-top: 70px;
+}
+
+.homeEmpty{
+    margin-top: 160px;
+}
+
+.homeNormal{
+    margin-top: 0px;
+}
+
+.forgotEmpty{
+    margin-top: 117px;
+}
+
+.forgotNotEmpty{
+    margin-top: 55px;
+}
+
+.changeEmpty{
+    margin-top: 232px;
+}
+
+.changeNotEmpty{
+    margin-top: 140px;
+}

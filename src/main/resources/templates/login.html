@@ -4,17 +4,59 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../css/login.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" />
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js/"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+    <link rel="shortcut icon" href="../../img/login.png"/>
 
     <title>Log in</title>
 </head>
 
-<body><!-- ng-app="mpi-app">-->
+<body>
+
+<!--<script>-->
+    <!--window.fbAsyncInit = function() {-->
+        <!--FB.init({-->
+            <!--appId      : '{180713105948207}',-->
+            <!--cookie     : true,-->
+            <!--xfbml      : true,-->
+            <!--version    : '{v3.0}'-->
+        <!--});-->
+
+        <!--FB.AppEvents.logPageView();-->
+
+    <!--};-->
+
+    <!--(function(d, s, id){-->
+        <!--var js, fjs = d.getElementsByTagName(s)[0];-->
+        <!--if (d.getElementById(id)) {return;}-->
+        <!--js = d.createElement(s); js.id = id;-->
+        <!--js.src = "https://connect.facebook.net/en_US/sdk.js";-->
+        <!--fjs.parentNode.insertBefore(js, fjs);-->
+    <!--}(document, 'script', 'facebook-jssdk'));-->
+<!--</script>-->
+
+<!--<script>-->
+    <!---->
+    <!--function checkLoginState() {-->
+        <!--FB.getLoginStatus(function(response) {-->
+            <!--statusChangeCallback(response);-->
+        <!--});-->
+    <!--}-->
+<!--</script>-->
+
+<!--<fb:login-button-->
+        <!--scope="public_profile,email"-->
+        <!--onlogin="checkLoginState();">-->
+<!--</fb:login-button>-->
+
+<p th:if="${notConfirmed}">
+        NU E CONFIRMAT
+</p>
 
 <div ng-controller="loginController as login" class="container-fluid bg">
     <div class="row">
@@ -25,18 +67,29 @@
                 <h1 id="title"> My Project Idea </h1>
 
                 <!--th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">-->
-                <div class="error" th:if="${param.error}">
-                    <span class="alert alert-danger"> Username or password are incorrect! </span>
-                </div><br/>
-
-                <div class="form-group emailInput has-feedback">
-                    <label for="username">Email address or Username</label>
-                    <input name="username" type="text" class="form-control" id="username" placeholder="Email" required=""/>
+                <div class="error" th:if="${param.error}" style="margin-bottom:20px; width: 700px;">
+                    <span class="alert alert-danger" style="padding: 18px; padding-left: 80px; padding-right: 75px"> Incorrect username or password!</span> <br/> <span style="color:#a94442; margin-left: 110px; font-size:12px; margin-top: -30px">(Or e-mail not confirmed) </span>
                 </div>
-                <div class="form-group passwordInput has-feedback">
-                    <label for="password">Password</label>
+
+                <label style="margin-bottom: 10px" for="username">Email address or Username</label>
+                <div class="form-group input-group emailInput has-feedback" style="margin-bottom: 20px;">
+                    <span class="input-group-addon" style="background-color: Transparent;">
+                        <i class="glyphicon glyphicon-user" style="color:white"></i>
+                    </span>
+                    <input name="username" type="text" class="form-control" id="username" placeholder="Email / Username" required=""/>
+                </div>
+
+                <label style="margin-bottom: 10px" for="password">Password</label>
+                <div style="margin-bottom: 4px" class="form-group input-group passwordInput has-feedback">
+                     <span class="input-group-addon" style="background-color: Transparent;">
+                        <i class="glyphicon glyphicon-lock" style="color:white"></i>
+                    </span>
                     <input name="password" type="password" class="form-control" id="password" placeholder="Password" required=""/>
                 </div>
+
+                <a href="/home/forgot" style=" margin-left: 120px">Forgot password</a>
+                <br/>
+                <br/>
 
                 <!--<div class="checkbox">-->
                     <!--<label class="control-label" for="remember">-->
@@ -45,7 +98,7 @@
                 <!--</div>-->
 
                 <button type="submit" class="btn btn-success btn-block">Login</button>
-                <br/><p class="loginbottomtext">Still don't have an account? <a href="/home/createUser">Register</a></p>
+                <br/><p class="loginbottomtext">Still don't have an account? <a href="/home/createUser"><b>Register</b></a></p>
             </form>
 
             <!--form end-->
@@ -54,8 +107,6 @@
     </div>
 
 </div>
-
-
 
 
 </body>

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org " xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="../../css/similarities.css"/>
+    <link rel="stylesheet" href="../../css/ideas.css"/>
+    <link rel="stylesheet" href="../../css/viewIdea.css"/>
+    <link rel="stylesheet" href="../../css/messages.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+
+    <!--<script src="../../js/bootstrap-dropdownhover.min.js"></script>-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
+    <!--<script src="http://malsup.github.com/jquery.form.js"></script>-->
+    <!--<script src="../../js/notification.js"></script>-->
+    <!--<script src="../../js/scroll.js"></script>-->
+    <!--<script src="../../js/userHome.js"></script>-->
+    <!--&lt;!&ndash;corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>&ndash;&gt;-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../../js/bootstrap-dropdownhover.min.js"></script>
+    <script src="../../js/notification.js"></script>
+    <script src="../../js/viewIdea.js"></script>
+    <script src="../../js/scroll.js"></script>
+    <script src="../../js/dashboard.js"></script>
+    <!--corespunde ajax form-ului, este comentat pentru ca nu mai functioneaza modalele-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>-->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="../../js/mk-notifications.min.js"></script>
+    <script src="../../js/followings.js"></script>
+    <script src="../../js/statsViewIdea.js"></script>
+
+    <link href="../../css/sideAddButton.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/mk-notifications.min.css"/>
+    <link href="../../css/bootstrap-notifications.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-notifications.min.css" rel="stylesheet"/>
+    <link href="../../css/notification.css" rel="stylesheet"/>
+    <link href="../../css/animate.min.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="shortcut icon" href="../../img/icon.png"/>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+    <!--comments-->
+
+    <meta name="robots" content="noindex"/>
+    <link rel="mask-icon" type=""
+          href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+          color="#111"/>
+    <link rel="canonical" href="https://codepen.io/kavendish/pen/aOdopx?q=comment&amp;limit=all&amp;type=type-pens"/>
+    <meta name="viewport" content="width=device-width"/>
+    <!--<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'/>-->
+    <link rel="stylesheet" href="../../css/comments.css" />
+
+    <title>View Idea</title>
+</head>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var imagePath = /*[[${userImage}]]*/ 'default';
+    var currentIdeaId = /*[[${currentIdeaId}]]*/ 'default';
+
+    // wait for the DOM to be loaded
+    $(document).ready(
+
+        function viewIdeaActions() {
+
+            // bind 'myForm' and provide a simple callback function
+            $('#commentForm').ajaxForm(function() {
+
+                commentBody = $(".commentInput .commentBody").val();
+                userImage = /*[[${userImage}]]*/ 'default';
+                userName = /*[[${username}]]*/ 'default';
+                comDate = /*[[${commentDate}]]*/ 'default';
+                // comId = /*[[${idComment}]]*/ 'default';
+                if($.trim(commentBody) == '') {
+                    return false;
+                }
+
+                $('<div class="comment-wrap">' +
+                        '<div class="photo">' +
+                            '<img class="avatar2" src=' + '"' + userImage + '"' + ' alt="" />' +
+                        '</div>' +
+                        '<div class="comment-block">' +
+                            '<p class="comment-text">' + commentBody + '</p>' +
+                            '<div class="bottom-comment">' +
+                                '<div class="comment-date">' + comDate + '</div>' +
+                                '<ul class="comment-actions">' +
+                                    '<li class="complain"> by' + '</li>' +
+                                    '<li class="reply">' + userName + '</li>' +
+                                '</ul>' +
+                            '</div>' +
+                        '</div>' +
+                  '</div>'
+
+                ).prependTo($('.commentList'));
+
+                $(".commentInput .commentBody").val(null);
+
+                //update number of comments
+                var noOfComments = parseInt($(".col-lg-6 .well .count2").text());
+                noOfComments += 1;
+                $(".col-lg-6 .well .count2").text(' ' + noOfComments + ' ');
+
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-check-square-o",
+                            background: "#4BB543"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Success</strong>",
+                    "Your comment was posted! ",
+                    options
+                );
+            });
+
+            $('.btnComment').prop('disabled', true);
+            $('.commentBody').on('keyup' , function() {
+                if( $.trim($('.commentBody').val()).length > 0 ) {
+                    $('.btnComment').prop('disabled', false);
+                }
+                else {
+                    $('.btnComment').prop('disabled', true);
+                }
+            });
+
+
+            $('.myForm #sendForm').on('submit', function(e) {
+                e.preventDefault();
+                $(this).ajaxSubmit({
+                    target: 'myResultDiv'
+                });
+
+                var fullname = $('.myForm #send_date').val();
+
+                $('#exampleModal').modal('toggle');
+
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-envelope",
+                            background: "#5bc0de"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Info</strong>",
+                    "Your message was sent to the user " + fullname +"!",
+                    options
+                );
+
+                $('#body').val('');
+
+            });
+
+
+            $('.myCommDelete #comForm').on('submit', function(e) {
+                e.preventDefault();
+
+                $(this).ajaxSubmit({
+                    target: 'myResultDiv'
+                });
+
+                //remove comment from list
+                var idComm = $('.myCommDelete #id').val();
+                $(".com" + idComm).remove();
+                $('#comModal').modal('toggle');
+
+                //-1 for the comments number
+                var noOfComments = parseInt($(".col-lg-6 .well .count2").text());
+                noOfComments -= 1;
+                $(".col-lg-6 .well .count2").text(' ' + noOfComments + ' ');
+
+                var config =
+                    {
+                        positionX: "top",
+                        positionY: "right"
+                    };
+
+                mkNotifications(config);
+
+                var options =
+                    {
+                        icon: {
+                            class: "fa fa-check-square-o",
+                            background: "#FFA07A"
+                        },
+                        sound: 'true'
+                    };
+
+                mkNoti(
+                    "<strong>Success</strong>",
+                    "Your comment was deleted!",
+                    options
+                );
+
+
+            });
+
+            $('.classLike #likeForm').on('submit', function(e) {
+                e.preventDefault(); // prevent native submit
+
+                $(this).ajaxSubmit({
+                    target: 'myResultsDiv'
+                });
+
+                var thisObject = $(this);
+                // atributul value contine id-ul ideii pentru care se executa form-ul
+
+                var copy = thisObject.html();
+                thisObject.html('<i style="float: left; font-size:1.5em" class="float-left fa fa-cog fa-spin fa-3x fa-fw"></i>');
+
+                var change = function(){
+                    if(copy.indexOf("<span>Like</span>") >= 0){
+                        var noOfLikes = parseInt($(".col-lg-6 .well .count1").text());
+                        noOfLikes += 1;
+                        $(".col-lg-6 .well .count1").text(' ' + noOfLikes + ' ');
+
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + currentIdeaId + '"' + ' type="submit" style="float: left" class="float-left btn btn-xs text-white btn-warning appreciations"> <i class="fa fa-thumbs-o-down"></i> <span>Dislike</span></button>');
+                    }else{
+                        var noOfLikes = parseInt($(".col-lg-6 .well .count1").text());
+                        noOfLikes -= 1;
+                        $(".col-lg-6 .well .count1").text(' ' + noOfLikes + ' ');
+
+                        thisObject.html('<button id="likeB"' + ' value=' + '"' + currentIdeaId + '"' + ' type="submit" style="float: left" class="float-left btn btn-xs text-white btn-info appreciations"> <i class="fa fa-thumbs-o-up"></i> <span>Like</span></button>');
+                    }
+                };
+                setTimeout(change, 700);
+
+            });
+
+
+        }
+    );
+
+    /*]]>*/
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<body style="background: url('../../img/h1.jpg'); overflow:auto;">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand"><img style="margin-top: -31px;height: 80px; padding: 15px; width: 80px;" src="../../img/icon11.png" /></a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li sec:authorize="isAuthenticated()" ><a href="/user/home/?page=0"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+            <li sec:authorize="isAnonymous()" ><a href="/home"><i class="glyphicon glyphicon-home"></i> Home</a></li><li class="divider-vertical"></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/myIdeas"><i style="font-size: 17px" class="fa fa-lightbulb-o"></i> My Ideas <span th:text="${myIdeasNumber}" class="badge" style="color: #5bc0de;"> 100 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()"><a href="/user/messages/-1"><i class="glyphicon glyphicon-envelope"></i> Messages <span th:text="${messagesNumber}" class="badge" style="color: orange"> 10 </span></a></li>
+
+            <li sec:authorize="isAuthenticated()" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i style="font-size: 16px" class="fa fa-rss" aria-hidden="true"></i> Following
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <ul class="followList">
+                            <li style="margin-top: 2px" th:each="user : ${displayedUsers}"><a style="color: black" th:href="@{'/user/viewProfile/' + ${user.getId()}}" th:text="${user.getFull_name()}"></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${followingUsers.size()} > 3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... </li>
+                    <li th:if="${followingUsers.size()} == 0"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No followings </li>
+                    <li th:if="${followingUsers.size()} > 0" role="separator" class="divider"></li>
+                    <li th:if="${followingUsers.size()} > 0"><a th:href="${'/user/followings/'}"><i class="glyphicon glyphicon-th-list"></i> View Separately</a></li>
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown" href="#"><i class="glyphicon glyphicon-th-list"></i> Categories
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/user/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAuthenticated()" th:each="category : ${categoryList}"><a th:href="@{/user/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li sec:authorize="isAnonymous()"><a th:href="@{/home/(page=0)}">All</a></li>
+                    <li sec:authorize="isAnonymous()" th:each="category : ${categoryList}"><a th:href="@{/home/(page=0,category=${category.getId()})}" th:text="${category.getBody()}">Education</a></li>
+                    <li class="divider"></li>
+                    <li sec:authorize="isAuthenticated()"><a href="/user/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                    <li sec:authorize="isAnonymous()"><a href="/home/chart/"><i class="fa fa-pie-chart"></i> Category Chart </a></li>
+                </ul>
+            </li>
+
+            <li sec:authorize="isAuthenticated()" th:if="${currentUser.getRole() == 0}" ><a href="/user/dashboard"><i class="fa fa-users"></i> Dashboard </a></li>
+
+            <li sec:authorize="isAnonymous()"><a href="/home/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+            <li sec:authorize="isAuthenticated()"><a href="/user/about"><i class="glyphicon glyphicon-info-sign"></i> About Us</a></li>
+
+        </ul>
+
+        <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+            <li><a href="/home/createUser"><span class="glyphicon glyphicon-off"></span> Sign Up</a></li>
+        </ul>
+
+
+        <a sec:authorize="isAnonymous()" style="color: white" class="btn btn-success navbar-btn navbar-right"
+           href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+
+
+        <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-animations="pulse" data-hover="dropdown"
+                   role="button" aria-expanded="false">
+                    <i class="fa fa-user" style="margin-right:10px; font-size:16px" aria-hidden="true"></i><span th:text="'Welcome, ' + ${username}" th:remove="tag"></span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/user/profile"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                    <li><a href="/user/accountSettings"><i class="glyphicon glyphicon-cog"></i> Account settings </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <form sec:authorize="isAuthenticated()" th:action="@{/user/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form sec:authorize="isAnonymous()" th:action="@{/home/(page=0)}" method="get" class="navbar-form navbar-left">
+            <div class="input-group" style="width: auto">
+                <input name="q" id="q" type="text" required="" pattern=".*\S+.*" class="form-control" placeholder="Search for an idea" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</nav>
+
+<ul class='social' style="margin-top: 250px">
+    <li style="margin-left: -35px">
+        <a class="fa fa-plus-square" style="height: 42px" href="/user/postIdea">
+            <span>Add idea!</span>
+        </a>
+    </li>
+</ul>
+
+
+<div th:object="${idea}" style="margin-top: 67px">
+
+    <div class="container">
+        <div class="row">
+
+
+            <div class="col-lg-8">
+
+                <h1 th:text="${idea.getTitle()}" style="font-size: 33px; font-weight: bold;">Blog Post Template for
+                    Bootstrap</h1>
+
+                <p class="lead" style="font-size: 16px"><i class="fa fa-user"></i> by
+                    <a sec:authorize="isAnonymous()" th:text="${idea.getUser().getFull_name()}" th:href="'/home/viewProfile/' + ${idea.getUser().getId()}">Super User</a>
+                    <a sec:authorize="isAuthenticated()" th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="'/user/viewProfile/' + ${idea.getUser().getId()}">Super User</a>
+                    <a sec:authorize="isAuthenticated()" th:text="${idea.getUser().getFull_name()}" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" href="/user/profile">Super User</a>
+                    <a style="padding: 0px 3px" sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" th:href="@{/user/findOne/(id=${idea.getUser().getId()})}" class="btn btn-warning btn-xs sBtn" data-title="Edit" data-target="#edit" ><span class="glyphicon glyphicon-envelope"></span></a>
+
+                </p>
+
+
+                <span style="font-size: 12px"> <i class="fa fa-calendar"></i> <span
+                        th:text="'  Posted on ' + ${idea.getPosted_date()}"> Posted on August 24, 2014 at 9:00 PM </span></span>
+                <div class="form-inline">
+                    <span style="font-size: 12px"><i class="glyphicon glyphicon-th-list"></i> Category: <span
+                            th:text="${idea.getCategory().getBody()}" style="font-size: 10px;"
+                            class="badge badge-pill badge-info">Education</span>
+                    </span>
+                    <!--<span style="font-size: 12px">-->
+                        <!--<i class="fa fa-tags"></i> Tags:-->
+                        <!--<span th:each=" tag : ${idea.getTags()}">-->
+                            <!--<span th:text="${tag.getBody()}" style="font-size: 10px;"-->
+                                  <!--class="label label-info">Bootstrap</span>-->
+                        <!--</span>-->
+                    <!--</span>-->
+                    <br/><br/>
+                    <div class="actions">
+                        <div class="classLike">
+                            <form sec:authorize="isAuthenticated()" id="likeForm" name="likeForm" th:action="@{/user/likedislike/(idIdea=${idea.getId()})}" method="post" role="form">
+                                <i>
+                                    <button id="likeB" th:value="${idea.getId()}" th:classappend="${idea.getLiked()} == 1 ? btn-warning : btn-info " type="submit" class="float-left btn btn-xs text-white appreciations"
+                                            style="float: left">
+                                        <i th:classappend="${idea.getLiked()} == 1 ? fa-thumbs-o-down : fa-thumbs-o-up" class="fa"></i>
+                                        <span th:text="${idea.getLiked()} == 1 ? Dislike : Like"></span>
+                                    </button>
+                                </i>
+                            </form>
+                        </div>
+
+                        <i style="margin-left: 10px" sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}"><a class="float-left btn btn-primary btn-xs text-white appreciations" th:href="@{'/user/editIdea/' + ${idea.getId()}}"><i class="fa fa-wrench"></i> Edit</a></i>
+                        <i sec:authorize="isAuthenticated()" th:if="${currentUser.getId() == idea.getUser().getId() || currentUser.getRole() == 0}" style="margin-left: 6px"><a class="float-left btn btn-danger btn-xs text-white appreciations delBtn" th:href="@{/user/findOneIdea/(id=${idea.getId()})}"><i class="fa fa-trash"></i> Delete</a></i>
+
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="col-lg-6" style="margin-left: 876px; margin-top: -100px; margin-bottom: -300px">
+                    <div class="well">
+                        <h4><i class="glyphicon glyphicon-stats"></i> Stats:</h4>
+                        <ul>
+                            <li>Likes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="glyphicon glyphicon-thumbs-up"></span>):&nbsp;&nbsp; <b class="count1" id="likeNr" th:text="${idea.getLikenumber()}" th:value="${idea.getLikenumber()}" style="color: #5bc0de">10</b></li>
+                            <li>Comments &nbsp;(<span class="fa fa-comments"></span>):&nbsp;&nbsp; <b class="count2" id="comNr" th:value="${idea.getComnumber()}" th:text="${idea.getComnumber()}" style="color: #f0ad4e">4</b></li>
+                            <li>Similarities (<span class="fa fa-handshake-o"></span>):&nbsp;&nbsp; <b class="count3" id="matchNr" th:text="${idea.getSimnumber()}" style="color: #FF4136">5</b></li>
+                        </ul>
+                    </div>
+                    <!-- /well -->
+                    <div class="well">
+                        <h4><i class="fa fa-tags"></i> Tags:</h4>
+                        <div class="row" style="margin-left: 12px">
+                            <div class="col-lg-6">
+                                <ul class="list-unstyled">
+                                    <li><a sec:authorize="isAuthenticated()" data-toggle="tooltip" data-title="Click to search" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags1}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                    <li><a sec:authorize="isAnonymous()" data-toggle="tooltip" data-title="Click to search" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags1}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6">
+                                <ul class="list-unstyled">
+                                    <li><a sec:authorize="isAuthenticated()" data-toggle="tooltip" data-title="Click to search" th:href="@{/user/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags2}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                    <li><a sec:authorize="isAnonymous()" data-toggle="tooltip" data-title="Click to search" th:href="@{/home/(page=0,q=${tag.getBody()})}" th:each="tag : ${tags2}" ><span th:text="${tag.getBody()}" class="label label-primary">Bootstrap</span><br/></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <img th:src="@{'../../img/' + ${idea.getImage_path()}}" class="img-responsive" style="width:650px; height:340px"  />
+                <hr/>
+                <h4><strong>Description</strong></h4>
+                <p th:text="${idea.getBody()}">Lorem ips um dolor Lorem ipsum dolor Lorem ipsum dolor Lorem ipsum dolor
+                    Lore m ipsum dolor Lorem ipsum dolor.</p>
+            </div>
+            <br/>
+        </div>
+    </div>
+
+
+    <div class="container" style="text-align: center">
+        <div class="row">
+            <div class="tab" role="tabpanel">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist" style="margin-left: 15px;">
+                    <li role="presentation" class="active">
+                        <a href="#Section1" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-handshake-o"></i>
+                        Similarities</a></li>
+                    <li role="presentation"><a href="#Section2" aria-controls="profile" role="tab" data-toggle="tab"><i
+                            class="glyphicon glyphicon-comment"></i> Comments</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content tabs">
+
+                    <div role="tabpanel" class="tab-pane fade in active" id="Section1">
+                        <h2 class="text-center margin_bottom10"><u>Similar Ideas</u> <i class="fa fa-handshake-o"></i></h2>
+
+                        <div class="container">
+                            <div class="row blog-row">
+
+                                <div style="text-align: center; margin-bottom: 10px; margin-left: 25px">
+                                    <div th:if="${#lists.isEmpty(ideaList)}" class="alert alert-info" role="alert">
+                                        <span>This Idea has 0 similarities!</span>
+                                    </div>
+                                </div>
+
+                                <div th:each="idea : ${ideaList}" class="col-md-6 col-sm-6 col-xs-12 margin_bottom30">
+                                    <a href="javascript::;">
+                                        <img class="img-responsive center-block" th:src="@{'../../img/' + ${idea.getImage_path()}}" style="width: 555px; height: 238px"/>
+                                    </a>
+                                    <div class="blog-content bg-white" style="height: 230px; position: relative">
+                                        <a sec:authorize="isAnonymous()" th:href="'/home/viewIdea/' + ${idea.getId()}"><h3 th:text="${idea.getTitle()}" style="margin-bottom: 23px; margin-top: -10px">Blog Title Comes Here</h3></a>
+                                        <a sec:authorize="isAuthenticated()" th:href="'/user/viewIdea/' + ${idea.getId()}"><h3 th:text="${idea.getTitle()}" style="margin-bottom: 23px; margin-top: -10px">Blog Title Comes Here</h3></a>
+                                        <h5 style="" ><b>Similarity : </b><a class="count4" id="simScore" th:text="${idea.getSemantic()}">64%</a><a>%</a></h5>
+                                        <p th:text="${idea.getBody()}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec mauris sit amet mi posuere imperdiet. Sed congue velit placerat sapien gravida sagittis. Phasellus in convallis urna, sit amet sollicitudin augue. Nullam vel est a neque lobortis iaculis....<a href="javascript::;"  class="heading_color">  Continue Reading</a></p>
+                                        <!--<a href="javascript::;"  class="heading_color">  Continue Reading</a>-->
+                                        <hr style="bottom: 25px;color: #f00;width: 90%; position: absolute"/>
+                                        <div style="position: absolute; bottom: 8%;">
+                                                <span >Stats :
+                                                    (<i class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></i>): <span th:text="${idea.getLikenumber()}" style="color:#5bc0de;">122</span>
+                                                    (<i class="fa fa-comment" aria-hidden="true"></i>): <span th:text="${idea.getComnumber()}" style="color:#f0ad4e;">122</span>
+                                                    (<i class="fa fa-handshake-o" aria-hidden="true"></i>): <span th:text="${idea.getSimnumber()}" style=" color:#FF4136;">32</span>
+                                                </span>
+                                        </div>
+                                        <div style="position: absolute; bottom: 8%; right: 25px;">
+                                            <span sec:authorize="isAnonymous()" style="left: 100%" class="pull-right">By : <strong><a th:href="'/home/viewProfile/' + ${idea.getUser().getId()}" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
+                                            <span sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} != ${currentUser.getId()}" style="left: 100%" class="pull-right">By : <strong><a th:href="'/user/viewProfile/' + ${idea.getUser().getId()}" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
+                                            <span sec:authorize="isAuthenticated()" th:if="${idea.getUser().getId()} == ${currentUser.getId()}" style="left: 100%" class="pull-right">By : <strong><a href="/user/profile" th:text="${idea.getUser().getFull_name()}">Blogger</a></strong></span>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane fade" id="Section2">
+                        <!--<h3 style=" margin-left: -46px; text-decoration: underline; font-size: 30px; margin-bottom: 55px;">-->
+                            <!--Comments <i class="glyphicon glyphicon-comment"></i>-->
+                        <!--</h3>-->
+                        <h2 class="text-center margin_bottom10" style="margin-bottom: 55px; margin-top: 17px"><u>Comments</u> <i class="glyphicon glyphicon-comment"></i></h2>
+
+
+                        <div class="comments" style="max-width: 83.75rem; margin-left: 120px">
+
+
+                            <div class="comment-wrap" sec:authorize="isAuthenticated()">
+                                <div class="photo">
+                                    <div class="avatar" th:style="'background-image: url(' + @{'../../img/' + ${currentUser.getImage()}} + '); margin-right:10px; '" id="commentPhoto">
+                                    </div>
+                                </div>
+                                <div class="comment-block commentInput">
+                                    <form id="commentForm" name="commentForm" th:action="@{'/user/viewIdea/' + ${idea.getId()}}" th:object="${comment}" method="post" data-toggle="validator" role="form">
+                                        <textarea class="commentBody" th:field="*{body}" required="" cols="30" rows="3" placeholder="Add comment..." ></textarea>
+                                        <button  style="float: right" class="btn btn-success btn-circle btnComment" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Comment </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-bottom: 10px;">
+                                <div sec:authorize="isAnonymous()" class="alert alert-info" role="alert">
+                                    <span>Please <a href="/user/createUser"> <strong>Log in</strong> </a> in order to post comments!</span>
+                                </div>
+                            </div>
+
+                            <div class="commentList" style="margin-bottom: -56px;">
+                                <div th:each="com : ${comments}" th:classappend="'com' + ${com.getId()}" class="comment-wrap">
+                                    <div class="photo">
+                                        <img th:src= "@{'../../img/' + ${com.getUser().getImage()}}" class="avatar2"/>
+                                    </div>
+                                    <div class="comment-block">
+                                        <a sec:authorize="isAuthenticated()" th:if="${com.getUser().getId() == currentUser.getId() or currentUser.getRole() == 0}" data-toggle="tooltip" class="btn btn-danger btn-xs delBtn" th:href="@{/user/findOneComment/(id=${com.getId()})}" style="margin-bottom: 10px; margin-left: 724px"><span class="glyphicon glyphicon-trash"></span></a>
+                                        <p sec:authorize="isAuthenticated()" th:if="${com.getUser().getId() == currentUser.getId() or currentUser.getRole() == 0}" style="margin-top: -32px; margin-right:17px;" th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
+                                        <p sec:authorize="isAuthenticated()" th:if="${com.getUser().getId() != currentUser.getId() and currentUser.getRole() == 1}" th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
+                                        <p sec:authorize="isAnonymous()" th:text="${com.getBody()}" class="comment-text" >Lorem ipsum dolor sit amet, Cumque, corrupti?</p>
+                                        <div class="bottom-comment">
+                                            <div th:text="${com.getPosted_date()}" class="comment-date">Aug 24, 2014 @ 2:35 AM</div>
+                                            <ul class="comment-actions">
+                                                <li class="complain">by</li>
+                                                <li th:text="${com.getUser().getFull_name()}" class="reply">Cineva</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!--<div role="tabpanel" class="tab-pane fade in active" id="Section1">-->
+                        <!--<h3 style="margin-left: -46px; text-decoration: underline; margin-top: 24px; font-size: 30px; margin-bottom: 55px;">-->
+                            <!--Similarities <i class="fa fa-handshake-o"></i></h3>-->
+                        <!--<div class="col-md-10">-->
+
+                            <!--<div style="text-align: center; margin-bottom: 10px; margin-left: 145px">-->
+                                <!--<div th:if="${#lists.isEmpty(ideaList)}" class="alert alert-info" role="alert">-->
+                                    <!--<span>This Idea has 0 similarities!</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div th:each="idea : ${ideaList}" class="row" style="margin-bottom: 50px">-->
+                                <!--<div class="col-md-12 post">-->
+                                    <!--<div class="row">-->
+                                        <!--<div class="col-md-12">-->
+                                            <!--<h4 th:text="${idea.getTitle()}" style="color: #5bc0de; margin-left: -69rem; margin-bottom: 13px; font-size: 25px">-->
+                                                <!--<strong><a class="post-title">Cool Share Button Effects Styles</a></strong>-->
+                                            <!--</h4>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="row post-content" style="margin-bottom: 15px">-->
+                                        <!--<div class="col-md-3 item">-->
+                                            <!--<a th:href="'/user/viewIdea/' + ${idea.getId()}">-->
+                                                <!--<img style="width:213px; height: 145px" src="../../img/i14.jpeg"-->
+                                                     <!--alt="" class="img-responsive"/>-->
+                                                <!--<span class="img-overflow"></span>-->
+                                            <!--</a>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-md-7" style="width: 74.333333%;">-->
+                                            <!--<p style="font-size: 16px;" th:text="${idea.getBody()}">-->
+                                                <!--Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam-->
+                                                <!--tation option.-->
+                                            <!--</p>-->
+                                            <!--<button sec:authorize="isAuthenticated()" class="btn btn-warning" style="display: inline-block;">-->
+                                                <!--Message-->
+                                            <!--</button>-->
+                                            <!--<p sec:authorize="isAuthenticated()" style="margin-left: 10px; display: inline-block;">-->
+                                                <!--<a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>-->
+                                            <!--</p>-->
+                                            <!--<p sec:authorize="" style="margin-left: 10px; display: inline-block;">-->
+                                                <!--<a class="btn btn-read-more" th:href="'/user/viewIdea/' + ${idea.getId()}">Read more</a>-->
+                                            <!--</p>-->
+
+                                            <!--<br/>-->
+                                            <!--<p th:text="'Similarity : ' + ${idea.getSemantic()} + ' %'"  style="display: inline-block; font-size: 19px; font-weight: bold"> </p>-->
+                                            <!--&lt;!&ndash;<p th:text="'Sintactic : ' + ${idea.getSintactic()} + ' %'" style="display: inline-block; margin-left: 148px; font-size: 19px; font-weight: bold">Sintactic % : </p>&ndash;&gt;-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="row" style="margin-left: -180px">-->
+                                        <!--<div class="col-md-15 post-header-line">-->
+                                            <!--<span class="glyphicon glyphicon-user"></span>by <a th:text="${idea.getUser().getFull_name()}" href="#">Bhaumik</a>-->
+                                            <!--| <span class="glyphicon glyphicon-calendar"></span> <span th:text="${idea.getPosted_date()}"> Sept 16th, 2012</span>-->
+                                            <!--| <span class="glyphicon glyphicon-comment"></span> <a th:text="${idea.getComments().size()} + ' Comments'" href="#"> 3 Comments </a>-->
+                                            <!--| <button disabled="" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-thumbs-up"></span> <span th:text="${idea.getAppreciations().size()} + ' Likes'"></span></button>-->
+                                            <!--| <span style="font-size: 12px"><i class="glyphicon glyphicon-th-list"></i> Category:-->
+                                              <!--<span th:text="${idea.getCategory().getBody()}" style="font-size: 12px;" class="badge badge-pill badge-info">Education</span> </span>-->
+                                            <!--| <span class="glyphicon glyphicon-tags"> </span>Tags : <span th:each="tag : ${idea.getTags()}" th:text="${tag.getBody()}" class="label label-info">Snipp</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="myFormDelete">
+    <form th:action="@{/user/deleteIdea/(page=0)}" method="post">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Delete this idea</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id" name="id" type="hidden" value=""/>
+                        <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Idea?</div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
+
+<div class="myCommDelete">
+    <form id="comForm" name="comForm" th:action="@{/user/deleteComment/}" method="post">
+        <div class="modal fade" id="comModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Delete this comment</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id" name="id" type="hidden" value=""/>
+                        <div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this comment?</div>
+                    </div>
+                    <div class="modal-footer ">
+                        <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
+
+<div class="myForm">
+    <form id="sendForm" name="sendForm" th:action="@{/user/send/}" method="post">
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <h4 class="modal-title custom_align" id="Heading">Send a message</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id_receiver" name="id_receiver" type="hidden" value=""/>
+                        <div class="form-group">
+                            <input id="send_date" name="send_date" value="" class="form-control" type="text" readonly="" />
+                        </div>
+                        <div class="form-group">
+                            <textarea id="body" name="body" rows="2" class="form-control" required="" value="" placeholder="Type your message here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Send</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </form>
+</div>
+
+
+<footer style="margin-top:112px !important; margin-bottom:-17px; !important; right: 0; bottom: 0; left: 0;">
+    <div class="container container2">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+                <ul class="adress">
+                    <span>Adress</span>
+                    <li>
+                        <p></p>
+                    </li>
+                    <li>
+                        <p>Bvd. Theodor Pallady Nr. 24, București </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <ul class="contact">
+                    <span>Contact</span>
+                    <li>
+                        <a>Telephone: +40 742 898 420</a>
+                    </li>
+                    <li>
+                        <a>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alexg.nutu@gmail.com</a>
+                    </li>
+                    <li>
+                        <a>Fax: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+02 342 65225</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <ul class="social2">
+                    <span>Social</span>
+                    <li>
+                        <a href="https://www.facebook.com/alex.nutu.1" target="_blank"><i
+                                class="fa fa-facebook fa-2x fa2"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/AlexNutu" target="_blank"><i class="fa fa-github fa-2x fa2"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/alexgnutu/" target="_blank"><i
+                                class="fa fa-linkedin fa-2x fa2"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://www.tumblr.com/blog/alexg-t" target="_blank"><i
+                                class="fa fa-tumblr fa-2x fa2"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://plus.google.com/u/0/106198043038355377855" target="_blank"><i
+                                class="fa fa-google-plus fa-2x fa2"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -9,17 +9,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <title>Error</title>
 </head>
-<body role="document">
+<body style="background: url('../../img/error2.png')" role="document">
 
-<div style="text-align: center">
-    <h1> An error has occurred in the application</h1>
+<div style="text-align: center; margin-top: 80px">
+    <h1> The page you're trying to access does not exist!</h1>
 
-    <div th:text="${error}"></div>
-
-    <button class="btn btn-primary" th:hidden="${backButton} == null" onclick="location.href='/user/userHome'">Go
-        back
-    </button>
+    <br/>
+    <br/>
+    <br/>
+    <a class="btn btn-primary" th:href="@{'/home'}">Go back
+    </a>
 
 </div>
 
 </body>
+
+</html>

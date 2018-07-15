@@ -9,30 +9,31 @@ public class Message {
     @Id
     @Column(name = "id_message")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id_message;
+    private Long id;
 
     @Column(name = "body")
     private String body;
 
     @Column(name = "send_date")
-    private Date send_date;
-
-    @Column(name = "id_sender")
-    private Long id_sender;
-
-//    @Column(name = "id_user")
-//    private Long id_user;
+    private String send_date;
 
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private User user;
+    @JoinColumn(name = "id_sender")
+    private User sender;
 
-    public Long getId_message() {
-        return id_message;
+    @ManyToOne
+    @JoinColumn(name = "id_conversation")
+    private Conversation conversation;
+
+    @Column(name = "id_receiver")
+    private Long id_receiver;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setId_message(Long id_message) {
-        this.id_message = id_message;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBody() {
@@ -43,27 +44,35 @@ public class Message {
         this.body = body;
     }
 
-    public Date getSend_date() {
+    public String getSend_date() {
         return send_date;
     }
 
-    public void setSend_date(Date send_date) {
+    public void setSend_date(String send_date) {
         this.send_date = send_date;
     }
 
-    public Long getId_sender() {
-        return id_sender;
+    public User getSender() {
+        return sender;
     }
 
-    public void setId_sender(Long id_sender) {
-        this.id_sender = id_sender;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public User getUser() {
-        return user;
+    public Conversation getConversation() {
+        return conversation;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
+    public Long getId_receiver() {
+        return id_receiver;
+    }
+
+    public void setId_receiver(Long id_receiver) {
+        this.id_receiver = id_receiver;
     }
 }
